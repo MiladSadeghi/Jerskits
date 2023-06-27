@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	@font-face {
+		font-family: "Urbanist";
+		src: url("./fonts/Urbanist-Regular.woff2") format("woff2");
+		font-weight: 400;
+		font-display: swap;
+		font-style: normal;
+	}
+	@font-face {
+		font-family: "Urbanist";
+		src: url("./fonts/Urbanist-Medium.woff2") format("woff2");
+		font-weight: 500;
+		font-display: swap;
+		font-style: normal;
+	}
+	@font-face {
+		font-family: "Urbanist";
+		src: url("./fonts/Urbanist-SemiBold.woff2") format("woff2");
+		font-weight: 600;
+		font-display: swap;
+		font-style: normal;
+	}
+	@font-face {
+		font-family: "Urbanist";
+		src: url("./fonts/Urbanist-Bold.woff2") format("woff2");
+		font-weight: 700;
+		font-display: swap;
+		font-style: normal;
+	}
+
+	html {
+    font-family: Urbanist, sans-serif, system-ui;
+  }
+}
