@@ -1,5 +1,6 @@
 import tw from "twin.macro";
 import { Link } from "react-router-dom";
+import styled from "twin.macro";
 
 function Navbar() {
   return (
@@ -73,6 +74,8 @@ function Navbar() {
 }
 
 const Wrapper = tw.div`container mx-auto h-[90px]`;
-const NavLink = tw(Link)`text-sm text-primary-black font-semibold`;
+const NavLink = styled(Link)`
+  text-sm font-semibold text-primary-black
+`;
 
 export default Navbar;
