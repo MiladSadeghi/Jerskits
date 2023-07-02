@@ -9,3 +9,10 @@ export const validateSignUpBody = [
     .withMessage("Password is required and must be at least 6 characters long"),
   check("fullName").not().isEmpty().withMessage("Full Name is required"),
 ];
+
+export const validateSignInBody = [
+  check("email")
+    .isEmail()
+    .withMessage("Email is required and must be a valid email address"),
+  check("password").not().isEmpty().withMessage("Password is required"),
+];
