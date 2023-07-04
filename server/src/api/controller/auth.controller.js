@@ -61,7 +61,7 @@ export const SignUp = [
         secure: process.env.NODE_ENV === "production",
         maxAge: 24 * 60 * 60 * 1000,
       });
-      return res.json({ accessToken });
+      return res.status(201).json({ accessToken });
     } catch (error) {
       console.log(error);
       return res.status(406).json({ message: "Invalid credentials" });
