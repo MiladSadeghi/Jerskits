@@ -3,7 +3,6 @@ import {
   FetchArgs,
   fetchBaseQuery,
   FetchBaseQueryError,
-  createApi,
 } from "@reduxjs/toolkit/query/react";
 import { removeToken, setToken } from "../feature/auth/authSlice";
 import { RootState } from "../store";
@@ -11,7 +10,7 @@ import { RootState } from "../store";
 const baseQueryWithAuth = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_SERVER_URL,
   prepareHeaders: async (headers, { getState }) => {
-    const accessToken = (getState() as RootState).authSlice.accessToken;
+    const accessToken = (getState() as RootState).auth.accessToken;
 
     if (accessToken) {
       headers.set("Authorization", `Bearer ${accessToken}`);
@@ -43,7 +42,7 @@ export const baseQueryWithReauth: BaseQueryFn<
     );
     if (refreshResult.data) {
       const refreshTokenResult = refreshResult.data as { accessToken: string };
-      api.dispatch(setToken({ accessToken: refreshTokenResult.accessToken }));
+      api.dispatch(setToken(refreshTokenResult.accessToken));
       result = await baseQueryWithAuth(args, api, extraOptions);
     } else {
       api.dispatch(removeToken);
