@@ -63,7 +63,14 @@ export const SignUp = [
       });
       return res.status(201).json({ accessToken });
     } catch (error) {
-      console.log(error);
+			console.log(error);
+      if (error.code === 11000) {
+        return res.status(409).json({
+          error: true,
+          message: "An account with that email already exists.",
+          field: Object.keys(error.keyValue),
+        });
+      }
       return res.status(406).json({ message: "Invalid credentials" });
     }
   },

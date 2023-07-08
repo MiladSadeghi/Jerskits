@@ -2,6 +2,7 @@ let whitelist = [
   "http://localhost:5173",
   "http://jerskits.miladsdgh.ir",
   "http://localhost",
+  "http://localhost:4173",
 ];
 export const corsOptions = {
   credentials: true,
