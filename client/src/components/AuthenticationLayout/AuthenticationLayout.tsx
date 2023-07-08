@@ -4,7 +4,7 @@ import {
 } from "./AuthenticationLayout.types";
 import Card from "./Card";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay } from "swiper";
+import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css/pagination";
 import "./AuthenticationLayout.style.scss";
 
@@ -105,16 +105,18 @@ function AuthenticationLayout({ children }: IAuthenticationLayoutProps) {
           className="h-full"
           modules={[Pagination, Autoplay]}
         >
-          {contents.map((content: ICard, index: number) => (
-            <div key={index}>
-              <SwiperSlide>
-                <Card {...content} />
-              </SwiperSlide>
-            </div>
-          ))}
+          <SwiperSlide>
+            <Card {...contents[0]} />
+          </SwiperSlide>
+          <SwiperSlide>
+            <Card {...contents[1]} />
+          </SwiperSlide>
+          <SwiperSlide>
+            <Card {...contents[2]} />
+          </SwiperSlide>
         </Swiper>
       </div>
-      <div className="flex items-center justify-center col-span-9 w-96">
+      <div className="flex items-center justify-center col-span-9">
         {children}
       </div>
     </div>

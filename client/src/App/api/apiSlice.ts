@@ -7,19 +7,15 @@ import {
 import { removeToken, setToken } from "../feature/auth/authSlice";
 import { RootState } from "../store";
 
-const baseQueryWithAuth = fetchBaseQuery({
+export const baseQueryWithAuth = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_SERVER_URL,
+  credentials: "include",
   prepareHeaders: async (headers, { getState }) => {
     const accessToken = (getState() as RootState).auth.accessToken;
 
     if (accessToken) {
       headers.set("Authorization", `Bearer ${accessToken}`);
     }
-
-    headers.set("Accept", "application/json");
-    headers.set("Cache-Control", "no-cache");
-    headers.set("Pragma", "no-cache");
-    headers.set("Expires", "0");
 
     return headers;
   },

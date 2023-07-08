@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import plugin from "@tailwindcss/forms";
+
 export default {
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
@@ -37,5 +39,9 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin({
+      strategy: "base",
+    }),
+  ],
 };
