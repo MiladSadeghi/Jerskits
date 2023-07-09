@@ -50,17 +50,11 @@ export const SignUp = [
 
       res.cookie("jwt", refreshToken, {
         httpOnly: true,
-        sameSite: "None",
-        secure: true,
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      });
-
-      res.cookie("jwt", refreshToken, {
-        httpOnly: true,
         sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
         secure: process.env.NODE_ENV === "production",
         maxAge: 24 * 60 * 60 * 1000,
       });
+
       return res.status(201).json({ accessToken });
     } catch (error) {
 			console.log(error);
@@ -132,13 +126,6 @@ export const SignIn = [
         process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: "7d" }
       );
-
-      res.cookie("jwt", refreshToken, {
-        httpOnly: true,
-        sameSite: "None",
-        secure: true,
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      });
 
       res.cookie("jwt", refreshToken, {
         httpOnly: true,
