@@ -4,7 +4,11 @@ import {
   createApi,
 } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithAuth } from "../../api/apiSlice";
-import { TSignUpResponseError, TSignUpRequest } from "./authSlice.types";
+import {
+  TAuthResponseError,
+  TSignInRequest,
+  TSignUpRequest,
+} from "./authSlice.types";
 import { setToken } from "./authSlice";
 import { toast } from "react-hot-toast";
 
@@ -13,7 +17,7 @@ export const authSliceApi = createApi({
   baseQuery: baseQueryWithAuth as BaseQueryFn<
     FetchArgs,
     unknown,
-    TSignUpResponseError
+    TAuthResponseError
   >,
   endpoints: (build) => ({
     SignUp: build.mutation<{ accessToken: string }, TSignUpRequest>({
@@ -33,7 +37,25 @@ export const authSliceApi = createApi({
         }
       },
     }),
+    SignIn: build.mutation<{ accessToken: string }, TSignInRequest>({
+      query({ email, password }) {
+        return {
+          url: "/auth/sign-in",
+          method: "POST",
+          body: { email, password },
+        };
+      },
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setToken(data.accessToken));
+        } catch (error: any) {
+          const errorMessage = error.error.data.message || "Try again later...";
+          toast.error(errorMessage);
+        }
+      },
+    }),
   }),
 });
 
-export const { useSignUpMutation } = authSliceApi;
+export const { useSignUpMutation, useSignInMutation } = authSliceApi;

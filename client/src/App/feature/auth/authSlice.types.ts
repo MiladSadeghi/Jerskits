@@ -8,7 +8,7 @@ export type TSignUpRequest = {
   password: string;
 };
 
-export type TSignUpResponseError = {
+export type TAuthResponseError = {
   status: number;
   data: {
     error: boolean;

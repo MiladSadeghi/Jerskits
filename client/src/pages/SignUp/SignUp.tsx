@@ -6,7 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import SignUpSchema from "./SignUp.schema";
 import { useSignUpMutation } from "../../App/feature/auth/authSliceApi";
 import { SpinnerCircular } from "spinners-react";
-import { TSignUpResponseError } from "../../App/feature/auth/authSlice.types";
+import { TAuthResponseError } from "../../App/feature/auth/authSlice.types";
 import React from "react";
 import { toast } from "react-hot-toast";
 
@@ -84,8 +84,8 @@ function SignUp() {
             <FormError>
               {(errors.email && errors.email.message) ||
                 (isError &&
-                  (error as TSignUpResponseError).status === 409 &&
-                  (error as TSignUpResponseError).data.message)}
+                  (error as TAuthResponseError).status === 409 &&
+                  (error as TAuthResponseError).data.message)}
             </FormError>
           </div>
           <div className="space-y-[8px]">
