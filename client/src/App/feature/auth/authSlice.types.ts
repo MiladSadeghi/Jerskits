@@ -15,3 +15,8 @@ export type TSignUpResponseError = {
     message: string;
   };
 };
+
+export type TSignInRequest = {
+  email: string;
+  password: string;
+};
