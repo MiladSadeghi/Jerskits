@@ -32,7 +32,8 @@ export const SignUp = [
 
       const accessToken = jwt.sign(
         {
-          userId: createUser._id,
+          email: createUser.email,
+          username: createUser.fullName,
         },
         process.env.ACCESS_TOKEN_SECRET,
         {
@@ -42,7 +43,8 @@ export const SignUp = [
 
       const refreshToken = jwt.sign(
         {
-          userId: createUser._id,
+          email: createUser.email,
+          username: createUser.fullName,
         },
         process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: "7d" }
@@ -57,7 +59,7 @@ export const SignUp = [
 
       return res.status(201).json({ accessToken });
     } catch (error) {
-			console.log(error);
+      console.log(error);
       if (error.code === 11000) {
         return res.status(409).json({
           error: true,
@@ -111,7 +113,8 @@ export const SignIn = [
 
       const accessToken = jwt.sign(
         {
-          userId: foundUser._id,
+          email: foundUser.email,
+          username: foundUser.fullName,
         },
         process.env.ACCESS_TOKEN_SECRET,
         {
@@ -121,7 +124,8 @@ export const SignIn = [
 
       const refreshToken = jwt.sign(
         {
-          userId: foundUser._id,
+          email: foundUser.email,
+          username: foundUser.fullName,
         },
         process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: "7d" }
@@ -142,6 +146,36 @@ export const SignIn = [
 ];
 
 export const Logout = (req, res) => {
-  res.clearCookie("access_token");
+  res.clearCookie("jwt");
   return res.sendStatus(200);
+};
+
+export const RefreshToken = async (req, res) => {
+  const jwtCookie = req.cookies.jwt;
+  if (!jwtCookie) return res.sendStatus(401);
+
+  try {
+    const decodedJWT = jwt.verify(
+      jwtCookie,
+      process.env.REFRESH_TOKEN_SECRET,
+      (err, decode) => {
+        if (err) return res.sendStatus(403);
+        return decode;
+      }
+    );
+    console.log(decodedJWT);
+    const foundUser = await UserModel.findOne({
+      email: decodedJWT.email,
+      fullName: decodedJWT.username,
+    });
+    const payload = { email: foundUser.email, username: foundUser.fullName };
+    const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: "2h",
+    });
+    return res.status(200).json({ accessToken });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: true, message: "Internal Server Error" });
+  }
 };
