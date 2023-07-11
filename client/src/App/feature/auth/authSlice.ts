@@ -3,6 +3,7 @@ import { IAuthSliceState } from "./authSlice.types";
 
 const initialState: IAuthSliceState = {
   accessToken: null,
+  isAuthenticated: false,
 };
 
 const authSlice = createSlice({
@@ -11,9 +12,11 @@ const authSlice = createSlice({
   reducers: {
     setToken: (state, { payload }: PayloadAction<string>) => {
       state.accessToken = payload;
+      state.isAuthenticated = true;
     },
     removeToken: (state) => {
       state.accessToken = null;
+      state.isAuthenticated = false;
     },
   },
 });

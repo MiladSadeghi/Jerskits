@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import { SignIn } from "..";
 import user from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
@@ -6,22 +6,30 @@ import { renderWithProviders } from "../../utils/test-utils";
 
 describe("Sign In", () => {
   test("render correctly", () => {
-    render(<SignIn />);
+    renderWithProviders(
+      <MemoryRouter>
+        <SignIn />
+      </MemoryRouter>
+    );
     const loginElement = screen.getByRole("heading", {
-      name: /Login to your account/i,
+      name: /Welcome to Jerskits/i,
     });
     expect(loginElement).toBeInTheDocument();
   });
 
   test("the form is working correctly", async () => {
     user.setup();
-    render(<SignIn />);
-    const emailInput = screen.getByLabelText("email");
+    renderWithProviders(
+      <MemoryRouter>
+        <SignIn />
+      </MemoryRouter>
+    );
+    const emailInput = screen.getByLabelText(/email/i);
     await user.type(emailInput, "test");
     const submitButton = screen.getByRole("button", { name: /login/i });
     await user.click(submitButton);
-    const emailErrorElement = screen.getAllByText(/email is required/i);
-    expect(emailErrorElement.length).toBeGreaterThan(1);
+    const emailErrorElement = screen.getByText(/Invalid email/i);
+    expect(emailErrorElement).toBeInTheDocument();
   });
 
   test("fetch access token after sign in", async () => {
@@ -31,7 +39,7 @@ describe("Sign In", () => {
         <SignIn />
       </MemoryRouter>,
       {
-        preloadedState: { auth: { accessToken: null } },
+        preloadedState: { auth: { accessToken: null, isAuthenticated: false } },
       }
     );
     const emailInput = screen.getByLabelText(/email/i);

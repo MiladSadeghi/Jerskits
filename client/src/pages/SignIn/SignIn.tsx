@@ -76,7 +76,7 @@ function SignIn() {
           <div className="space-y-[8px]">
             <FormLabel htmlFor="email">Email</FormLabel>
             <FormInput
-              type="email"
+              type="text"
               id="email"
               autoComplete="off"
               {...register("email", { required: true })}

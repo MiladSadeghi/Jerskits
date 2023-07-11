@@ -39,7 +39,7 @@ describe("Sign Up", () => {
         <SignUp />
       </MemoryRouter>,
       {
-        preloadedState: { auth: { accessToken: null } },
+        preloadedState: { auth: { accessToken: null, isAuthenticated: false } },
       }
     );
 

@@ -30,7 +30,7 @@ export const baseQueryWithReauth: BaseQueryFn<
   if (result.error && result.error.status === 401) {
     const refreshResult = await baseQueryWithAuth(
       {
-        url: `/auth/refresh-token`,
+        url: `/auth/refresh`,
         method: "POST",
       },
       api,
