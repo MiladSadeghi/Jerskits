@@ -6,11 +6,14 @@ import {
 import { baseQueryWithAuth } from "../../api/apiSlice";
 import {
   TAuthResponseError,
+  TDecodedJWT,
   TSignInRequest,
   TSignUpRequest,
 } from "./authSlice.types";
 import { setToken } from "./authSlice";
 import { toast } from "react-hot-toast";
+import jwtDecode from "jwt-decode";
+import { setProfile } from "../profile/profileSlice";
 
 export const authSliceApi = createApi({
   reducerPath: "authSliceApi",
@@ -55,7 +58,29 @@ export const authSliceApi = createApi({
         }
       },
     }),
+    RefreshToken: build.query<{ accessToken: string }, void>({
+      query() {
+        return {
+          url: "/auth/refresh",
+          method: "GET",
+          credentials: "include",
+        };
+      },
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setToken(data.accessToken));
+          const decodeJWT: TDecodedJWT = jwtDecode(data.accessToken);
+          dispatch(setProfile(decodeJWT));
+        } catch (error: any) {
+          if (error?.error?.status === "FETCH_ERROR") {
+            toast.error("Cant login, try again later or refresh the page");
+          }
+        }
+      },
+    }),
   }),
 });
 
-export const { useSignUpMutation, useSignInMutation } = authSliceApi;
+export const { useSignUpMutation, useSignInMutation, useRefreshTokenQuery } =
+  authSliceApi;

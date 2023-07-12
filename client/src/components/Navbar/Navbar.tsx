@@ -1,8 +1,59 @@
 import tw from "twin.macro";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "twin.macro";
+import { useRefreshTokenQuery } from "../../App/feature/auth/authSliceApi";
+import { SpinnerCircular } from "spinners-react";
+import { useAppSelector } from "../../App/hooks";
+import React from "react";
+import ProfilePopup from "../ProfilePopup/ProfilePopup";
+
+type TPopups = {
+  profile: boolean;
+};
 
 function Navbar() {
+  const { isLoading, isSuccess } = useRefreshTokenQuery();
+  const profile = useAppSelector((state) => state.profile);
+  const userFullName = profile ? profile.username : null;
+  const [popups, setPopups] = React.useState<TPopups>({
+    profile: false,
+  });
+  const profileRef = React.useRef<HTMLDivElement | null>(null);
+  const profileButtonRef = React.useRef<HTMLButtonElement | null>(null);
+  const location = useLocation();
+
+  const handlePopupOpen = () => {
+    setPopups({
+      profile: true,
+    });
+  };
+
+  const handleClickOutside = (event: Event) => {
+    if (
+      profileRef.current &&
+      profileButtonRef.current &&
+      !profileRef.current.contains(event.target as Node) &&
+      !profileButtonRef.current.contains(event.target as Node)
+    ) {
+      setPopups({
+        profile: false,
+      });
+    }
+  };
+
+  React.useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    setPopups({
+      profile: false,
+    });
+  }, [location]);
+
   return (
     <Wrapper>
       <div className="flex items-center justify-between w-full h-full">
@@ -66,14 +117,37 @@ function Navbar() {
               />
             </svg>
           </button>
-          <NavLink to="/sign-in">Sign In</NavLink>
+          {isLoading ? (
+            <SpinnerCircular
+              size={25}
+              thickness={100}
+              speed={100}
+              color="rgba(0, 0, 0, 1)"
+              secondaryColor="rgba(255, 255, 255, 1)"
+            />
+          ) : isSuccess ? (
+            <button ref={profileButtonRef} onClick={handlePopupOpen}>
+              <img
+                src={"/blank-profile-picture.png"}
+                alt={userFullName as string}
+                className="object-contain rounded-full w-7 h-7"
+              />
+            </button>
+          ) : (
+            <NavLink to="/sign-in">Sign In</NavLink>
+          )}
         </div>
       </div>
+      <ProfilePopup
+        myPropRef={profileRef}
+        name={userFullName as string}
+        isShow={popups.profile}
+      />
     </Wrapper>
   );
 }
 
-const Wrapper = tw.div`container mx-auto h-[90px]`;
+const Wrapper = tw.div`container mx-auto h-[90px] relative`;
 const NavLink = styled(Link)`
   text-sm font-semibold text-primary-black
 `;
