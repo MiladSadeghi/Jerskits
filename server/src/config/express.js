@@ -8,9 +8,17 @@ import { corsOptions } from "./corsConfig.js";
 import cookieParser from "cookie-parser";
 import { config } from "dotenv";
 import mainRoutes from "../api/routes/index.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname("../");
+
+console.log(__filename, __dirname, import.meta.url);
+
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 
 app.use(bodyParser.json());
@@ -21,6 +29,7 @@ app.use(helmet());
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
+app.use("/images", express.static(path.join(__dirname, "images")));
 app.get("/api", (req, res) => res.send("OK"));
 app.use("/api", mainRoutes);
 

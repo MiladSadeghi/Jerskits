@@ -163,7 +163,6 @@ export const RefreshToken = async (req, res) => {
         return decode;
       }
     );
-    console.log(decodedJWT);
     const foundUser = await UserModel.findOne({
       email: decodedJWT.email,
       fullName: decodedJWT.username,
