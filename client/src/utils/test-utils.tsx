@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import type { AppStore, RootState } from "../App/store";
 import authSlice from "../App/feature/auth/authSlice";
 import { authSliceApi } from "../App/feature/auth/authSliceApi";
+import profileSlice from "../App/feature/profile/profileSlice";
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
   preloadedState?: PreloadedState<RootState>;
@@ -20,11 +21,13 @@ export function renderWithProviders(
     preloadedState = {
       auth: {
         accessToken: null,
+        isAuthenticated: false,
       },
     },
     store = configureStore({
       reducer: {
         auth: authSlice,
+        profile: profileSlice,
         [authSliceApi.reducerPath]: authSliceApi.reducer,
       },
       preloadedState,

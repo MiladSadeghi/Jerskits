@@ -1,6 +1,6 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import Navbar from "./Navbar";
-import { MemoryRouter, BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import { renderWithProviders } from "../../utils/test-utils";
 import { server } from "../../test/setup";
 import { rest } from "msw";

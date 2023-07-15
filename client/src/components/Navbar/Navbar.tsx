@@ -21,6 +21,7 @@ function Navbar() {
   const profileRef = React.useRef<HTMLDivElement | null>(null);
   const profileButtonRef = React.useRef<HTMLButtonElement | null>(null);
   const location = useLocation();
+	const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
 
   const handlePopupOpen = () => {
     setPopups({
@@ -125,7 +126,7 @@ function Navbar() {
               color="rgba(0, 0, 0, 1)"
               secondaryColor="rgba(255, 255, 255, 1)"
             />
-          ) : isSuccess ? (
+          ) : isSuccess && isAuthenticated ? (
             <button ref={profileButtonRef} onClick={handlePopupOpen}>
               <img
                 src={"/blank-profile-picture.png"}

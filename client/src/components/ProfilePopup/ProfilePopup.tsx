@@ -2,6 +2,7 @@ import tw, { styled } from "twin.macro";
 import { Link as RouterLink } from "react-router-dom";
 import React from "react";
 import ProfileLinks from "../../utils/profile-links";
+import { useSignOutMutation } from "../../App/feature/auth/authSliceApi";
 
 type Props = {
   name: string;
@@ -10,6 +11,8 @@ type Props = {
 };
 
 function ProfilePopup({ name, isShow, myPropRef }: Props) {
+  const [signOut] = useSignOutMutation();
+
   return (
     <Wrapper $isShow={isShow} ref={myPropRef}>
       <header className="flex items-center">
@@ -26,6 +29,12 @@ function ProfilePopup({ name, isShow, myPropRef }: Props) {
             {link.title}
           </Link>
         ))}
+        <button
+          className="font-bold text-lg leading-[150%] text-primary-black text-left"
+          onClick={() => signOut()}
+        >
+          Logout
+        </button>
       </main>
     </Wrapper>
   );

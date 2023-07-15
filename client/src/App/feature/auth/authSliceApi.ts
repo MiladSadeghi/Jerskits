@@ -10,7 +10,7 @@ import {
   TSignInRequest,
   TSignUpRequest,
 } from "./authSlice.types";
-import { setToken } from "./authSlice";
+import { removeToken, setToken } from "./authSlice";
 import { toast } from "react-hot-toast";
 import jwtDecode from "jwt-decode";
 import { setProfile } from "../profile/profileSlice";
@@ -79,8 +79,37 @@ export const authSliceApi = createApi({
         }
       },
     }),
+    SignOut: build.mutation<void, void>({
+      query() {
+        return {
+          url: "/auth/logout",
+          method: "DELETE",
+        };
+      },
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(removeToken());
+          toast.success("You have successfully signed out");
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } catch (error: any) {
+          console.log(error);
+          if (error?.error?.status === "FETCH_ERROR") {
+            toast.error("Cant login, try again later or refresh the page");
+          } else {
+            toast.error("Sign out failed. Please try again later");
+          }
+        }
+      },
+    }),
   }),
 });
 
-export const { useSignUpMutation, useSignInMutation, useRefreshTokenQuery } =
-  authSliceApi;
+export const {
+  useSignUpMutation,
+  useSignInMutation,
+  useRefreshTokenQuery,
+  useSignOutMutation,
+} = authSliceApi;
