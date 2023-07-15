@@ -147,7 +147,7 @@ export const SignIn = [
 
 export const Logout = (req, res) => {
   res.clearCookie("jwt");
-  return res.sendStatus(200);
+  return res.status(200).json({ error: false });
 };
 
 export const RefreshToken = async (req, res) => {
