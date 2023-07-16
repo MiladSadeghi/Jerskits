@@ -4,7 +4,7 @@ import { AuthenticationLayout, Layout } from "./components";
 import { SignIn, SignUp } from "./pages";
 import Profile from "./pages/Profile";
 import "swiper/css";
-import Edit from "./pages/Profile/components/Edit";
+import Edit from "./pages/Profile/components/Edit/Edit";
 import Favorites from "./pages/Profile/components/Favorites";
 import Orders from "./pages/Profile/components/Orders";
 import Setting from "./pages/Profile/components/Setting";
