@@ -1,4 +1,4 @@
-import { rest } from "msw";
+import {rest} from "msw";
 
 type SubmitProfileMockAPI = {
   firstName: string;
@@ -10,20 +10,17 @@ export const GetProfileMock = rest.get(
   (_req, res, ctx) => {
     return res(
       ctx.status(200),
-      ctx.json({ firstName: "test", lastName: "test2" })
+      ctx.json({profile: {firstName: "test", lastName: "test2"}})
     );
   }
 );
 
-export const SubmitProfileMock = rest.post<SubmitProfileMockAPI>(
+export const SubmitProfileMock = rest.patch<SubmitProfileMockAPI>(
   `${import.meta.env.VITE_SERVER_URL}/profile`,
-  (req, res, ctx) => {
-    const { firstName, lastName } = req.body;
-    if (firstName && lastName) {
-      return res(
-        ctx.status(200),
-        ctx.json({ newProfile: { firstName, lastName } })
-      );
-    }
+  (_req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({profile: {firstName: "test3", lastName: "test4"}})
+    );
   }
 );

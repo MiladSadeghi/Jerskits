@@ -1,76 +1,89 @@
-import { render, screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import Edit from "./Edit";
 import user from "@testing-library/user-event";
+import { renderWithProviders } from "../../../../utils/test-utils.tsx";
 
 describe("Edit profile page", () => {
-  test("render correctly", () => {
-    render(<Edit />);
-    const firstNameElement = screen.getByLabelText(/first name/i);
-    const LastNameElement = screen.getByLabelText(/last name/i);
-    const addressElement = screen.getByLabelText(/address/i);
-    const postalCodeELement = screen.getByLabelText(/postal code/i);
-    const cityElement = screen.getByLabelText(/city/i);
-    const stateElement = screen.getByLabelText(/state/i);
-    const countryElement = screen.getByLabelText(/country/i);
-    const emailElement = screen.getByLabelText(/email/i);
-    const phoneNumberElement = screen.getByLabelText(/phone number/i);
+  test("render correctly", async () => {
+    renderWithProviders(<Edit />);
 
-    expect(firstNameElement).toBeInTheDocument();
-    expect(LastNameElement).toBeInTheDocument();
-    expect(addressElement).toBeInTheDocument();
-    expect(postalCodeELement).toBeInTheDocument();
-    expect(cityElement).toBeInTheDocument();
-    expect(stateElement).toBeInTheDocument();
-    expect(countryElement).toBeInTheDocument();
-    expect(emailElement).toBeInTheDocument();
-    expect(phoneNumberElement).toBeInTheDocument();
+    await waitFor(async () => {
+      const firstNameElement = screen.getByLabelText(/first name/i);
+      const lastNameElement = screen.getByLabelText(/last name/i);
+      const addressElement = screen.getByLabelText(/^address$/i);
+      const postalCodeElement = screen.getByLabelText(/postal code/i);
+      const cityElement = screen.getByLabelText(/^city$/i);
+      const stateElement = screen.getByLabelText(/state/i);
+      const countryElement = screen.getByLabelText(/country/i);
+      const emailElement = screen.getByLabelText(/email/i);
+      const phoneNumberElement = screen.getByLabelText(/phone number/i);
+
+      expect(firstNameElement).toBeInTheDocument();
+      expect(lastNameElement).toBeInTheDocument();
+      expect(addressElement).toBeInTheDocument();
+      expect(postalCodeElement).toBeInTheDocument();
+      expect(cityElement).toBeInTheDocument();
+      expect(stateElement).toBeInTheDocument();
+      expect(countryElement).toBeInTheDocument();
+      expect(emailElement).toBeInTheDocument();
+      expect(phoneNumberElement).toBeInTheDocument();
+    });
   });
 
-  test("if one of the shipping fields is filled, the other field will display an error message", async () => {
-    render(<Edit />);
+  test("shipping address work correctly", async () => {
+    renderWithProviders(<Edit />);
     user.setup();
-    const addressElement = screen.getByLabelText(/address/i);
-    const submitButton = screen.getByRole("button", { name: /save/i });
-    await user.type(addressElement, "Every where you are");
-    await user.click(submitButton);
+    await waitFor(async () => {
+      const saveAddressElement = screen.getByTestId(/^save-address$/i);
+      await user.click(saveAddressElement);
+      const submitButton = screen.getByRole("button", { name: /save/i });
+      await user.click(submitButton);
+    });
 
-    expect(screen.getByTestId("postal-code-error")).toBeVisible();
-    expect(screen.getByTestId("city-error")).toBeVisible();
-    expect(screen.getByTestId("state-error")).toBeVisible();
-    expect(screen.getByTestId("country-error")).toBeVisible();
+    await waitFor(() => {
+      expect(screen.getByTestId("address-error")).toBeVisible();
+      expect(screen.getByTestId("country-error")).toBeVisible();
+      expect(screen.getByTestId("postal-code-error")).toBeVisible();
+    });
   });
 
   test("get user profile", async () => {
-    render(<Edit />);
-    const loadingAnimation = screen.getByTestId("loading-animation");
-    expect(loadingAnimation).toBeInTheDocument();
+    renderWithProviders(<Edit/>);
 
-    const firstNameElement = screen.getByLabelText(
-      /first name/i
-    ) as HTMLInputElement;
-    const LastNameElement = screen.getByLabelText(
-      /last name/i
-    ) as HTMLInputElement;
+    await waitFor(async () => {
+      const firstNameElement = screen.getByLabelText(
+        /first name/i
+      ) as HTMLInputElement;
 
-    expect(firstNameElement.value).toBe("test");
-    expect(LastNameElement.value).toBe("test2");
+      const LastNameElement = screen.getByLabelText(
+        /last name/i
+      ) as HTMLInputElement;
+
+      expect(firstNameElement).toHaveValue("test");
+      expect(LastNameElement).toHaveValue("test2");
+    })
   });
 
-  test("submit user profile", async () => {
-    render(<Edit />);
+  test("profile update successfully", async () => {
+    const { store } = renderWithProviders(
+      <Edit/>
+    );
     user.setup();
-    const loadingAnimation = screen.getByTestId("loading-animation");
-    expect(loadingAnimation).toBeInTheDocument();
+    await waitFor(async () => {
+      const firstNameElement = screen.getByLabelText(/first name/i);
+      const lastNameElement = screen.getByLabelText(/last name/i);
+  
+      await user.type(firstNameElement, "test3")
+      await user.type(lastNameElement, "test4")
+  
+      const submitButton = screen.getByRole("button", { name: /save/i });
+      await user.click(submitButton);
+    });
 
-    const firstNameElement = screen.getByLabelText(/first name/i);
-    const LastNameElement = screen.getByLabelText(/last name/i);
 
-    await user.type(firstNameElement, "test");
-    await user.type(LastNameElement, "test2");
-
-    const submitButton = screen.getByRole("button", { name: /save/i });
-    await user.click(submitButton);
-
-    expect(screen.getByText("Your profile saved successfully"));
-  });
+    await waitFor(() => {
+      expect(store?.getState().profile.firstName).toBe("test3")
+      expect(store?.getState().profile.lastName).toBe("test4")
+    })
+  })
 });
