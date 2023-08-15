@@ -35,8 +35,9 @@ export const authSliceApi = createApi({
         try {
           const { data } = await queryFulfilled;
           dispatch(setToken(data.accessToken));
-        } catch (error: any) {
-          toast.error(error.error.data.message);
+        } catch (error: unknown) {
+          const typedError = error as TAuthResponseError;
+          toast.error(typedError?.data?.message);
         }
       },
     }),
@@ -52,8 +53,9 @@ export const authSliceApi = createApi({
         try {
           const { data } = await queryFulfilled;
           dispatch(setToken(data.accessToken));
-        } catch (error: any) {
-          const errorMessage = error.error.data.message || "Try again later...";
+        } catch (error: unknown) {
+          const typedError = error as TAuthResponseError;
+          const errorMessage = typedError?.data?.message || "Try again later...";
           toast.error(errorMessage);
         }
       },
@@ -72,9 +74,10 @@ export const authSliceApi = createApi({
           dispatch(setToken(data.accessToken));
           const decodeJWT: TDecodedJWT = jwtDecode(data.accessToken);
           dispatch(setProfile(decodeJWT));
-        } catch (error: any) {
-          if (error?.error?.status === "FETCH_ERROR") {
-            toast.error("Cant login, try again later or refresh the page");
+        } catch (error: unknown) {
+          const typedError = error as TAuthResponseError;
+          if (typedError.status === "FETCH_ERROR") {
+            toast.error("Can't login, try again later or refresh the page");
           }
         }
       },
@@ -94,10 +97,10 @@ export const authSliceApi = createApi({
           setTimeout(() => {
             window.location.reload();
           }, 1000);
-        } catch (error: any) {
-          console.log(error);
-          if (error?.error?.status === "FETCH_ERROR") {
-            toast.error("Cant login, try again later or refresh the page");
+        } catch (error: unknown) {
+          const typedError = error as TAuthResponseError;
+          if (typedError?.status === "FETCH_ERROR") {
+            toast.error("Can't login, try again later or refresh the page");
           } else {
             toast.error("Sign out failed. Please try again later");
           }

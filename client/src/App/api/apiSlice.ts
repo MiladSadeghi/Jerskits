@@ -4,13 +4,13 @@ import {
   fetchBaseQuery,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
-import { removeToken, setToken } from "../feature/auth/authSlice";
-import { RootState } from "../store";
+import {removeToken, setToken} from "../feature/auth/authSlice";
+import {RootState} from "../store";
 
 export const baseQueryWithAuth = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_SERVER_URL,
   credentials: "include",
-  prepareHeaders: async (headers, { getState }) => {
+  prepareHeaders: async (headers, {getState}) => {
     const accessToken = (getState() as RootState).auth.accessToken;
 
     if (accessToken) {
@@ -36,6 +36,7 @@ export const baseQueryWithReauth: BaseQueryFn<
       api,
       extraOptions
     );
+
     if (refreshResult.data) {
       const refreshTokenResult = refreshResult.data as { accessToken: string };
       api.dispatch(setToken(refreshTokenResult.accessToken));

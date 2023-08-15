@@ -1,4 +1,4 @@
-import { IProfileSliceState } from "../profile/profileSlice.types";
+import {IProfile} from "../profile/profileSlice.types";
 
 export interface IAuthSliceState {
   accessToken: string | null;
@@ -12,7 +12,7 @@ export type TSignUpRequest = {
 };
 
 export type TAuthResponseError = {
-  status: number;
+  status: number | string;
   data: {
     error: boolean;
     message: string;
@@ -24,4 +24,4 @@ export type TSignInRequest = {
   password: string;
 };
 
-export type TDecodedJWT = IProfileSliceState;
+export type TDecodedJWT = IProfile;
