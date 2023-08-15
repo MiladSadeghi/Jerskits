@@ -171,8 +171,12 @@ export const RefreshToken = async (req, res) => {
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
       expiresIn: "2h",
     });
+    console.log(accessToken)
+
     return res.status(200).json({ accessToken });
   } catch (error) {
+    console.log(error)
+
     return res
       .status(500)
       .json({ error: true, message: "Internal Server Error" });

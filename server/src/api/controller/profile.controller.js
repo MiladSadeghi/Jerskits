@@ -1,24 +1,77 @@
+import { Country, State } from "country-state-city";
 import UserModel from "../models/user.model.js";
+import { validationResult } from "express-validator";
 
 export const getUserProfile = async (req, res, next) => {
   try {
     const { email, username } = req.decoded;
-    const findUser = await UserModel.findOne({ email, fullName: username });
+    const findUser = await UserModel.findOne({
+      email,
+      fullName: username,
+    }).populate("shippingAddress");
     if (!findUser) {
       const err = new Error("User not found");
       err.status = 404;
       return next();
     }
-    const profile = {
-      email: findUser.email,
-      fullName: findUser.fullName,
-      firstName: findUser.firstName,
-      lastName: findUser.lastName,
-      shippingAddress: findUser.shippingAddress,
-      avatar: findUser.avatar,
-      phoneNumber: findUser.phoneNumber,
-      paymentMethod: findUser.paymentMethod,
+    let profile;
+    if (Object.keys(findUser.shippingAddress._doc).length >= 1) {
+      profile = {
+        shippingAddress: {},
+      };
+      profile.shippingAddress = {
+        ...profile.shippingAddress,
+        address: findUser.shippingAddress._doc.address,
+      };
+      const country = Country.getCountryByCode(
+        findUser.shippingAddress._doc.country
+      );
+      profile.shippingAddress = {
+        ...profile.shippingAddress,
+        country: {
+          value: country.isoCode,
+          label: country.name,
+        },
+      };
+
+      if (findUser.shippingAddress._doc.state) {
+        const state = State.getStateByCode(findUser.shippingAddress._doc.state);
+        profile.shippingAddress = {
+          ...profile.shippingAddress,
+          state: {
+            value: state.isoCode,
+            label: state.name,
+          },
+        };
+      }
+
+      if (findUser.shippingAddress._doc.city) {
+        profile.shippingAddress = {
+          ...profile.shippingAddress,
+          city: {
+            value: findUser.shippingAddress._doc.city,
+            label: findUser.shippingAddress._doc.city,
+          },
+        };
+      }
+      profile.shippingAddress = {
+        ...profile.shippingAddress,
+        postalCode: findUser.shippingAddress._doc.postalCode,
+      };
+    }
+
+    profile = {
+      ...profile,
+      email: findUser?.email,
+      fullName: findUser?.fullName,
+      firstName: findUser?.firstName,
+      lastName: findUser?.lastName,
+      avatar: findUser?.avatar,
+      phoneNumber: findUser?.phoneNumber,
+      paymentMethod: findUser?.paymentMethod,
+      contactEmail: findUser?.contactEmail,
     };
+
     return res.status(200).json({ error: false, profile });
   } catch (error) {
     console.log(error);
@@ -27,56 +80,64 @@ export const getUserProfile = async (req, res, next) => {
 };
 
 export const updateUserProfile = async (req, res, next) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { firstName, lastName, contactEmail, phoneNumber } = req.body;
+  const avatar = req.file;
   const { email, username } = req.decoded;
-  const { body } = req;
 
   try {
     const findUser = await UserModel.findOne({ email, fullName: username });
+
     if (!findUser) {
       const err = new Error("User not found");
       err.status = 404;
-      return next();
+      return next(err);
     }
 
-    const updateOptions = {
-      ...(body.firstName && { firstName: body.firstName }),
-      ...(body.lastName && { lastName: body.lastName }),
-      ...(body.address && {
-        shippingAddress: { address: body.address },
-      }),
-      ...(body.postalCode && {
-        shippingAddress: { postalCode: body.postalCode },
-      }),
-      ...(body.city && {
-        shippingAddress: { city: body.city },
-      }),
-      ...(body.state && {
-        shippingAddress: { state: body.state },
-      }),
-      ...(body.country && {
-        shippingAddress: { country: body.country },
-      }),
-      ...(body.contactEmail && {
-        shippingAddress: { contactEmail: body.contactEmail },
-      }),
-      ...(body.phoneNumber && {
-        shippingAddress: { phoneNumber: body.phoneNumber },
-      }),
-      ...(req.file && {
-        avatar: req.file.filename,
-      }),
+    let updateOptions = {
+      ...(firstName && { firstName }),
+      ...(lastName && { lastName }),
+      ...(contactEmail && { contactEmail }),
+      ...(phoneNumber && { phoneNumber }),
     };
 
+    if (avatar) {
+      updateOptions.avatar = req.file.filename;
+    }
+    if (req.body?.saveAddress) {
+      const shippingAddress = {
+        address: req.body.shippingAddress?.address,
+        postalCode: req.body.shippingAddress?.postalCode,
+        city: req.body.shippingAddress?.city,
+        state: req.body.shippingAddress?.state,
+        country: req.body.shippingAddress?.country,
+      };
+      updateOptions = { ...updateOptions, shippingAddress };
+    }
+
+    console.log(updateOptions);
+
+    if (Object.keys(updateOptions).length === 0) {
+      return res
+        .status(400)
+        .json({ error: true, message: "you should change something" });
+    }
+
     const updatedUser = await UserModel.findByIdAndUpdate(
-      findUser._id,
+      findUser?._id,
       updateOptions,
       { new: true }
     ).select("-_id -password");
 
     return res.status(200).json({ profile: updatedUser });
   } catch (error) {
-    console.log(error);
-    const err = new Error();
+    console.error(error);
+    const err = new Error("Server error");
     err.status = 500;
     return next(err);
   }

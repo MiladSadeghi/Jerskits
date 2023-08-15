@@ -17,8 +17,6 @@ config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname("../");
 
-console.log(__filename, __dirname, import.meta.url);
-
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 
 app.use(bodyParser.json());

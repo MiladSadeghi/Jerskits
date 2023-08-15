@@ -10,6 +10,6 @@ const profileRouter = Router();
 
 profileRouter.use(verifyJWT);
 profileRouter.get("/", getUserProfile);
-profileRouter.patch("/", uploadProfile.single("profile"), updateUserProfile);
+profileRouter.patch("/", uploadProfile.single("avatar"), updateUserProfile);
 
 export default profileRouter;

@@ -1,12 +1,15 @@
 import { mongoose } from "mongoose";
 
-const AddressSchema = new mongoose.Schema({
-  address: String,
-  postalCode: String,
-  city: String,
-  state: String,
-  country: String,
-});
+const AddressSchema = new mongoose.Schema(
+  {
+    address: String,
+    postalCode: Number,
+    city: String,
+    state: String,
+    country: String,
+  },
+  { _id: false }
+);
 
 const PaymentMethodSchema = new mongoose.Schema({
   provider: String,
