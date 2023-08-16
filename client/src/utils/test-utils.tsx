@@ -6,20 +6,16 @@ import { setupStore, type AppStore, type RootState } from "../App/store";
 import { PreloadedState } from "@reduxjs/toolkit";
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
-  preloadedState?: PreloadedState<RootState>;
-  store?: AppStore;
+	preloadedState?: PreloadedState<RootState>;
+	store?: AppStore;
 }
 
 export function renderWithProviders(
-  ui: React.ReactElement,
-  {
-    
-    store = setupStore(),
-    ...renderOptions
-  }: ExtendedRenderOptions = {}
+	ui: React.ReactElement,
+	{ store = setupStore(), ...renderOptions }: ExtendedRenderOptions = {}
 ) {
-  function Wrapper({ children }: PropsWithChildren): JSX.Element {
-    return <Provider store={store}>{children}</Provider>;
-  }
-  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
+	function Wrapper({ children }: PropsWithChildren): JSX.Element {
+		return <Provider store={store}>{children}</Provider>;
+	}
+	return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 }

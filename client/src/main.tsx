@@ -9,13 +9,13 @@ import { Toaster } from "react-hot-toast";
 
 const store = setupStore();
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <Toaster />
-        <App />
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>
+ReactDOM.createRoot(document.getElementById("root")!).render(
+	<React.StrictMode>
+		<Provider store={store}>
+			<BrowserRouter>
+				<Toaster />
+				<App />
+			</BrowserRouter>
+		</Provider>
+	</React.StrictMode>
 );

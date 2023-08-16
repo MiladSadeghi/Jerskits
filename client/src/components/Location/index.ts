@@ -1,4 +1,4 @@
-import LocationDropdown from "./LocationDropdown"
+import LocationDropdown from "./LocationDropdown";
 import CountryProvider from "./LocationProvider.tsx";
 
-export { LocationDropdown, CountryProvider }
+export { LocationDropdown, CountryProvider };

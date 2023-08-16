@@ -5,15 +5,15 @@ import { MemoryRouter } from "react-router-dom";
 import { renderWithProviders } from "../../utils/test-utils";
 
 describe("Authentication Layout", () => {
-  test("children props work", () => {
-    renderWithProviders(
-      <MemoryRouter>
-        <AuthenticationLayout children={<SignIn />} />
-      </MemoryRouter>
-    );
-    const signInElement = screen.getByRole("heading", {
-      name: /Welcome to Jerskits/i,
-    });
-    expect(signInElement).toBeInTheDocument();
-  });
+	test("children props work", () => {
+		renderWithProviders(
+			<MemoryRouter>
+				<AuthenticationLayout children={<SignIn />} />
+			</MemoryRouter>
+		);
+		const signInElement = screen.getByRole("heading", {
+			name: /Welcome to Jerskits/i,
+		});
+		expect(signInElement).toBeInTheDocument();
+	});
 });
