@@ -33,9 +33,11 @@ export const getUserProfile = async (req, res, next) => {
           label: country.name,
         },
       };
-
       if (findUser.shippingAddress._doc.state) {
-        const state = State.getStateByCode(findUser.shippingAddress._doc.state);
+        const state = State.getStateByCodeAndCountry(
+          findUser.shippingAddress._doc.state,
+          findUser.shippingAddress._doc.country
+        );
         profile.shippingAddress = {
           ...profile.shippingAddress,
           state: {
