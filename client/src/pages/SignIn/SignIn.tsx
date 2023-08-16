@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import { styled } from "twin.macro";
@@ -6,10 +5,11 @@ import { ISignInForm } from "./SignIn.types";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import SignInSchema from "./SignIn.schema";
-import { useSignInMutation } from "../../App/feature/auth/authSliceApi";
 import { toast } from "react-hot-toast";
 import { SpinnerCircular } from "spinners-react";
 import { css } from "twin.macro";
+import { useSignInMutation } from "../../services";
+import { useEffect } from "react";
 
 function SignIn() {
 	const navigate = useNavigate();
@@ -24,7 +24,7 @@ function SignIn() {
 
 	const [signIn, { isLoading, isSuccess }] = useSignInMutation();
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (isSuccess) {
 			toast.success(
 				"Awesome! You're all signed up. Taking you back to the home page now...",

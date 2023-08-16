@@ -1,8 +1,5 @@
 import { rest } from "msw";
-import {
-	TSignInRequest,
-	TSignUpRequest,
-} from "../../App/feature/auth/authSlice.types";
+import { TSignInRequest, TSignUpRequest } from "../../shared/types/Auth.types";
 
 const SignUpApiMock = rest.post<TSignUpRequest>(
 	`${import.meta.env.VITE_SERVER_URL}/auth/sign-up`,

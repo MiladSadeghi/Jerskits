@@ -1,12 +1,12 @@
 import { Route, Routes } from "react-router-dom";
-import { AuthenticationLayout, Layout } from "./components";
 import { SignIn, SignUp } from "./pages";
-import Profile from "./pages/Profile/Profile";
+import { Profile } from "./pages";
 import "swiper/css";
-import Edit from "./pages/Profile/components/Edit/Edit";
 import Favorites from "./pages/Profile/components/Favorites";
 import Orders from "./pages/Profile/components/Orders";
 import Setting from "./pages/Profile/components/Setting";
+import { Edit } from "./pages/Profile/components";
+import { AuthenticationLayout, Layout } from "./layouts";
 
 function App() {
 	return (

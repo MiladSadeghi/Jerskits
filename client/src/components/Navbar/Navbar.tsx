@@ -1,11 +1,12 @@
 import tw from "twin.macro";
 import { Link, useLocation } from "react-router-dom";
 import styled from "twin.macro";
-import { useRefreshTokenQuery } from "../../App/feature/auth/authSliceApi";
 import { SpinnerCircular } from "spinners-react";
 import { useAppSelector } from "../../App/hooks";
-import React from "react";
-import ProfilePopup from "../ProfilePopup/ProfilePopup";
+import { useRefreshTokenQuery } from "../../services";
+import { useState, useRef, useEffect } from "react";
+import { ProfilePopup } from "..";
+import { RootState } from "../../App/store";
 
 type TPopups = {
 	profile: boolean;
@@ -13,15 +14,17 @@ type TPopups = {
 
 function Navbar() {
 	const { isLoading, isSuccess } = useRefreshTokenQuery();
-	const profile = useAppSelector((state) => state.profile);
+	const profile = useAppSelector((state: RootState) => state.profile);
 	const userFullName = profile ? profile.username : null;
-	const [popups, setPopups] = React.useState<TPopups>({
+	const [popups, setPopups] = useState<TPopups>({
 		profile: false,
 	});
-	const profileRef = React.useRef<HTMLDivElement | null>(null);
-	const profileButtonRef = React.useRef<HTMLButtonElement | null>(null);
+	const profileRef = useRef<HTMLDivElement | null>(null);
+	const profileButtonRef = useRef<HTMLButtonElement | null>(null);
 	const location = useLocation();
-	const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+	const isAuthenticated = useAppSelector(
+		(state: RootState) => state.auth.isAuthenticated
+	);
 
 	const handlePopupOpen = () => {
 		setPopups({
@@ -42,14 +45,14 @@ function Navbar() {
 		}
 	};
 
-	React.useEffect(() => {
+	useEffect(() => {
 		document.addEventListener("mousedown", handleClickOutside);
 		return () => {
 			document.removeEventListener("mousedown", handleClickOutside);
 		};
 	}, []);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		setPopups({
 			profile: false,
 		});
@@ -60,7 +63,7 @@ function Navbar() {
 			<div className="flex items-center justify-between w-full h-full">
 				<div>
 					<Link to="/">
-						<img src={"/jerskits-black.jpg"} alt="Home" />
+						<img src={"/images/jerskits-black.jpg"} alt="Home" />
 					</Link>
 				</div>
 				<div className="flex gap-10">
@@ -129,7 +132,7 @@ function Navbar() {
 					) : isSuccess && isAuthenticated ? (
 						<button ref={profileButtonRef} onClick={handlePopupOpen}>
 							<img
-								src={"/blank-profile-picture.png"}
+								src={"/images/blank-profile-picture.png"}
 								alt={userFullName as string}
 								className="object-contain rounded-full w-7 h-7"
 							/>

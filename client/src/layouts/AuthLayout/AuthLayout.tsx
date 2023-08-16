@@ -1,16 +1,16 @@
-import {
-	IAuthenticationLayoutProps,
-	ICard,
-} from "./AuthenticationLayout.types";
-import Card from "./Card";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css/pagination";
-import "./AuthenticationLayout.style.scss";
+import "./AuthLayout.style.scss";
+import {
+	IAuthenticationLayoutProps,
+	ICard,
+} from "../../shared/types/Auth.types";
+import Card from "./AuthLayout.card";
 
 const contents: ICard[] = [
 	{
-		background: "/best-quality-material.jpg",
+		background: "/images/best-quality-material.jpg",
 		icon: (
 			<svg
 				width="50"
@@ -41,7 +41,7 @@ const contents: ICard[] = [
 		desc: "Our product is made from at least 75% recycled polyester fibres.",
 	},
 	{
-		background: "/secure-payments.jpg",
+		background: "/images/secure-payments.jpg",
 		icon: (
 			<svg
 				width="50"
@@ -66,7 +66,7 @@ const contents: ICard[] = [
 		desc: "Payments with a guaranteed level of security, you don't have to worry",
 	},
 	{
-		background: "/free-shipping.jpg",
+		background: "/images/free-shipping.jpg",
 		icon: (
 			<svg
 				width="50"

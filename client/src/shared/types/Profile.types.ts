@@ -1,4 +1,14 @@
-import { Option } from "../../../pages/Profile/components/Edit/Edit.types";
+import * as yup from "yup";
+import editProfileSchema from "../../pages/Profile/components/Edit/Edit.schema";
+
+export type TeditProfileSchema = yup.InferType<typeof editProfileSchema>;
+
+type Option = {
+	label: string;
+	value: string;
+};
+
+export type { Option };
 
 interface IProfile {
 	username?: string;

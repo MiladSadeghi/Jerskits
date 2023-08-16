@@ -1,10 +1,10 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithReauth } from "../../api/apiSlice";
-import { IProfile, TGetProfileResponse } from "./profileSlice.types";
-import { toast } from "react-hot-toast";
-import { setProfile } from "./profileSlice";
+import { baseQueryWithReauth } from "./api";
+import { setProfile } from "../App/feature/profile/profileSlice";
+import toast from "react-hot-toast";
+import { IProfile, TGetProfileResponse } from "../shared/types/Profile.types";
 
-export const profileSliceApi = createApi({
+export const profileApi = createApi({
 	reducerPath: "profileSliceApi",
 	baseQuery: baseQueryWithReauth,
 	refetchOnMountOrArgChange: true,
@@ -58,4 +58,4 @@ export const profileSliceApi = createApi({
 });
 
 export const { useGetUserProfileQuery, useUpdateUserProfileMutation } =
-	profileSliceApi;
+	profileApi;

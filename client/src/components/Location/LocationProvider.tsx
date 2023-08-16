@@ -1,9 +1,11 @@
-import { Option } from "../../pages/Profile/components/Edit/Edit.types.ts";
-import { useLazyGetLocationQuery } from "../../App/feature/location/locationSliceApi.ts";
 import { useEffect } from "react";
 import { Control } from "react-hook-form";
 import LocationDropdown from "./LocationDropdown.tsx";
-import { TeditProfileSchema } from "../../pages/Profile/components/Edit/Edit.schema.ts";
+import { useLazyGetLocationQuery } from "../../services/locationApi.ts";
+import {
+	Option,
+	TeditProfileSchema,
+} from "../../shared/types/Profile.types.ts";
 
 type Props = {
 	onSelect: (value: Option | null) => void;

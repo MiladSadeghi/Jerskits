@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import { SingleValue } from "react-select";
-import { Option } from "../../pages/Profile/components/Edit/Edit.types.ts";
 import { Control, Controller } from "react-hook-form";
 import ReactSelect from "react-select";
-import { TeditProfileSchema } from "../../pages/Profile/components/Edit/Edit.schema.ts";
+import { Option, TeditProfileSchema } from "../../shared/types/Profile.types";
 
 interface Props {
 	options: Option[] | undefined;

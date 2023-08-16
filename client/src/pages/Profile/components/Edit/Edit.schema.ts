@@ -67,5 +67,4 @@ const editProfileSchema = yup.object().shape({
 		}),
 });
 
-export type TeditProfileSchema = yup.InferType<typeof editProfileSchema>;
 export default editProfileSchema;

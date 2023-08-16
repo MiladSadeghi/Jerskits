@@ -3,19 +3,20 @@ import {
 	FetchArgs,
 	createApi,
 } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithAuth } from "../../api/apiSlice";
+
+import { toast } from "react-hot-toast";
+import jwtDecode from "jwt-decode";
+import { baseQueryWithAuth } from "./api";
+import { removeToken, setToken } from "../App/feature/auth/authSlice";
+import { setProfile } from "../App/feature/profile/profileSlice";
 import {
 	TAuthResponseError,
 	TDecodedJWT,
 	TSignInRequest,
 	TSignUpRequest,
-} from "./authSlice.types";
-import { removeToken, setToken } from "./authSlice";
-import { toast } from "react-hot-toast";
-import jwtDecode from "jwt-decode";
-import { setProfile } from "../profile/profileSlice";
+} from "../shared/types/Auth.types";
 
-export const authSliceApi = createApi({
+export const authApi = createApi({
 	reducerPath: "authSliceApi",
 	baseQuery: baseQueryWithAuth as BaseQueryFn<
 		FetchArgs,
@@ -116,4 +117,4 @@ export const {
 	useSignInMutation,
 	useRefreshTokenQuery,
 	useSignOutMutation,
-} = authSliceApi;
+} = authApi;

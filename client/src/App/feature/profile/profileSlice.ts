@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { IProfile } from "./profileSlice.types";
+import { IProfile } from "../../../shared/types/Profile.types";
 
 const initialState: IProfile = {
 	username: "",

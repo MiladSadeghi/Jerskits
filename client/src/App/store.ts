@@ -1,17 +1,17 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import type { PreloadedState } from "@reduxjs/toolkit";
 import authSlice from "./feature/auth/authSlice";
-import { authSliceApi } from "./feature/auth/authSliceApi";
 import profileSlice from "./feature/profile/profileSlice";
-import { profileSliceApi } from "./feature/profile/profileSliceApi";
-import { locationSliceApi } from "./feature/location/locationSliceApi.ts";
+import { profileApi } from "../services/profileApi";
+import { locationApi } from "../services/locationApi";
+import { authApi } from "../services/authApi";
 
 const rootReducer = combineReducers({
 	auth: authSlice,
 	profile: profileSlice,
-	[authSliceApi.reducerPath]: authSliceApi.reducer,
-	[profileSliceApi.reducerPath]: profileSliceApi.reducer,
-	[locationSliceApi.reducerPath]: locationSliceApi.reducer,
+	[authApi.reducerPath]: authApi.reducer,
+	[profileApi.reducerPath]: profileApi.reducer,
+	[locationApi.reducerPath]: locationApi.reducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
@@ -19,9 +19,9 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
 		reducer: rootReducer,
 		middleware: (getDefaultMiddleware) =>
 			getDefaultMiddleware().concat(
-				authSliceApi.middleware,
-				profileSliceApi.middleware,
-				locationSliceApi.middleware
+				authApi.middleware,
+				profileApi.middleware,
+				locationApi.middleware
 			),
 		preloadedState,
 	});

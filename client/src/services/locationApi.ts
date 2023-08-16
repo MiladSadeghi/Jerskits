@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithAuth } from "../../api/apiSlice.ts";
-import { Option } from "../../../pages/Profile/components/Edit/Edit.types.ts";
+import { baseQueryWithAuth } from "./api";
+import { Option } from "../shared/types/Profile.types";
 
 type LocationResponse = {
 	error: string;
@@ -8,7 +8,7 @@ type LocationResponse = {
 	state: Option[];
 	city: Option[];
 };
-export const locationSliceApi = createApi({
+export const locationApi = createApi({
 	reducerPath: "locationSliceApi",
 	baseQuery: baseQueryWithAuth,
 	endpoints: (build) => ({
@@ -23,4 +23,4 @@ export const locationSliceApi = createApi({
 	}),
 });
 
-export const { useLazyGetLocationQuery } = locationSliceApi;
+export const { useLazyGetLocationQuery } = locationApi;

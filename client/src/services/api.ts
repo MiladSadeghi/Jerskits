@@ -4,8 +4,8 @@ import {
 	fetchBaseQuery,
 	FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
-import { removeToken, setToken } from "../feature/auth/authSlice";
-import { RootState } from "../store";
+import { removeToken, setToken } from "../App/feature/auth/authSlice";
+import { RootState } from "../App/store";
 
 export const baseQueryWithAuth = fetchBaseQuery({
 	baseUrl: import.meta.env.VITE_SERVER_URL,

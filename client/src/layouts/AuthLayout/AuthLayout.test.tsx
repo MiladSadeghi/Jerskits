@@ -1,5 +1,5 @@
 import { screen } from "@testing-library/react";
-import AuthenticationLayout from "./AuthenticationLayout";
+import AuthenticationLayout from "./AuthLayout";
 import { SignIn } from "../../pages";
 import { MemoryRouter } from "react-router-dom";
 import { renderWithProviders } from "../../utils/test-utils";

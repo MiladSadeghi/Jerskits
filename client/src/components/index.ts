@@ -1,4 +1,4 @@
 import Navbar from "./Navbar/Navbar";
-import AuthenticationLayout from "./AuthenticationLayout/AuthenticationLayout";
-import Layout from "./Layout/Layout";
-export { Navbar, AuthenticationLayout, Layout };
+import LocationProvider from "./Location/LocationProvider";
+import ProfilePopup from "./Popups/ProfilePopup";
+export { Navbar, LocationProvider, ProfilePopup };

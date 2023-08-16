@@ -1,14 +1,14 @@
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import tw, { styled, css } from "twin.macro";
-import { IFormValues } from "./SignUp.types";
+import { ISignUpForm } from "./SignUp.types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import SignUpSchema from "./SignUp.schema";
-import { useSignUpMutation } from "../../App/feature/auth/authSliceApi";
 import { SpinnerCircular } from "spinners-react";
-import { TAuthResponseError } from "../../App/feature/auth/authSlice.types";
-import React from "react";
 import { toast } from "react-hot-toast";
+import { useSignUpMutation } from "../../services";
+import { useEffect } from "react";
+import { TAuthResponseError } from "../../shared/types/Auth.types";
 
 function SignUp() {
 	const navigate = useNavigate();
@@ -19,11 +19,11 @@ function SignUp() {
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<IFormValues>({
+	} = useForm<ISignUpForm>({
 		resolver: yupResolver(SignUpSchema),
 	});
 
-	const signUpHandler = async (data: IFormValues) => {
+	const signUpHandler = async (data: ISignUpForm) => {
 		await signUp({
 			email: data.email,
 			fullName: data.fullName,
@@ -31,7 +31,7 @@ function SignUp() {
 		});
 	};
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (isSuccess) {
 			toast.success(
 				"Awesome! You're all signed up. Taking you back to the home page now...",

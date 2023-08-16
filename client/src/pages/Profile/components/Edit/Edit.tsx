@@ -3,16 +3,19 @@ import { SpinnerCircular, SpinnerDiamond } from "spinners-react";
 import tw, { styled } from "twin.macro";
 import { css } from "twin.macro";
 import { yupResolver } from "@hookform/resolvers/yup";
-import editProfileSchema, { TeditProfileSchema } from "./Edit.schema";
+import editProfileSchema from "./Edit.schema";
+import { ErrorMessage } from "@hookform/error-message";
+import { useEffect, useRef, useState } from "react";
+import LocationProvider from "../../../../components/Location/LocationProvider.tsx";
+import toast from "react-hot-toast";
 import {
 	useGetUserProfileQuery,
 	useUpdateUserProfileMutation,
-} from "../../../../App/feature/profile/profileSliceApi";
-import { ErrorMessage } from "@hookform/error-message";
-import { useEffect, useRef, useState } from "react";
-import { Option } from "./Edit.types.ts";
-import LocationProvider from "../../../../components/Location/LocationProvider.tsx";
-import toast from "react-hot-toast";
+} from "../../../../services/profileApi.ts";
+import {
+	Option,
+	TeditProfileSchema,
+} from "../../../../shared/types/Profile.types.ts";
 
 function Edit() {
 	const profileAvatar = useRef<HTMLInputElement>(null);

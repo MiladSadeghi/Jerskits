@@ -1,6 +1,18 @@
-import { IProfile } from "../profile/profileSlice.types";
+import { ReactNode, ReactElement } from "react";
+import { IProfile } from "./Profile.types";
 
-export interface IAuthSliceState {
+export interface IAuthenticationLayoutProps {
+	children: ReactNode;
+}
+
+export interface ICard {
+	background: string;
+	icon: ReactElement;
+	title: string;
+	desc: string;
+}
+
+export interface IAuthSlice {
 	accessToken: string | null;
 	isAuthenticated: boolean;
 }
