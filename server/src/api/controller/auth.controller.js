@@ -61,7 +61,7 @@ export const SignIn = [
     }
 
     try {
-      const { email, password } = req.body;
+      const { email, password: bodyPassword } = req.body;
       const foundUser = await UserModel.findOne({
         email,
       });
@@ -76,7 +76,7 @@ export const SignIn = [
       }
 
       const isPasswordCorrect = await bcrypt.compare(
-        password,
+        bodyPassword,
         foundUser.password
       );
 
@@ -89,11 +89,14 @@ export const SignIn = [
         throw error;
       }
 
+      const { password, __v, createdAt, updatedAt, ...profileData } =
+        foundUser._doc;
+
       const accessToken = jwt.sign(
         {
-          _id: foundUser._id,
-          email: foundUser.email,
-          fullName: foundUser.fullName,
+          _id: profileData._id,
+          email: profileData.email,
+          fullName: profileData.fullName,
         },
         process.env.ACCESS_TOKEN_SECRET,
         {
@@ -103,9 +106,9 @@ export const SignIn = [
 
       const refreshToken = jwt.sign(
         {
-          _id: foundUser._id,
-          email: foundUser.email,
-          fullName: foundUser.fullName,
+          _id: profileData._id,
+          email: profileData.email,
+          fullName: profileData.fullName,
         },
         process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: "7d" }
@@ -128,7 +131,7 @@ export const SignIn = [
       return res.json({
         error: false,
         message: "Welcome back!",
-        profile: foundUser,
+        profile: profileData,
       });
     } catch (error) {
       next(error);
@@ -160,12 +163,19 @@ export const RefreshToken = async (req, res) => {
         return decode;
       }
     );
+
     const foundUser = await UserModel.findOne({
       _id: decodedJWT._id,
       email: decodedJWT.email,
       fullName: decodedJWT.fullName,
     });
-    const payload = { email: foundUser.email, fullName: foundUser.fullName };
+
+    const payload = {
+      _id: foundUser._id,
+      email: foundUser.email,
+      fullName: foundUser.fullName,
+    };
+
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
       expiresIn: "30m",
     });

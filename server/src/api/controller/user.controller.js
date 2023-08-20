@@ -8,7 +8,7 @@ export const getUser = async (req, res, next) => {
       email,
       fullName,
     })
-      .select("-_id -password")
+      .select("-_id -password -__v -createdAt -updatedAt")
       .populate("shippingAddress");
     if (!foundedUser) {
       const err = new Error("User not found");

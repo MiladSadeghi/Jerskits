@@ -4,8 +4,9 @@ import { validationResult } from "express-validator";
 
 export const getUserProfile = async (req, res, next) => {
   try {
-    const { email, fullName } = req.decoded;
+    const { _id, email, fullName } = req.decoded;
     const findUser = await UserModel.findOne({
+      _id,
       email,
       fullName,
     }).populate("shippingAddress");
@@ -15,7 +16,10 @@ export const getUserProfile = async (req, res, next) => {
       return next();
     }
     let profile;
-    if (Object.keys(findUser.shippingAddress._doc).length >= 1) {
+    if (
+      findUser.shippingAddress &&
+      Object.keys(findUser.shippingAddress._doc).length >= 1
+    ) {
       profile = {
         shippingAddress: {},
       };
