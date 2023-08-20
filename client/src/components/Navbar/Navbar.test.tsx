@@ -4,9 +4,11 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { renderWithProviders } from "../../utils/test-utils";
 import { server } from "../../test/setup";
 import { rest } from "msw";
+import { setAuthStatus } from "../../App/feature/auth/authSlice";
+import { setProfile } from "../../App/feature/profile/profileSlice";
 
 describe("Navbar", () => {
-	test("elements render correctly", () => {
+	test("elements render correctly", async () => {
 		server.use(
 			rest.get(
 				`${import.meta.env.VITE_SERVER_URL}/auth/refresh`,
@@ -35,21 +37,21 @@ describe("Navbar", () => {
 			name: "favorite",
 		});
 
-		expect(homeElement).toBeInTheDocument();
-		expect(menElement).toBeInTheDocument();
-		expect(womanElement).toBeInTheDocument();
-		expect(kidsElement).toBeInTheDocument();
-		expect(brandsElement).toBeInTheDocument();
-		expect(searchElement).toBeInTheDocument();
-		expect(bagListElement).toBeInTheDocument();
-		expect(favoriteListElement).toBeInTheDocument();
-		waitFor(() => {
+		await waitFor(() => {
+			expect(homeElement).toBeInTheDocument();
+			expect(menElement).toBeInTheDocument();
+			expect(womanElement).toBeInTheDocument();
+			expect(kidsElement).toBeInTheDocument();
+			expect(brandsElement).toBeInTheDocument();
+			expect(searchElement).toBeInTheDocument();
+			expect(bagListElement).toBeInTheDocument();
+			expect(favoriteListElement).toBeInTheDocument();
 			const signInLink = screen.getByRole("link", { name: "Sign In" });
 			expect(signInLink.closest("a")).toHaveAttribute("href", "/sign-in");
 		});
 	});
 
-	test("links render correctly", () => {
+	test("links render correctly", async () => {
 		server.use(
 			rest.get(
 				`${import.meta.env.VITE_SERVER_URL}/auth/refresh`,
@@ -69,30 +71,41 @@ describe("Navbar", () => {
 		const kidsLink = screen.getByRole("link", { name: "Kids" });
 		const brandsLink = screen.getByRole("link", { name: "Brands" });
 
-		expect(homeLink.closest("a")).toHaveAttribute("href", "/");
-		expect(menLink.closest("a")).toHaveAttribute("href", "/category/mens");
-		expect(womanLink.closest("a")).toHaveAttribute("href", "/category/womans");
-		expect(kidsLink.closest("a")).toHaveAttribute("href", "/category/kids");
-		expect(brandsLink.closest("a")).toHaveAttribute("href", "/category/brands");
-		waitFor(() => {
+		await waitFor(() => {
+			expect(homeLink.closest("a")).toHaveAttribute("href", "/");
+			expect(menLink.closest("a")).toHaveAttribute("href", "/category/mens");
+			expect(womanLink.closest("a")).toHaveAttribute(
+				"href",
+				"/category/womans"
+			);
+			expect(kidsLink.closest("a")).toHaveAttribute("href", "/category/kids");
+			expect(brandsLink.closest("a")).toHaveAttribute(
+				"href",
+				"/category/brands"
+			);
 			const signInLink = screen.getByRole("link", { name: "Sign In" });
 			expect(signInLink.closest("a")).toHaveAttribute("href", "/sign-in");
 		});
 	});
 
-	test("user login with refresh token", () => {
+	test("navbar work correctly after login", async () => {
 		const { store } = renderWithProviders(
 			<Router>
 				<Navbar />
-			</Router>,
-			{
-				preloadedState: {
-					auth: { accessToken: null, isAuthenticated: false },
-				},
-			}
+			</Router>
 		);
-		waitFor(() => {
-			expect(store.getState().auth.isAuthenticated).toBe(true);
+
+		await waitFor(() => {
+			store.dispatch(setAuthStatus(true));
+			store.dispatch(setProfile({ firstName: "milad" }));
+			const signInLink = screen.queryByText(/sign in/i);
+			if (store.getState().auth) {
+				expect(signInLink).not.toBeInTheDocument();
+				expect(screen.getByText(/hi, milad/i)).toBeInTheDocument();
+			} else {
+				expect(signInLink).toBeInTheDocument();
+				expect(screen.getByText(/hi, milad/i)).toBeInTheDocument();
+			}
 		});
 	});
 });

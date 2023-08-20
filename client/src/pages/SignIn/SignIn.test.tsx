@@ -1,15 +1,15 @@
 import { screen, waitFor } from "@testing-library/react";
 import { SignIn } from "..";
 import user from "@testing-library/user-event";
-import { MemoryRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { renderWithProviders } from "../../utils/test-utils";
 
 describe("Sign In", () => {
 	test("render correctly", () => {
 		renderWithProviders(
-			<MemoryRouter>
+			<BrowserRouter>
 				<SignIn />
-			</MemoryRouter>
+			</BrowserRouter>
 		);
 		const loginElement = screen.getByRole("heading", {
 			name: /Welcome to Jerskits/i,
@@ -20,9 +20,9 @@ describe("Sign In", () => {
 	test("the form is working correctly", async () => {
 		user.setup();
 		renderWithProviders(
-			<MemoryRouter>
+			<BrowserRouter>
 				<SignIn />
-			</MemoryRouter>
+			</BrowserRouter>
 		);
 		const emailInput = screen.getByLabelText(/email/i);
 		await user.type(emailInput, "test");
@@ -34,13 +34,10 @@ describe("Sign In", () => {
 
 	test("fetch access token after sign in", async () => {
 		user.setup();
-		const { store } = renderWithProviders(
-			<MemoryRouter>
+		renderWithProviders(
+			<BrowserRouter>
 				<SignIn />
-			</MemoryRouter>,
-			{
-				preloadedState: { auth: { accessToken: null, isAuthenticated: false } },
-			}
+			</BrowserRouter>
 		);
 		const emailInput = screen.getByLabelText(/email/i);
 		const passwordInput = screen.getByLabelText(/^password$/i);
@@ -50,8 +47,12 @@ describe("Sign In", () => {
 		await user.type(passwordInput, "123456");
 		await user.click(submitButtonElement);
 
-		await waitFor(() =>
-			expect(store.getState().auth.accessToken).toBe("fakeAccessToken")
-		);
+		await waitFor(() => {
+			const regex = /ref=(\w+).*acc=(\w+)/;
+			const [, refValue, accValue] = document.cookie.match(regex) || [];
+
+			expect(refValue).toBe("refreshToken");
+			expect(accValue).toBe("accessToken");
+		});
 	});
 });

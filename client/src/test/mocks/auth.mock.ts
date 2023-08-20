@@ -6,7 +6,13 @@ const SignUpApiMock = rest.post<TSignUpRequest>(
 	(req, res, ctx) => {
 		const { email, fullName, password } = req.body;
 		if (email && fullName && password) {
-			return res(ctx.status(201), ctx.json({ accessToken: "fakeAccessToken" }));
+			return res(
+				ctx.status(201),
+				ctx.json({
+					error: false,
+					message: "thanks for sign up, now you can sign in!",
+				})
+			);
 		} else {
 			return res(
 				ctx.status(403),
@@ -21,7 +27,12 @@ const SignInApiMock = rest.post<TSignInRequest>(
 	(req, res, ctx) => {
 		const { email, password } = req.body;
 		if (email && password) {
-			return res(ctx.status(200), ctx.json({ accessToken: "fakeAccessToken" }));
+			return res(
+				ctx.status(200),
+				ctx.cookie("acc", "accessToken"),
+				ctx.cookie("ref", "refreshToken"),
+				ctx.json({ error: false, message: "Welcome back!" })
+			);
 		} else {
 			return res(
 				ctx.status(403),
