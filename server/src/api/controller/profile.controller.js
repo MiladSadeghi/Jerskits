@@ -4,10 +4,10 @@ import { validationResult } from "express-validator";
 
 export const getUserProfile = async (req, res, next) => {
   try {
-    const { email, username } = req.decoded;
+    const { email, fullName } = req.decoded;
     const findUser = await UserModel.findOne({
       email,
-      fullName: username,
+      fullName,
     }).populate("shippingAddress");
     if (!findUser) {
       const err = new Error("User not found");
@@ -90,10 +90,10 @@ export const updateUserProfile = async (req, res, next) => {
 
   const { firstName, lastName, contactEmail, phoneNumber } = req.body;
   const avatar = req.file;
-  const { email, username } = req.decoded;
+  const { email, fullName } = req.decoded;
 
   try {
-    const findUser = await UserModel.findOne({ email, fullName: username });
+    const findUser = await UserModel.findOne({ email, fullName });
 
     if (!findUser) {
       const err = new Error("User not found");
@@ -121,8 +121,6 @@ export const updateUserProfile = async (req, res, next) => {
       };
       updateOptions = { ...updateOptions, shippingAddress };
     }
-
-    console.log(updateOptions);
 
     if (Object.keys(updateOptions).length === 0) {
       return res

@@ -2,15 +2,15 @@ import jwt from "jsonwebtoken";
 
 export const verifyJWT = async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization || req.headers.Authorization;
-    if (!authHeader?.startsWith("Bearer ")) return res.sendStatus(401);
-    const token = authHeader.split(" ")[1];
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-      if (err)
-        return res.status(403).json({ error: true, message: "invalid token" });
+    const accToken = req.cookies.acc;
+    const refToken = req.cookies.ref;
+    if (!refToken) return res.status(403).json({ error: { status: 403 } });
+    jwt.verify(accToken, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+      if (err) return res.status(401).json({ error: { status: 401 } });
       const decodedJWT = {
+        _id: decoded._id,
         email: decoded.email,
-        username: decoded.username,
+        fullName: decoded.fullName,
       };
       req.decoded = decodedJWT;
       next();

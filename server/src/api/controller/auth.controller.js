@@ -24,40 +24,16 @@ export const SignUp = [
       const salt = bcrypt.genSaltSync(10);
       const hashedPassword = bcrypt.hashSync(password, salt);
 
-      const createUser = await UserModel.create({
+      await UserModel.create({
         email,
         password: hashedPassword,
         fullName,
       });
 
-      const accessToken = jwt.sign(
-        {
-          email: createUser.email,
-          username: createUser.fullName,
-        },
-        process.env.ACCESS_TOKEN_SECRET,
-        {
-          expiresIn: "2h",
-        }
-      );
-
-      const refreshToken = jwt.sign(
-        {
-          email: createUser.email,
-          username: createUser.fullName,
-        },
-        process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: "7d" }
-      );
-
-      res.cookie("jwt", refreshToken, {
-        httpOnly: true,
-        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 24 * 60 * 60 * 1000,
+      return res.status(201).json({
+        error: false,
+        message: "thanks for sign up, now you can sign in!",
       });
-
-      return res.status(201).json({ accessToken });
     } catch (error) {
       console.log(error);
       if (error.code === 11000) {
@@ -67,14 +43,14 @@ export const SignUp = [
           field: Object.keys(error.keyValue),
         });
       }
-      return res.status(406).json({ message: "Invalid credentials" });
+      return next(error);
     }
   },
 ];
 
 export const SignIn = [
   validateSignInBody,
-  async (req, res) => {
+  async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const errorObj = {};
@@ -86,96 +62,124 @@ export const SignIn = [
 
     try {
       const { email, password } = req.body;
-
       const foundUser = await UserModel.findOne({
         email,
       });
 
       if (!foundUser) {
-        return res.status(404).json({
-          error: true,
-          message:
-            "We couldn't find your account. Please check your email and password",
-        });
+        const error = new Error("");
+        error.message =
+          "We couldn't find your account. Please check your email and password";
+        error.status = 404;
+        error.error = true;
+        throw error;
       }
 
       const isPasswordCorrect = await bcrypt.compare(
         password,
         foundUser.password
       );
+
       if (!isPasswordCorrect) {
-        return res.status(404).json({
-          error: true,
-          message:
-            "We couldn't find your account. Please check your email and password",
-        });
+        const error = new Error("");
+        error.message =
+          "We couldn't find your account. Please check your email and password";
+        error.status = 404;
+        error.error = true;
+        throw error;
       }
 
       const accessToken = jwt.sign(
         {
+          _id: foundUser._id,
           email: foundUser.email,
-          username: foundUser.fullName,
+          fullName: foundUser.fullName,
         },
         process.env.ACCESS_TOKEN_SECRET,
         {
-          expiresIn: "2h",
+          expiresIn: "30m",
         }
       );
 
       const refreshToken = jwt.sign(
         {
+          _id: foundUser._id,
           email: foundUser.email,
-          username: foundUser.fullName,
+          fullName: foundUser.fullName,
         },
         process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: "7d" }
       );
 
-      res.cookie("jwt", refreshToken, {
+      res.cookie("acc", accessToken, {
         httpOnly: true,
         sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
         secure: process.env.NODE_ENV === "production",
-        maxAge: 24 * 60 * 60 * 1000,
+        maxAge: 30 * 60 * 1000,
       });
-      return res.json({ accessToken });
+
+      res.cookie("ref", refreshToken, {
+        httpOnly: true,
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      return res.json({
+        error: false,
+        message: "Welcome back!",
+        profile: foundUser,
+      });
     } catch (error) {
-      console.log(error);
-      return res.status(406).json({ message: "Invalid credentials" });
+      next(error);
     }
   },
 ];
 
 export const Logout = (req, res) => {
-  res.clearCookie("jwt");
-  return res.status(200).json({ error: false });
+  res.clearCookie("ref");
+  res.clearCookie("acc");
+
+  res.status(200).json({ error: false });
 };
 
 export const RefreshToken = async (req, res) => {
-  const jwtCookie = req.cookies.jwt;
-  if (!jwtCookie) return res.sendStatus(401);
+  const jwtCookie = req.cookies.ref;
+  if (!jwtCookie) return res.status(401).json({ error: true });
 
   try {
     const decodedJWT = jwt.verify(
       jwtCookie,
       process.env.REFRESH_TOKEN_SECRET,
       (err, decode) => {
-        if (err) return res.sendStatus(403);
+        if (err) {
+          res.clearCookie("acc");
+          res.clearCookie("ref");
+          return res.status(403).json({ error: true });
+        }
         return decode;
       }
     );
     const foundUser = await UserModel.findOne({
+      _id: decodedJWT._id,
       email: decodedJWT.email,
-      fullName: decodedJWT.username,
+      fullName: decodedJWT.fullName,
     });
-    const payload = { email: foundUser.email, username: foundUser.fullName };
+    const payload = { email: foundUser.email, fullName: foundUser.fullName };
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: "2h",
+      expiresIn: "30m",
     });
-    console.log(accessToken)
 
-    return res.status(200).json({ accessToken });
+    res.cookie("acc", accessToken, {
+      httpOnly: true,
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 30 * 60 * 1000,
+    });
+
+    return res.status(200).json({ error: false });
   } catch (error) {
-    console.log(error)
+    console.log(error);
 
     return res
       .status(500)
