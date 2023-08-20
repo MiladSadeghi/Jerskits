@@ -5,6 +5,7 @@ import profileSlice from "./feature/profile/profileSlice";
 import { profileApi } from "../services/profileApi";
 import { locationApi } from "../services/locationApi";
 import { authApi } from "../services/authApi";
+import userApi from "../services/userApi";
 
 const rootReducer = combineReducers({
 	auth: authSlice,
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
 	[authApi.reducerPath]: authApi.reducer,
 	[profileApi.reducerPath]: profileApi.reducer,
 	[locationApi.reducerPath]: locationApi.reducer,
+	[userApi.reducerPath]: userApi.reducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
@@ -21,7 +23,8 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
 			getDefaultMiddleware().concat(
 				authApi.middleware,
 				profileApi.middleware,
-				locationApi.middleware
+				locationApi.middleware,
+				userApi.middleware
 			),
 		preloadedState,
 	});

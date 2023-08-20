@@ -1,7 +1,6 @@
 import {
 	useSignUpMutation,
 	useSignInMutation,
-	useRefreshTokenQuery,
 	useSignOutMutation,
 } from "./authApi";
 
@@ -16,11 +15,10 @@ import { baseQueryWithReauth, baseQueryWithAuth } from "./api";
 export {
 	useSignUpMutation,
 	useSignInMutation,
-	useRefreshTokenQuery,
 	useSignOutMutation,
 	useLazyGetLocationQuery,
-	useGetUserProfileQuery,
 	useUpdateUserProfileMutation,
 	baseQueryWithReauth,
 	baseQueryWithAuth,
+	useGetUserProfileQuery,
 };
