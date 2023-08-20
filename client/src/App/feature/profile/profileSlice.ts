@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { IProfile } from "../../../shared/types/Profile.types";
 
 const initialState: IProfile = {
-	username: "",
+	fullName: "",
 	email: "",
 	firstName: "",
 	lastName: "",
@@ -24,9 +24,10 @@ const profileSlice = createSlice({
 	initialState,
 	reducers: {
 		setProfile: (state, { payload }: PayloadAction<IProfile>) => {
-			state.username = payload.username ?? state.username;
+			state.fullName = payload.fullName ?? state.fullName;
 			state.firstName = payload.firstName ?? state.firstName;
 			state.lastName = payload.lastName ?? state.lastName;
+			state.email = payload.email ?? state.email;
 			state.contactEmail = payload.contactEmail ?? state.contactEmail;
 			state.phoneNumber = payload.phoneNumber ?? state.phoneNumber;
 			state.avatar = payload.avatar ?? state.avatar;

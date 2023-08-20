@@ -13,7 +13,6 @@ export interface ICard {
 }
 
 export interface IAuthSlice {
-	accessToken: string | null;
 	isAuthenticated: boolean;
 }
 
@@ -28,12 +27,18 @@ export type TAuthResponseError = {
 	data: {
 		error: boolean;
 		message: string;
+		field: [string];
 	};
 };
 
 export type TSignInRequest = {
 	email: string;
 	password: string;
+};
+
+export type TAuthResponse = {
+	error: boolean;
+	message: string;
 };
 
 export type TDecodedJWT = IProfile;

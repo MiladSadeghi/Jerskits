@@ -3,15 +3,13 @@ import editProfileSchema from "../../pages/Profile/components/Edit/Edit.schema";
 
 export type TeditProfileSchema = yup.InferType<typeof editProfileSchema>;
 
-type Option = {
+export type Option = {
 	label: string;
 	value: string;
 };
 
-export type { Option };
-
 interface IProfile {
-	username?: string;
+	fullName?: string;
 	email?: string;
 	firstName?: string;
 	lastName?: string;

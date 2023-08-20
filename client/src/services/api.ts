@@ -4,21 +4,12 @@ import {
 	fetchBaseQuery,
 	FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
-import { removeToken, setToken } from "../App/feature/auth/authSlice";
-import { RootState } from "../App/store";
+import { setAuthStatus } from "../App/feature/auth/authSlice";
+import { toast } from "react-hot-toast";
 
 export const baseQueryWithAuth = fetchBaseQuery({
 	baseUrl: import.meta.env.VITE_SERVER_URL,
 	credentials: "include",
-	prepareHeaders: async (headers, { getState }) => {
-		const accessToken = (getState() as RootState).auth.accessToken;
-
-		if (accessToken) {
-			headers.set("Authorization", `Bearer ${accessToken}`);
-		}
-
-		return headers;
-	},
 });
 
 export const baseQueryWithReauth: BaseQueryFn<
@@ -31,18 +22,17 @@ export const baseQueryWithReauth: BaseQueryFn<
 		const refreshResult = await baseQueryWithAuth(
 			{
 				url: `/auth/refresh`,
-				method: "POST",
+				method: "GET",
 			},
 			api,
 			extraOptions
 		);
 
-		if (refreshResult.data) {
-			const refreshTokenResult = refreshResult.data as { accessToken: string };
-			api.dispatch(setToken(refreshTokenResult.accessToken));
+		if (!refreshResult.error) {
 			result = await baseQueryWithAuth(args, api, extraOptions);
 		} else {
-			api.dispatch(removeToken);
+			api.dispatch(setAuthStatus(false));
+			toast("Sorry but you should login again!", { icon: "⚠️" });
 		}
 	}
 

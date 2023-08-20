@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { IProfile, TGetProfileResponse } from "../shared/types/Profile.types";
 
 export const profileApi = createApi({
-	reducerPath: "profileSliceApi",
+	reducerPath: "profileApi",
 	baseQuery: baseQueryWithReauth,
 	refetchOnMountOrArgChange: true,
 	endpoints: (build) => ({

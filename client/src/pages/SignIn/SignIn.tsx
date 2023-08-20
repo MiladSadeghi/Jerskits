@@ -10,6 +10,9 @@ import { SpinnerCircular } from "spinners-react";
 import { css } from "twin.macro";
 import { useSignInMutation } from "../../services";
 import { useEffect } from "react";
+import { useAppDispatch } from "../../App/hooks";
+import { setAuthStatus } from "../../App/feature/auth/authSlice";
+import { setProfile } from "../../App/feature/profile/profileSlice";
 
 function SignIn() {
 	const navigate = useNavigate();
@@ -21,22 +24,25 @@ function SignIn() {
 	} = useForm<ISignInForm>({
 		resolver: yupResolver(SignInSchema),
 	});
+	const dispatch = useAppDispatch();
 
-	const [signIn, { isLoading, isSuccess }] = useSignInMutation();
+	const [signIn, { isLoading, isSuccess, data, isError, error }] =
+		useSignInMutation();
 
 	useEffect(() => {
-		if (isSuccess) {
-			toast.success(
-				"Awesome! You're all signed up. Taking you back to the home page now...",
-				{
-					duration: 2900,
-				}
-			);
-			setTimeout(() => {
-				navigate("/", { replace: true });
-			}, 3000);
+		if (isSuccess && data) {
+			toast.success(data.message, { position: "bottom-center" });
+			dispatch(setAuthStatus(true));
+			dispatch(setProfile(data.profile));
+			navigate("/");
 		}
-	}, [isSuccess, navigate]);
+	}, [isSuccess]);
+
+	useEffect(() => {
+		if (error && data) {
+			toast.error(data?.message, { position: "bottom-center" });
+		}
+	}, [isError]);
 
 	const signInHandler = async (data: ISignInForm) => {
 		await signIn({

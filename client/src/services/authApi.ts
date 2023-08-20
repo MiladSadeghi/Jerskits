@@ -1,30 +1,20 @@
-import {
-	BaseQueryFn,
-	FetchArgs,
-	createApi,
-} from "@reduxjs/toolkit/query/react";
-
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { toast } from "react-hot-toast";
-import jwtDecode from "jwt-decode";
 import { baseQueryWithAuth } from "./api";
-import { removeToken, setToken } from "../App/feature/auth/authSlice";
-import { setProfile } from "../App/feature/profile/profileSlice";
 import {
+	TAuthResponse,
 	TAuthResponseError,
-	TDecodedJWT,
 	TSignInRequest,
 	TSignUpRequest,
 } from "../shared/types/Auth.types";
+import { IProfile } from "../shared/types/Profile.types";
+import { setAuthStatus } from "../App/feature/auth/authSlice";
 
 export const authApi = createApi({
-	reducerPath: "authSliceApi",
-	baseQuery: baseQueryWithAuth as BaseQueryFn<
-		FetchArgs,
-		unknown,
-		TAuthResponseError
-	>,
+	reducerPath: "authApi",
+	baseQuery: baseQueryWithAuth,
 	endpoints: (build) => ({
-		SignUp: build.mutation<{ accessToken: string }, TSignUpRequest>({
+		SignUp: build.mutation<TAuthResponse, TSignUpRequest>({
 			query({ email, password, fullName }) {
 				return {
 					url: "/auth/sign-up",
@@ -32,56 +22,17 @@ export const authApi = createApi({
 					body: { email, password, fullName },
 				};
 			},
-			async onQueryStarted(_, { dispatch, queryFulfilled }) {
-				try {
-					const { data } = await queryFulfilled;
-					dispatch(setToken(data.accessToken));
-				} catch (error: unknown) {
-					const typedError = error as TAuthResponseError;
-					toast.error(typedError?.data?.message);
-				}
-			},
 		}),
-		SignIn: build.mutation<{ accessToken: string }, TSignInRequest>({
+		SignIn: build.mutation<
+			TAuthResponse & { profile: IProfile },
+			TSignInRequest
+		>({
 			query({ email, password }) {
 				return {
 					url: "/auth/sign-in",
 					method: "POST",
 					body: { email, password },
 				};
-			},
-			async onQueryStarted(_, { dispatch, queryFulfilled }) {
-				try {
-					const { data } = await queryFulfilled;
-					dispatch(setToken(data.accessToken));
-				} catch (error: unknown) {
-					const typedError = error as TAuthResponseError;
-					const errorMessage =
-						typedError?.data?.message || "Try again later...";
-					toast.error(errorMessage);
-				}
-			},
-		}),
-		RefreshToken: build.query<{ accessToken: string }, void>({
-			query() {
-				return {
-					url: "/auth/refresh",
-					method: "GET",
-					credentials: "include",
-				};
-			},
-			async onQueryStarted(_, { dispatch, queryFulfilled }) {
-				try {
-					const { data } = await queryFulfilled;
-					dispatch(setToken(data.accessToken));
-					const decodeJWT: TDecodedJWT = jwtDecode(data.accessToken);
-					dispatch(setProfile(decodeJWT));
-				} catch (error: unknown) {
-					const typedError = error as TAuthResponseError;
-					if (typedError.status === "FETCH_ERROR") {
-						toast.error("Can't login, try again later or refresh the page");
-					}
-				}
 			},
 		}),
 		SignOut: build.mutation<void, void>({
@@ -94,11 +45,8 @@ export const authApi = createApi({
 			async onQueryStarted(_, { dispatch, queryFulfilled }) {
 				try {
 					await queryFulfilled;
-					dispatch(removeToken());
+					dispatch(setAuthStatus(false));
 					toast.success("You have successfully signed out");
-					setTimeout(() => {
-						window.location.reload();
-					}, 1000);
 				} catch (error: unknown) {
 					const typedError = error as TAuthResponseError;
 					if (typedError?.status === "FETCH_ERROR") {
@@ -112,9 +60,5 @@ export const authApi = createApi({
 	}),
 });
 
-export const {
-	useSignUpMutation,
-	useSignInMutation,
-	useRefreshTokenQuery,
-	useSignOutMutation,
-} = authApi;
+export const { useSignUpMutation, useSignInMutation, useSignOutMutation } =
+	authApi;

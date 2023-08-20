@@ -36,6 +36,7 @@ function Edit() {
 		watch,
 		setValue,
 		control,
+		reset,
 	} = useForm<TeditProfileSchema>({
 		resolver: yupResolver(editProfileSchema),
 		reValidateMode: "onChange",
@@ -45,6 +46,7 @@ function Edit() {
 
 	useEffect(() => {
 		if (isSuccess && profileData) {
+			reset();
 			if (profileData.profile.firstName)
 				setValue("firstName", profileData.profile.firstName);
 			if (profileData.profile.lastName)

@@ -26,7 +26,7 @@ function Profile() {
 								/>
 							</div>
 							<h1 className="ml-5 font-bold capitalize text-primary-black text-text-xl">
-								Hi, {profile.username}
+								Hi, {profile.fullName}
 							</h1>
 						</div>
 						{ProfileLinks.map((link, index) => (

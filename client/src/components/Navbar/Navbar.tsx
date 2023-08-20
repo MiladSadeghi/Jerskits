@@ -1,31 +1,23 @@
 import tw from "twin.macro";
 import { Link, useLocation } from "react-router-dom";
 import styled from "twin.macro";
-import { SpinnerCircular } from "spinners-react";
-import { useAppSelector } from "../../App/hooks";
-import { useRefreshTokenQuery } from "../../services";
 import { useState, useRef, useEffect } from "react";
 import { ProfilePopup } from "..";
-import { RootState } from "../../App/store";
+import { useAppSelector } from "../../App/hooks";
 
 type TPopups = {
 	profile: boolean;
 };
 
 function Navbar() {
-	const { isLoading, isSuccess } = useRefreshTokenQuery();
-	const profile = useAppSelector((state: RootState) => state.profile);
-	const userFullName = profile ? profile.username : null;
 	const [popups, setPopups] = useState<TPopups>({
 		profile: false,
 	});
 	const profileRef = useRef<HTMLDivElement | null>(null);
 	const profileButtonRef = useRef<HTMLButtonElement | null>(null);
 	const location = useLocation();
-	const isAuthenticated = useAppSelector(
-		(state: RootState) => state.auth.isAuthenticated
-	);
-
+	const authStatus = useAppSelector((state) => state.auth.isAuthenticated);
+	const profile = useAppSelector((state) => state.profile);
 	const handlePopupOpen = () => {
 		setPopups({
 			profile: true,
@@ -121,19 +113,19 @@ function Navbar() {
 							/>
 						</svg>
 					</button>
-					{isLoading ? (
-						<SpinnerCircular
-							size={25}
-							thickness={100}
-							speed={100}
-							color="rgba(0, 0, 0, 1)"
-							secondaryColor="rgba(255, 255, 255, 1)"
-						/>
-					) : isSuccess && isAuthenticated ? (
+					{authStatus ? (
 						<button ref={profileButtonRef} onClick={handlePopupOpen}>
 							<img
-								src={"/images/blank-profile-picture.png"}
-								alt={userFullName as string}
+								crossOrigin="anonymous"
+								src={
+									(profile.avatar as string)
+										? `${import.meta.env.VITE_SERVER_URL.replace(
+												"/api",
+												""
+										  )}/images/${profile.avatar}`
+										: "/images/blank-profile-picture.png"
+								}
+								alt={profile.firstName || profile.fullName}
 								className="object-contain rounded-full w-7 h-7"
 							/>
 						</button>
@@ -142,11 +134,7 @@ function Navbar() {
 					)}
 				</div>
 			</div>
-			<ProfilePopup
-				myPropRef={profileRef}
-				name={userFullName as string}
-				isShow={popups.profile}
-			/>
+			<ProfilePopup ref={profileRef} isShow={popups.profile} />
 		</Wrapper>
 	);
 }

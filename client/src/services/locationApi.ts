@@ -9,7 +9,7 @@ type LocationResponse = {
 	city: Option[];
 };
 export const locationApi = createApi({
-	reducerPath: "locationSliceApi",
+	reducerPath: "locationApi",
 	baseQuery: baseQueryWithAuth,
 	endpoints: (build) => ({
 		getLocation: build.query<LocationResponse, string>({

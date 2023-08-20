@@ -8,17 +8,19 @@ import { SpinnerCircular } from "spinners-react";
 import { toast } from "react-hot-toast";
 import { useSignUpMutation } from "../../services";
 import { useEffect } from "react";
+import { ErrorMessage } from "@hookform/error-message";
 import { TAuthResponseError } from "../../shared/types/Auth.types";
 
 function SignUp() {
 	const navigate = useNavigate();
 	window.document.title = "Jerskits - Sign Up";
-	const [signUp, { isLoading, error, isError, isSuccess }] =
-		useSignUpMutation();
+	const [signUp, { isLoading, error, isSuccess, data }] = useSignUpMutation();
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
+		setError,
+		setFocus,
 	} = useForm<ISignUpForm>({
 		resolver: yupResolver(SignUpSchema),
 	});
@@ -32,18 +34,28 @@ function SignUp() {
 	};
 
 	useEffect(() => {
-		if (isSuccess) {
-			toast.success(
-				"Awesome! You're all signed up. Taking you back to the home page now...",
-				{
-					duration: 2900,
-				}
-			);
-			setTimeout(() => {
-				navigate("/", { replace: true });
-			}, 3000);
+		if (isSuccess && data) {
+			toast.success(data.message);
+			navigate("/sign-in");
 		}
-	}, [isSuccess, navigate]);
+	}, [isSuccess]);
+
+	useEffect(() => {
+		if (error) {
+			const SignUpError = error as TAuthResponseError;
+			if (
+				SignUpError.status === 409 &&
+				SignUpError.data.field.includes("email")
+			) {
+				setError("email", { message: SignUpError.data.message });
+				setFocus("email");
+			} else if (SignUpError.status !== 409) {
+				toast.error("Something bad happened, try again later!", {
+					position: "bottom-center",
+				});
+			}
+		}
+	}, [error]);
 
 	return (
 		<div className="max-w-[400px] w-full">
@@ -81,12 +93,11 @@ function SignUp() {
 							autoComplete="off"
 							{...register("email", { required: true })}
 						/>
-						<FormError>
-							{(errors.email && errors.email.message) ||
-								(isError &&
-									(error as TAuthResponseError).status === 409 &&
-									(error as TAuthResponseError).data.message)}
-						</FormError>
+						<ErrorMessage
+							errors={errors}
+							name="email"
+							render={({ message }) => <FormError>{message}</FormError>}
+						/>
 					</div>
 					<div className="space-y-[8px]">
 						<FormLabel htmlFor="full-name">Full Name</FormLabel>
@@ -96,7 +107,11 @@ function SignUp() {
 							autoComplete="off"
 							{...register("fullName", { required: true })}
 						/>
-						<FormError>{errors.fullName && errors.fullName.message}</FormError>
+						<ErrorMessage
+							errors={errors}
+							name="fullName"
+							render={({ message }) => <FormError>{message}</FormError>}
+						/>
 					</div>
 					<div className="space-y-[8px]">
 						<FormLabel htmlFor="password">Password</FormLabel>
@@ -106,7 +121,11 @@ function SignUp() {
 							autoComplete="new-password"
 							{...register("password", { required: true })}
 						/>
-						<FormError>{errors.password && errors.password.message}</FormError>
+						<ErrorMessage
+							errors={errors}
+							name="password"
+							render={({ message }) => <FormError>{message}</FormError>}
+						/>
 					</div>
 					<div className="space-y-[8px]">
 						<FormLabel htmlFor="confirmation-password">
@@ -118,9 +137,11 @@ function SignUp() {
 							autoComplete="new-password"
 							{...register("confirmPassword", { required: true })}
 						/>
-						<FormError>
-							{errors.confirmPassword && errors.confirmPassword.message}
-						</FormError>
+						<ErrorMessage
+							errors={errors}
+							name="confirmPassword"
+							render={({ message }) => <FormError>{message}</FormError>}
+						/>
 					</div>
 					<div className="flex items-start gap-2">
 						<input
