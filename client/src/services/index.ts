@@ -10,15 +10,11 @@ import {
 	useUpdateUserProfileMutation,
 } from "./profileApi";
 
-import { baseQueryWithReauth, baseQueryWithAuth } from "./api";
-
 export {
 	useSignUpMutation,
 	useSignInMutation,
 	useSignOutMutation,
 	useLazyGetLocationQuery,
 	useUpdateUserProfileMutation,
-	baseQueryWithReauth,
-	baseQueryWithAuth,
 	useGetUserProfileQuery,
 };

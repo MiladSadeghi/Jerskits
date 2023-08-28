@@ -1,9 +1,14 @@
 import tw from "twin.macro";
 import { Link, useLocation } from "react-router-dom";
 import styled from "twin.macro";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { ProfilePopup } from "..";
-import { useAppSelector } from "../../App/hooks";
+import { useAppDispatch, useAppSelector } from "../../App/hooks";
+import { useGetUserQuery } from "../../services/userApi";
+import LoaderContext from "../../providers/LoaderContext";
+import { setProfile } from "../../App/feature/profile/profileSlice";
+import { setAuthStatus } from "../../App/feature/auth/authSlice";
+import Skeleton from "react-loading-skeleton";
 
 type TPopups = {
 	profile: boolean;
@@ -18,6 +23,10 @@ function Navbar() {
 	const location = useLocation();
 	const authStatus = useAppSelector((state) => state.auth.isAuthenticated);
 	const profile = useAppSelector((state) => state.profile);
+	const Loaders = useContext(LoaderContext);
+	const { data, error, isError, isSuccess, isFetching } = useGetUserQuery();
+	const dispatch = useAppDispatch();
+
 	const handlePopupOpen = () => {
 		setPopups({
 			profile: true,
@@ -49,6 +58,26 @@ function Navbar() {
 			profile: false,
 		});
 	}, [location]);
+
+	useEffect(() => {
+		if (isFetching) Loaders?.showNavbarLoader();
+	}, [isFetching]);
+
+	useEffect(() => {
+		if (isSuccess) {
+			console.log(data);
+			Loaders?.hideNavbarLoader();
+			if (data.profile) dispatch(setProfile(data.profile));
+			dispatch(setAuthStatus(true));
+		}
+	}, [isSuccess]);
+
+	useEffect(() => {
+		if (error) {
+			Loaders?.hideNavbarLoader();
+			console.log(error);
+		}
+	}, [isError]);
 
 	return (
 		<Wrapper>
@@ -113,7 +142,12 @@ function Navbar() {
 							/>
 						</svg>
 					</button>
-					{authStatus ? (
+					{Loaders?.navbarLoader ? (
+						<Skeleton
+							containerClassName="w-20"
+							className="w-full h-full leading-normal"
+						/>
+					) : authStatus ? (
 						<button ref={profileButtonRef} onClick={handlePopupOpen}>
 							<img
 								crossOrigin="anonymous"

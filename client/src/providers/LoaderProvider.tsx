@@ -7,20 +7,27 @@ interface LoaderProviderProps {
 }
 
 const LoaderProvider: React.FC<LoaderProviderProps> = ({ children }) => {
-	const [isLoading, setIsLoading] = useState(true);
+	const [fullScreenLoader, setFullScreenLoader] = useState(true);
+	const [navbarLoader, setNavbarLoader] = useState<boolean>(true);
 
-	const showLoader = () => {
-		setIsLoading(true);
+	const showFullScreenLoader = () => {
+		setFullScreenLoader(true);
 	};
 
-	const hideLoader = () => {
-		setIsLoading(false);
+	const hideFullScreenLoader = () => {
+		setFullScreenLoader(false);
 	};
+
+	const showNavbarLoader = () => setNavbarLoader(true);
+	const hideNavbarLoader = () => setNavbarLoader(false);
 
 	const contextValue: LoaderContextType = {
-		isLoading,
-		showLoader,
-		hideLoader,
+		fullScreenLoader,
+		navbarLoader,
+		showFullScreenLoader,
+		hideFullScreenLoader,
+		showNavbarLoader,
+		hideNavbarLoader,
 	};
 
 	return (

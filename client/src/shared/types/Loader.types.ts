@@ -1,5 +1,8 @@
 export interface LoaderContextType {
-	isLoading: boolean;
-	showLoader: () => void;
-	hideLoader: () => void;
+	fullScreenLoader: boolean;
+	navbarLoader: boolean;
+	showFullScreenLoader: () => void;
+	hideFullScreenLoader: () => void;
+	showNavbarLoader: () => void;
+	hideNavbarLoader: () => void;
 }
