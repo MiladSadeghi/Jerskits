@@ -1,13 +1,13 @@
 import { mongoose } from "mongoose";
 
 const ProductSchema = mongoose.Schema({
-  title: {
+  name: {
     type: String,
     required: true,
   },
   brand: {
     type: String,
-    enum: ["nike", "adidas", "jordan", "puma", "reebok", "vans"],
+    enum: ["nike", "adidas", "jordan"],
     required: true,
   },
   type: {
@@ -19,13 +19,58 @@ const ProductSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  size: {
+  offPrice: {
+    type: Number,
+  },
+  gender: {
     type: String,
-    enum: ["XS", "S", "M", "L", "XL"],
+    enum: ["men", "women", "kid"],
     required: true,
   },
-  description: {
+  color: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
+  size: [
+    {
+      type: String,
+      enum: ["XS", "S", "M", "L", "XL", "2XL", "3XL"],
+    },
+  ],
+  slug: {
     type: String,
+    required: true,
+  },
+  gallery: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
+  poster: {
+    type: String,
+    required: false,
+  },
+  detail_product: {
+    type: [
+      {
+        _id: false,
+        title: String,
+        description: {
+          type: String,
+          required: false,
+          default: undefined,
+        },
+        specification: {
+          type: [String],
+          required: false,
+          default: undefined,
+        },
+      },
+    ],
+    default: undefined,
   },
 });
 
