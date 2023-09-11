@@ -1,13 +1,13 @@
-import { SignInApiMock, SignUpApiMock } from "./auth.mock";
-import { SignInWIthRefreshTokenMock } from "./navbar.mock";
-import { GetProfileMock, SubmitProfileMock } from "./profile.mock.ts";
+import { SignInApiMock, SignUpApiMock } from './auth.mock'
+import { SignInWIthRefreshTokenMock } from './navbar.mock'
+import { GetProfileMock, SubmitProfileMock } from './profile.mock.ts'
 
 const handler = [
-	SignUpApiMock,
-	SignInApiMock,
-	SignInWIthRefreshTokenMock,
-	GetProfileMock,
-	SubmitProfileMock,
-];
+  SignUpApiMock,
+  SignInApiMock,
+  SignInWIthRefreshTokenMock,
+  GetProfileMock,
+  SubmitProfileMock
+]
 
-export default handler;
+export default handler

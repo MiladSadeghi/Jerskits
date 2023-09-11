@@ -1,3 +1,3 @@
-import Edit from "./Edit";
+import Edit from './Edit'
 
-export { Edit };
+export { Edit }

@@ -1,5 +1,5 @@
-import { IProfile } from "./Profile.types";
+import { IProfile } from './Profile.types'
 
 export interface IGetUserResponse {
-	profile: IProfile;
+  profile: IProfile
 }
