@@ -148,3 +148,5 @@ images/*
 !images/
 .idea
 images
+
+.vscode

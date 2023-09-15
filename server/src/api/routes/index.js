@@ -11,6 +11,6 @@ mainRoutes.use("/auth", authRouter);
 mainRoutes.use("/profile", profileRouter);
 mainRoutes.use("/location", locationRouter);
 mainRoutes.use("/user", userRouter);
-mainRoutes.use("/", landingProvider);
+mainRoutes.get("/", landingProvider);
 
 export default mainRoutes;

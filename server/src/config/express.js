@@ -28,7 +28,6 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 
 app.use("/images", express.static(path.join(__dirname, "images")));
-app.get("/api", (req, res) => res.send("OK"));
 app.use("/api", mainRoutes);
 
 app.use(converter);
