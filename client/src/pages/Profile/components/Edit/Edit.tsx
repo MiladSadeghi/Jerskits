@@ -348,7 +348,7 @@ function Edit() {
           type='checkbox'
           className={`form-checkbox rounded-full !outline-none focus:!outline-none focus:!border-none text-primary-black w-5 h-5 border-none ring-primary-black ring-1 focus:ring-primary-black ring-offset-0 focus:ring-offset-0 `}
           id='save-address'
-          data-testid='save-address'
+          data-testid='save-address-checkbox'
           {...register('saveAddress')}
         />
         <FormLabel htmlFor='save-address' className='flex-1'>

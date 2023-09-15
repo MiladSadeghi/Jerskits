@@ -24,16 +24,16 @@ const profileSlice = createSlice({
   initialState,
   reducers: {
     setProfile: (state, { payload }: PayloadAction<IProfile>) => {
-      state.fullName = payload.fullName ?? state.fullName
-      state.firstName = payload.firstName ?? state.firstName
-      state.lastName = payload.lastName ?? state.lastName
-      state.email = payload.email ?? state.email
-      state.contactEmail = payload.contactEmail ?? state.contactEmail
-      state.phoneNumber = payload.phoneNumber ?? state.phoneNumber
-      state.avatar = payload.avatar ?? state.avatar
+      state.fullName = payload?.fullName ?? state.fullName
+      state.firstName = payload?.firstName ?? state.firstName
+      state.lastName = payload?.lastName ?? state.lastName
+      state.email = payload?.email ?? state.email
+      state.contactEmail = payload?.contactEmail ?? state.contactEmail
+      state.phoneNumber = payload?.phoneNumber ?? state.phoneNumber
+      state.avatar = payload?.avatar ?? state.avatar
       state.shippingAddress = {
         ...state.shippingAddress,
-        ...(payload.shippingAddress ?? {})
+        ...(payload?.shippingAddress ?? {})
       }
     }
   }

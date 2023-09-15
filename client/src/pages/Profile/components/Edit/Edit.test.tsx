@@ -34,7 +34,7 @@ describe('Edit profile page', () => {
     renderWithProviders(<Edit />)
     user.setup()
     await waitFor(async () => {
-      const saveAddressElement = screen.getByTestId(/^save-address$/i)
+      const saveAddressElement = screen.getByTestId(/^save-address-checkbox$/i)
       await user.click(saveAddressElement)
       const submitButton = screen.getByRole('button', { name: /save/i })
       await user.click(submitButton)
@@ -65,8 +65,10 @@ describe('Edit profile page', () => {
   })
 
   test('profile update successfully', async () => {
-    const { store } = renderWithProviders(<Edit />)
     user.setup()
+
+    const { store } = renderWithProviders(<Edit />)
+
     await waitFor(async () => {
       const firstNameElement = screen.getByLabelText(/first name/i)
       const lastNameElement = screen.getByLabelText(/last name/i)
