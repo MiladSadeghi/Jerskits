@@ -31,8 +31,16 @@
 		font-display: swap;
 		font-style: normal;
 	}
+  @font-face {
+    font-family: "BabasNeue-Regular";
+    src: url("/fonts/BebasNeue-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-display: swap;
+		font-style: normal;
+  }
 
 	html {
     font-family: Urbanist, sans-serif, system-ui;
+    scroll-behavior: smooth;
   }
 }

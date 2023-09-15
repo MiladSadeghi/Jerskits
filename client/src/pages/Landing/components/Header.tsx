@@ -1,4 +1,7 @@
+import { useRef, useState } from 'react'
+import Skeleton from 'react-loading-skeleton'
 import { TLandingPageHeaderProduct } from '../../../shared/types/LandingPage.types'
+import { HeaderController, HeaderSlide } from '../../../components'
 
 type Props = {
   products: TLandingPageHeaderProduct[] | undefined
@@ -7,7 +10,39 @@ type Props = {
 }
 
 const Header = ({ products, isError, isLoading }: Props) => {
-  return <div>Header</div>
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const [currentSlide, setCurrentSlide] = useState<number>(0)
+
+  if (isLoading || isError || !products) {
+    return (
+      <Skeleton
+        containerClassName='h-screen block'
+        className='h-full leading-normal rounded-none'
+        containerTestId='landingpage-header'
+      />
+    )
+  }
+
+  return (
+    <div>
+      <div className='relative flex overflow-hidden' ref={containerRef}>
+        {products.map((product: TLandingPageHeaderProduct, index: number) => (
+          <HeaderSlide
+            product={product}
+            currentSlide={currentSlide}
+            key={product._id}
+            index={index}
+          />
+        ))}
+      </div>
+      <HeaderController
+        ref={containerRef}
+        slide={currentSlide}
+        setSlide={setCurrentSlide}
+        maxSlide={products.length - 1}
+      />
+    </div>
+  )
 }
 
 export default Header
