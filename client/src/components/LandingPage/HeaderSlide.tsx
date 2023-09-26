@@ -2,7 +2,7 @@ import { Variants, motion } from 'framer-motion'
 import { TLandingPageHeaderProduct } from '../../shared/types/LandingPage.types'
 import provideBrandLogo from '../../utils/brand-logo'
 import tw from 'twin.macro'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type Props = {
   product: TLandingPageHeaderProduct
@@ -30,13 +30,17 @@ const backgroundVariants: Variants = {
 
 const contentWrapper: Variants = {
   initial: {
-    marginTop: '80px',
+    paddingTop: 'var(--content-paddingTop)',
+    justifyContent: 'space-between',
+    marginLeft: 'var(--content-marginLeft)',
     transition: {
       delay: 0.5
     }
   },
   animate: {
-    marginTop: '44px',
+    paddingTop: '44px',
+    justifyContent: 'start',
+    marginLeft: '125px',
     transition: {
       delay: 0.6
     }
@@ -46,7 +50,7 @@ const contentWrapper: Variants = {
 const teamNameVariants: Variants = {
   currentInitial: {
     width: '0%',
-    fontSize: '350px',
+    fontSize: 'var(--current-initial-font-size)',
     fontWeight: 700
   },
   upcomingInitial: {
@@ -59,7 +63,7 @@ const teamNameVariants: Variants = {
     transition: { delay: 0.4, duration: 0.4 }
   },
   upcomingAnimate: {
-    fontSize: '350px',
+    fontSize: 'var(--current-initial-font-size)',
     fontWeight: 700,
     transition: { delay: 0.2, duration: 0.3 }
   }
@@ -68,25 +72,33 @@ const teamNameVariants: Variants = {
 const teamKitWrapperVariants: Variants = {
   currentInitial: {
     opacity: 0,
-    top: '75%',
-    left: '44%'
+    left: 'var(--current-initial-left)',
+    transform: 'translate(-50%, -50%)',
+    marginTop: 0,
+    width: 'var(--current-initial-width)'
   },
   currentAnimate: {
     opacity: 1,
-    top: '50%'
+    left: 'var(--current-initial-left)',
+    transform: 'translate(-50%, -50%)',
+    marginTop: 0,
+    width: 'var(--current-initial-width)'
   },
   upcomingInitial: {
-    width: '14%',
-    left: '14%',
-    marginTop: 20,
+    width: '251px',
+    left: 'var(--upcoming-initial-left, 120px)',
+    transform: 'translateY(-50%)',
+    marginTop: 34,
     transition: {
       delay: 0.8,
       duration: 0.2
     }
   },
   upcomingAnimate: {
-    width: '25%',
-    left: '44%'
+    width: 'var(--current-initial-width)',
+    left: 'var(--current-initial-left)',
+    transform: 'translate(-50%, -50%)',
+    marginTop: 0
   }
 }
 const teamKitImageVariants: Variants = {
@@ -139,9 +151,22 @@ const howWasMadeVariants: Variants = {
     opacity: 1,
     transition: { duration: 0.7, delay: 1 }
   },
-  nextSlideAnimate: {
+  upcomingSlideAnimate: {
     opacity: 1,
     transition: { duration: 0, delay: 2 }
+  }
+}
+
+const posterDescriptionVariants: Variants = {
+  initial: {
+    height: '0%'
+  },
+  animate: {
+    height: 'fit-content',
+    transition: {
+      delay: 1.1,
+      duration: 0.6
+    }
   }
 }
 
@@ -183,10 +208,6 @@ const HeaderSlide = ({ product, currentSlide, index }: Props) => {
     }
   }, [currentSlide])
 
-  const memoizedDescription = useMemo(() => {
-    return product.posterDescription.split('')
-  }, [product.posterDescription])
-
   const slideVariants: Variants = {
     initial: {
       marginLeft: '0rem',
@@ -196,7 +217,7 @@ const HeaderSlide = ({ product, currentSlide, index }: Props) => {
       }
     },
     animate: {
-      marginLeft: '-20rem',
+      marginLeft: 'var(--slide-animate-margin, 0)',
       transition: {
         easings: ['easeInOut'],
         delay: delay
@@ -205,56 +226,66 @@ const HeaderSlide = ({ product, currentSlide, index }: Props) => {
   }
 
   return (
-    <motion.div
+    <motion.section
       variants={slideVariants}
       initial='initial'
       animate={index - 1 === currentSlide ? 'animate' : 'initial'}
-      className='relative flex h-screen min-w-full overflow-hidden'
+      className='relative flex min-h-screen min-w-full overflow-hidden [--slide-animate-margin:0rem] xl:[--slide-animate-margin:-20rem] '
     >
       <motion.div
         variants={backgroundVariants}
         initial='initial'
         animate={index <= currentSlide ? 'animate' : 'initial'}
-        className={`absolute top-0 left-0 w-full  h-full will-change-transform z-[6] opacity-0`}
+        className={`absolute left-0 top-0 z-[6] h-full w-full opacity-0 will-change-transform`}
       />
       <img
-        className='absolute top-0 left-0 object-cover w-full h-full z-[3]'
+        className='absolute left-0 top-0 z-[3] h-full w-full object-cover'
         alt={`${product.teamName} stadium`}
         src={product.stadiumImage}
       />
-
       <motion.div
         variants={contentWrapper}
-        initial='initial'
+        initial={index === currentSlide && 'initial'}
         animate={index > currentSlide ? 'animate' : 'initial'}
-        className='absolute top-0 left-0 flex flex-col ml-[130px]'
+        className='absolute left-0 top-0 
+				ml-[30px] flex h-full w-full xl:w-4/5 flex-col pb-11 pr-11
+				[--content-paddingTop:40px]
+				[--content-marginLeft:30px]
+				xl:[--content-marginLeft:50px] 
+				2xl:[--content-marginLeft:70px] 
+				3xl:[--content-marginLeft:130px] 
+				'
       >
-        <div className='relative mb-8 z-[7]'>
-          <motion.img
-            className='w-16'
-            src={product.teamLogo}
-            alt={`${product.teamName} logo`}
-            variants={TeamLogoVariants}
+        <div>
+          <div className='relative z-[7] mb-8 w-1/2'>
+            <motion.img
+              className='w-16'
+              src={product.teamLogo}
+              alt={`${product.teamName} logo`}
+              variants={TeamLogoVariants}
+              initial='initial'
+              animate='animate'
+            />
+          </div>
+
+          <motion.div
+            variants={TitleVariants}
             initial='initial'
             animate='animate'
-          />
+            className={`relative z-[7] flex flex-col lg:flex-row lg:items-center overflow-hidden`}
+          >
+            <img
+              className='h-[40px] w-[40px] brightness-[100] '
+              src={provideBrandLogo(product.brand as string)}
+              alt={product.brand}
+            />
+            <h4
+              className={`lg:ml-4 block whitespace-nowrap font-bold text-white`}
+            >
+              {product.posterTitle}
+            </h4>
+          </motion.div>
         </div>
-
-        <motion.div
-          variants={TitleVariants}
-          initial='initial'
-          animate='animate'
-          className={`relative z-[7] mb-6 flex overflow-hidden items-center`}
-        >
-          <img
-            className='brightness-[100] w-[40px] h-[40px] '
-            src={provideBrandLogo(product.brand as string)}
-            alt={product.brand}
-          />
-          <h4 className={`font-bold text-white whitespace-nowrap ml-4 block`}>
-            {product.posterTitle}
-          </h4>
-        </motion.div>
         <motion.h1
           variants={teamNameVariants}
           initial={index === 0 ? 'currentInitial' : 'upcomingInitial'}
@@ -265,20 +296,23 @@ const HeaderSlide = ({ product, currentSlide, index }: Props) => {
               ? 'upcomingAnimate'
               : 'upcomingInitial'
           }
-          className={`relative  text-white uppercase font-BebasNeue tracking-wide leading-none overflow-hidden z-[7]`}
+          className={`relative z-[7] overflow-hidden font-BebasNeue uppercase leading-none tracking-wide text-white whitespace-nowrap
+						[--current-initial-font-size:21vw] xl:[--current-initial-font-size:17.9vw] scale-y-150 md:scale-y-100
+					`}
         >
           {product.teamName}
         </motion.h1>
-        <div className='relative flex w-full z-[9]'>
+        <div className='space-between relative z-[9] grid grid-cols-12 gap-y-11 lg:gap-0'>
           <motion.div
-            className={`z-40 flex w-fit will-change-transform`}
+            className={`z-40 flex will-change-transform h-full col-span-11 lg:col-span-6 2xl:col-span-5`}
             variants={howWasMadeVariants}
             initial={'initial'}
-            animate={`${
-              currentSlide === index ? 'animate' : 'nextSlideInitial'
-            }`}
+            animate={index <= currentSlide ? 'animate' : 'upcomingSlideInitial'}
           >
-            <img src={product.kitLogo} className='w-[241px] h-[241px]' />
+            <img
+              src={product.kitLogo}
+              className='w-[136px] h-[136px] lg:(h-[241px] w-[241px])'
+            />
             <motion.div
               initial={{
                 background: 'rgba(0, 0, 0, 0)',
@@ -292,32 +326,25 @@ const HeaderSlide = ({ product, currentSlide, index }: Props) => {
                   duration: 1
                 }
               }}
-              className='z-[9] flex flex-col justify-center pl-10 pr-12 will-change-transform'
+              className='z-[9] flex flex-col justify-center pl-4 pr-6 lg:(pl-6 pr-8) xl:(pl-10 pr-12)  will-change-transform'
             >
-              <h5 className='text-2xl font-bold text-white mb-[10px]'>
+              <h5 className='mb-[10px] text-2xl font-bold text-white'>
                 How Was Made?
               </h5>
-              <p className='w-64 text-sm leading-6 text-neutral-grey line-clamp-4'>
+              <p className='text-sm leading-6 line-clamp-2 lg:line-clamp-4 text-neutral-grey'>
                 {product.howWasMade}
               </p>
             </motion.div>
           </motion.div>
-          <div className='w-[400px] ml-[320px] flex flex-col justify-between'>
-            <p className='leading-6 line-clamp-4 text-neutral-grey'>
-              {memoizedDescription.map((char: string, index: number) => (
-                <motion.span
-                  key={index}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{
-                    delay: 1.7 + index * 0.005,
-                    duration: 0
-                  }}
-                >
-                  {char}
-                </motion.span>
-              ))}
-            </p>
+          <div className='flex flex-col justify-between col-span-11 lg:col-span-3 lg:col-start-8 break-word'>
+            <motion.p
+              variants={posterDescriptionVariants}
+              initial='initial'
+              animate='animate'
+              className='leading-6 line-clamp-4 text-neutral-grey mb-11 lg:mb-0'
+            >
+              {product.posterDescription}
+            </motion.p>
             <ShopNowButton
               variants={ShopButtonVariants}
               initial='initial'
@@ -354,7 +381,10 @@ const HeaderSlide = ({ product, currentSlide, index }: Props) => {
             ? 'upcomingAnimate'
             : 'upcomingInitial'
         }
-        className={`absolute flex items-center justify-center -translate-x-1/2 -translate-y-1/2 top-1/2 z-[8] w-[25%]`}
+        className={`absolute z-[8] flex items-center justify-center top-[35%] lg:top-1/2
+				[--current-initial-left:70%] lg:[--current-initial-left:44%]
+				[--current-initial-width:60vw] md:[--current-initial-width:323px] xl:[--current-initial-width:420px] 2xl:[--current-initial-width:446px] 
+				`}
       >
         <motion.img
           variants={teamKitImageVariants}
@@ -364,13 +394,16 @@ const HeaderSlide = ({ product, currentSlide, index }: Props) => {
           alt={`${product.teamName} kit`}
         />
       </motion.div>
-      <motion.div
-        variants={SkewedRectangleVariants}
-        initial='initial'
-        animate={index <= currentSlide ? 'animate' : 'initial'}
-        className={`w-96 right-[116px] absolute bottom-0 bg-neutral-light-grey skew-x-[14deg] z-[4]`}
-      />
-    </motion.div>
+      <div className='hidden overflow-hidden lg:block'>
+        <motion.div
+          variants={SkewedRectangleVariants}
+          initial='initial'
+          animate={index <= currentSlide ? 'animate' : 'initial'}
+          className={`absolute bottom-0 right-[106px] z-[5] w-full skew-x-[14deg] bg-neutral-light-grey 
+					lg:w-[17rem] xl:w-[20rem] 3xl:w-[24rem] `}
+        />
+      </div>
+    </motion.section>
   )
 }
 

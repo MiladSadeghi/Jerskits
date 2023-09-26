@@ -9,7 +9,7 @@
     "lint": "eslint src --ext ts,tsx",
     "preview": "vite preview",
     "test": "vitest",
-		"test:watch": "vitest --watch"
+    "test:watch": "vitest --watch"
   },
   "dependencies": {
     "@hookform/error-message": "^2.0.1",

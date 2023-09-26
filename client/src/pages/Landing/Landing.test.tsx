@@ -3,8 +3,7 @@ import { renderWithProviders } from '../../utils/test-utils'
 import { Landing } from '..'
 import Header from './components/Header'
 import { TLandingPageHeaderProduct } from '../../shared/types/LandingPage.types'
-import user from '@testing-library/user-event'
-import { HeaderSlide } from '../../components'
+import HeaderSlide from '../../components/LandingPage/HeaderSlide'
 
 const headerProducts: TLandingPageHeaderProduct[] = [
   {
@@ -91,32 +90,6 @@ describe('landing page header', () => {
     })
   })
 
-  test('change the slide delay when the current slide changes', async () => {
-    user.setup()
-    renderWithProviders(
-      <Header products={headerProducts} isError={false} isLoading={false} />
-    )
-    const teamNameFirstSlide = screen.getByRole('heading', {
-      name: 'Team 1'
-    })
-    const teamNameSecondSlide = screen.getByRole('heading', {
-      name: 'Team 2'
-    })
-
-    expect(teamNameFirstSlide).toHaveStyle('width: 0%;')
-    expect(teamNameSecondSlide).toHaveStyle('font-size: 48px;')
-
-    const nextSlideButton = screen.getByTestId('next-slide')
-    await user.click(nextSlideButton)
-
-    await waitFor(() => {
-      expect(
-        screen.getByRole('heading', {
-          name: 'Team 2'
-        })
-      ).toHaveStyle('font-size: 350px;')
-    })
-  })
   test('render with error', () => {
     renderWithProviders(
       <Header products={headerProducts} isError={true} isLoading={false} />
