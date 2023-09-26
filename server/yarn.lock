@@ -50,6 +50,13 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
+"@mongodb-js/saslprep@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@mongodb-js/saslprep/-/saslprep-1.1.0.tgz#022fa36620a7287d17acd05c4aae1e5f390d250d"
+  integrity sha512-Xfijy7HvfzzqiOAhAepF4SGN5e9leLkMvg/OPOF97XemjfVCYN/oWa75wnkc6mltMSTwY+XlbhWgUOJmkFspSw==
+  dependencies:
+    sparse-bitfield "^3.0.3"
+
 "@sideway/address@^4.1.3":
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/@sideway/address/-/address-4.1.4.tgz#03dccebc6ea47fdc226f7d3d1ad512955d4783f0"
@@ -123,9 +130,9 @@
   integrity sha512-YATxVxgRqNH6nHEIsvg6k2Boc1JHI9ZbH5iWFFv/MTkchz3b1ieGDa5T0a9RznNdI0KhVbdbWSN+KWWrQZRxTw==
 
 "@types/node@*":
-  version "20.3.3"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.3.3.tgz#329842940042d2b280897150e023e604d11657d6"
-  integrity sha512-wheIYdr4NYML61AjC8MKj/2jrR/kDQri/CIpVoZwldwhnIrD/j9jIU5bJ8yBKuB2VhpFV7Ab6G2XkBjv9r9Zzw==
+  version "20.7.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.7.0.tgz#c03de4572f114a940bc2ca909a33ddb2b925e470"
+  integrity sha512-zI22/pJW2wUZOVyguFaUL1HABdmSVxpXrzIqkjsHmyUjNhPoWM1CKfvVuXfetHhIok4RY573cqS0mZ1SJEnoTg==
 
 "@types/qs@*":
   version "6.9.7"
@@ -160,9 +167,9 @@
   integrity sha512-txGIh+0eDFzKGC25zORnswy+br1Ha7hj5cMVwKIU7+s0U2AxxJru/jZSMU6OC9MJWP6+pc/hc6ZjyZShpsyY2g==
 
 "@types/webidl-conversions@*":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@types/webidl-conversions/-/webidl-conversions-7.0.0.tgz#2b8e60e33906459219aa587e9d1a612ae994cfe7"
-  integrity sha512-xTE1E+YF4aWPJJeUzaZI5DRntlkY3+BCVJi0axFptnjGmAoWxkyREIh/XMrfxVLejwQxMCfDXdICo0VLxThrog==
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@types/webidl-conversions/-/webidl-conversions-7.0.1.tgz#2b9a2062b39a7272343c185cdb884f2e52188f75"
+  integrity sha512-8hKOnOan+Uu+NgMaCouhg3cT9x5fFZ92Jwf+uDLXLu/MFRbXxlWwGeQY7KVHkeSft6RvY+tdxklUBuyY9eIEKg==
 
 "@types/whatwg-url@^8.2.1":
   version "8.2.2"
@@ -310,9 +317,9 @@ braces@~3.0.2:
     fill-range "^7.0.1"
 
 bson@^5.4.0:
-  version "5.4.0"
-  resolved "https://registry.yarnpkg.com/bson/-/bson-5.4.0.tgz#0eea77276d490953ad8616b483298dbff07384c6"
-  integrity sha512-WRZ5SQI5GfUuKnPTNmAYPiKIof3ORXAF4IRU5UcgmivNIon01rWQlw5RUH954dpu8yGL8T59YShVddIPaU/gFA==
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/bson/-/bson-5.5.0.tgz#a419cc69f368d2def3b8b22ea03ed1c9be40e53f"
+  integrity sha512-B+QB4YmDx9RStKv8LLSl/aVIEV3nYJc3cJNNTK2Cd1TL+7P+cNpw9mAPeCgc5K+j01Dv6sxUzcITXDx7ZU3F0w==
 
 buffer-equal-constant-time@1.0.1:
   version "1.0.1"
@@ -1053,25 +1060,25 @@ mongodb-connection-string-url@^2.6.0:
     "@types/whatwg-url" "^8.2.1"
     whatwg-url "^11.0.0"
 
-mongodb@5.7.0:
-  version "5.7.0"
-  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-5.7.0.tgz#e16d2fcdfd9f8503ec2d88288392dc3235bb3ecc"
-  integrity sha512-zm82Bq33QbqtxDf58fLWBwTjARK3NSvKYjyz997KSy6hpat0prjeX/kxjbPVyZY60XYPDNETaHkHJI2UCzSLuw==
+mongodb@5.8.1:
+  version "5.8.1"
+  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-5.8.1.tgz#dc201adfbd6c6d73401cdcf12ebdb75f14771faf"
+  integrity sha512-wKyh4kZvm6NrCPH8AxyzXm3JBoEf4Xulo0aUWh3hCgwgYJxyQ1KLST86ZZaSWdj6/kxYUA3+YZuyADCE61CMSg==
   dependencies:
     bson "^5.4.0"
     mongodb-connection-string-url "^2.6.0"
     socks "^2.7.1"
   optionalDependencies:
-    saslprep "^1.0.3"
+    "@mongodb-js/saslprep" "^1.1.0"
 
-mongoose@^7.4.0:
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-7.4.0.tgz#3726a8dea0c9e2d54651845cc84c813a6507906a"
-  integrity sha512-oHE1eqodfKzugXRlQxpo+msIea7jPcRoayDuEMr50+bYwM/juA5f+1stjkWlXcg6vo1PdJFVA6DGaKOPLuG5mA==
+mongoose@^7.5.3:
+  version "7.5.3"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-7.5.3.tgz#89ef67f8125c11a0e4db70317c7f6a730151c525"
+  integrity sha512-QyYzhZusux0wIJs+4rYyHvel0kJm0CT887trNd1WAB3iQnDuJow0xEnjETvuS/cTjHQUVPihOpN7OHLlpJc52w==
   dependencies:
     bson "^5.4.0"
     kareem "2.5.1"
-    mongodb "5.7.0"
+    mongodb "5.8.1"
     mpath "0.9.0"
     mquery "5.0.0"
     ms "2.1.3"
@@ -1393,13 +1400,6 @@ safe-stable-stringify@^2.3.1:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
-
-saslprep@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/saslprep/-/saslprep-1.0.3.tgz#4c02f946b56cf54297e347ba1093e7acac4cf226"
-  integrity sha512-/MY/PEMbk2SuY5sScONwhUDsV2p77Znkb/q3nSVstq/yQzYJOH/Azh29p9oJLsl3LnQwSvZDKagDGBsBwSooag==
-  dependencies:
-    sparse-bitfield "^3.0.3"
 
 semver@^5.7.1, semver@^6.0.0, semver@^7.3.5, semver@^7.3.8, semver@^7.5.3, semver@~7.0.0:
   version "7.5.3"
