@@ -2,10 +2,10 @@ import tw from 'twin.macro'
 import { useAppSelector } from '../../App/hooks'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import ProfileLinks from '../../utils/profile-links'
-import ProfileLink from './components/ProfileLink'
 import { useSignOutMutation } from '../../services'
+import { ProfileLink } from '../../components'
 
-function Profile() {
+function ProfileLayout() {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
   const location = useLocation()
   const profile = useAppSelector((state) => state.profile)
@@ -66,4 +66,4 @@ function Profile() {
 
 const Wrapper = tw.div`mx-auto max-w-[950px] my-24`
 
-export default Profile
+export default ProfileLayout

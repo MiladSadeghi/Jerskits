@@ -1,7 +1,7 @@
 import { screen, waitFor } from '@testing-library/react'
-import Edit from './Edit'
+import Edit from './Edit.tsx'
 import user from '@testing-library/user-event'
-import { renderWithProviders } from '../../../../utils/test-utils.tsx'
+import { renderWithProviders } from '../../../utils/test-utils.tsx'
 
 describe('Edit profile page', () => {
   test('render correctly', async () => {

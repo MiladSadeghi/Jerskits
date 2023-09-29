@@ -1,7 +1,6 @@
-import { Variants, motion } from 'framer-motion'
+import { LazyMotion, Variants, domAnimation, m } from 'framer-motion'
 import { TLandingPageHeaderProduct } from '../../shared/types/LandingPage.types'
 import provideBrandLogo from '../../utils/brand-logo'
-import tw from 'twin.macro'
 import { useEffect, useState } from 'react'
 
 type Props = {
@@ -14,14 +13,14 @@ type Props = {
 const backgroundVariants: Variants = {
   initial: {
     opacity: 0,
-    backgroundColor: '#262D33',
+    background: '#262D33',
     transition: {
       delay: 0.5
     }
   },
   animate: {
     opacity: 0.6,
-    backgroundColor: '#262D33',
+    background: '#262D33',
     transition: {
       delay: 0.3
     }
@@ -143,10 +142,6 @@ const howWasMadeVariants: Variants = {
   initial: {
     opacity: 0
   },
-  nextSlideInitial: {
-    opacity: 0,
-    transition: { duration: 0.2, delay: 0.5 }
-  },
   animate: {
     opacity: 1,
     transition: { duration: 0.7, delay: 1 }
@@ -154,6 +149,21 @@ const howWasMadeVariants: Variants = {
   upcomingSlideAnimate: {
     opacity: 1,
     transition: { duration: 0, delay: 2 }
+  }
+}
+
+const howWasMadeBlurVariants: Variants = {
+  initial: {
+    background: 'rgba(0, 0, 0, 0)',
+    backdropFilter: 'blur(0px)'
+  },
+  animate: {
+    background: 'rgba(0, 0, 0, 0.3)',
+    backdropFilter: 'blur(50px)',
+    transition: {
+      delay: 2,
+      duration: 1
+    }
   }
 }
 
@@ -226,189 +236,186 @@ const HeaderSlide = ({ product, currentSlide, index }: Props) => {
   }
 
   return (
-    <motion.section
-      variants={slideVariants}
-      initial='initial'
-      animate={index - 1 === currentSlide ? 'animate' : 'initial'}
-      className='relative flex min-h-screen min-w-full overflow-hidden [--slide-animate-margin:0rem] xl:[--slide-animate-margin:-20rem] '
-    >
-      <motion.div
-        variants={backgroundVariants}
+    <LazyMotion features={domAnimation}>
+      <m.section
+        variants={slideVariants}
         initial='initial'
-        animate={index <= currentSlide ? 'animate' : 'initial'}
-        className={`absolute left-0 top-0 z-[6] h-full w-full opacity-0 will-change-transform`}
-      />
-      <img
-        className='absolute left-0 top-0 z-[3] h-full w-full object-cover'
-        alt={`${product.teamName} stadium`}
-        src={product.stadiumImage}
-      />
-      <motion.div
-        variants={contentWrapper}
-        initial={index === currentSlide && 'initial'}
-        animate={index > currentSlide ? 'animate' : 'initial'}
-        className='absolute left-0 top-0 
-				ml-[30px] flex h-full w-full xl:w-4/5 flex-col pb-11 pr-11
-				[--content-paddingTop:40px]
-				[--content-marginLeft:30px]
-				xl:[--content-marginLeft:50px] 
-				2xl:[--content-marginLeft:70px] 
-				3xl:[--content-marginLeft:130px] 
-				'
+        animate={index - 1 === currentSlide ? 'animate' : 'initial'}
+        className='relative flex min-h-screen min-w-full overflow-hidden [--slide-animate-margin:0rem] xl:[--slide-animate-margin:-20rem]'
       >
-        <div>
-          <div className='relative z-[7] mb-8 w-1/2'>
-            <motion.img
-              className='w-16'
-              src={product.teamLogo}
-              alt={`${product.teamName} logo`}
-              variants={TeamLogoVariants}
+        <m.div
+          variants={backgroundVariants}
+          initial='initial'
+          animate={index <= currentSlide ? 'animate' : 'initial'}
+          className={`absolute left-0 top-0 z-[6] h-full w-full`}
+        />
+        <img
+          className='absolute left-0 top-0 z-[3] h-full w-full object-cover'
+          alt={`${product.teamName} stadium`}
+          src={product.stadiumImage}
+        />
+        <m.div
+          variants={contentWrapper}
+          initial={index === currentSlide && 'initial'}
+          animate={index > currentSlide ? 'animate' : 'initial'}
+          className='absolute left-0 top-0 ml-[30px] flex h-full w-full xl:w-4/5 flex-col pb-11 pr-11
+						[--content-paddingTop:44px]
+						lg:[--content-paddingTop:88px]
+						[--content-marginLeft:30px]
+						xl:[--content-marginLeft:50px] 
+						2xl:[--content-marginLeft:70px] 
+						3xl:[--content-marginLeft:130px]'
+        >
+          <div>
+            <div className='relative z-[7] mb-8 w-1/2'>
+              <m.img
+                src={product.teamLogo}
+                alt={`${product.teamName} logo`}
+                variants={TeamLogoVariants}
+                initial='initial'
+                animate='animate'
+                width='64'
+              />
+            </div>
+
+            <m.div
+              variants={TitleVariants}
               initial='initial'
               animate='animate'
-            />
-          </div>
-
-          <motion.div
-            variants={TitleVariants}
-            initial='initial'
-            animate='animate'
-            className={`relative z-[7] flex flex-col lg:flex-row lg:items-center overflow-hidden`}
-          >
-            <img
-              className='h-[40px] w-[40px] brightness-[100] '
-              src={provideBrandLogo(product.brand as string)}
-              alt={product.brand}
-            />
-            <h4
-              className={`lg:ml-4 block whitespace-nowrap font-bold text-white`}
+              className={`relative z-[7] flex flex-col lg:flex-row lg:items-center overflow-hidden`}
             >
-              {product.posterTitle}
-            </h4>
-          </motion.div>
-        </div>
-        <motion.h1
-          variants={teamNameVariants}
+              <img
+                className='brightness-[100] '
+                src={provideBrandLogo(product.brand as string)}
+                alt={product.brand}
+                width='40'
+                height='40'
+              />
+              <h2
+                className={`lg:ml-4 block whitespace-nowrap font-bold text-white`}
+              >
+                {product.posterTitle}
+              </h2>
+            </m.div>
+          </div>
+          <m.h1
+            variants={teamNameVariants}
+            initial={index === 0 ? 'currentInitial' : 'upcomingInitial'}
+            animate={
+              index === 0
+                ? 'currentAnimate'
+                : index === currentSlide
+                ? 'upcomingAnimate'
+                : 'upcomingInitial'
+            }
+            className={`relative z-[7] overflow-hidden font-BebasNeue uppercase leading-none tracking-wide text-white whitespace-nowrap
+						[--current-initial-font-size:21vw] xl:[--current-initial-font-size:17.9vw] scale-y-150 md:scale-y-100
+					`}
+          >
+            {product.teamName}
+          </m.h1>
+          <div className='space-between relative z-[9] grid grid-cols-12 gap-y-11 lg:gap-0'>
+            <m.div
+              className={`z-40 flex h-full col-span-11 lg:col-span-6 2xl:col-span-5`}
+              variants={howWasMadeVariants}
+              initial={'initial'}
+              animate={
+                index <= currentSlide ? 'animate' : 'upcomingSlideInitial'
+              }
+            >
+              <img
+                src={product.kitLogo}
+                className='w-[136px] h-[136px] lg:h-[241px] lg:w-[241px]'
+                alt='kit logo'
+                width='241'
+                height='241'
+              />
+              <m.div
+                variants={howWasMadeBlurVariants}
+                initial='initial'
+                animate='animate'
+                className='z-[9] flex flex-col justify-center pl-4 pr-6 lg:pl-6 lg:pr-8 xl:pl-10 xl:pr-12'
+              >
+                <h1 className='mb-[10px] text-2xl font-bold text-white'>
+                  How Was Made?
+                </h1>
+                <p className='text-sm leading-6 line-clamp-2 lg:line-clamp-4 text-neutral-grey'>
+                  {product.howWasMade}
+                </p>
+              </m.div>
+            </m.div>
+            <div className='flex flex-col justify-between col-span-11 lg:col-span-3 lg:col-start-8 break-word'>
+              <m.p
+                variants={posterDescriptionVariants}
+                initial='initial'
+                animate='animate'
+                className='leading-6 line-clamp-4 text-neutral-grey mb-11 lg:mb-0'
+              >
+                {product.posterDescription}
+              </m.p>
+              <m.button
+                variants={ShopButtonVariants}
+                initial='initial'
+                animate='animate'
+                aria-label='Shop Now'
+                className='font-bold bg-white w-fit flex items-center justify-center py-3.5 overflow-hidden whitespace-nowrap'
+              >
+                SHOP NOW
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='20'
+                  height='20'
+                  viewBox='0 0 20 20'
+                  fill='none'
+                  className='ml-3 text-primary-black'
+                >
+                  <path
+                    d='M10.8334 5.41699L15.4167 10.0003M15.4167 10.0003L10.8334 14.5837M15.4167 10.0003H3.33335'
+                    stroke='#262D33'
+                    strokeWidth='1.2'
+                  />
+                </svg>
+              </m.button>
+            </div>
+          </div>
+        </m.div>
+
+        <m.div
+          variants={teamKitWrapperVariants}
           initial={index === 0 ? 'currentInitial' : 'upcomingInitial'}
           animate={
             index === 0
               ? 'currentAnimate'
-              : index === currentSlide
+              : currentSlide >= index
               ? 'upcomingAnimate'
               : 'upcomingInitial'
           }
-          className={`relative z-[7] overflow-hidden font-BebasNeue uppercase leading-none tracking-wide text-white whitespace-nowrap
-						[--current-initial-font-size:21vw] xl:[--current-initial-font-size:17.9vw] scale-y-150 md:scale-y-100
-					`}
-        >
-          {product.teamName}
-        </motion.h1>
-        <div className='space-between relative z-[9] grid grid-cols-12 gap-y-11 lg:gap-0'>
-          <motion.div
-            className={`z-40 flex will-change-transform h-full col-span-11 lg:col-span-6 2xl:col-span-5`}
-            variants={howWasMadeVariants}
-            initial={'initial'}
-            animate={index <= currentSlide ? 'animate' : 'upcomingSlideInitial'}
-          >
-            <img
-              src={product.kitLogo}
-              className='w-[136px] h-[136px] lg:(h-[241px] w-[241px])'
-            />
-            <motion.div
-              initial={{
-                background: 'rgba(0, 0, 0, 0)',
-                backdropFilter: 'blur(0px)'
-              }}
-              animate={{
-                background: 'rgba(0, 0, 0, 0.3)',
-                backdropFilter: 'blur(50px)',
-                transition: {
-                  delay: 2,
-                  duration: 1
-                }
-              }}
-              className='z-[9] flex flex-col justify-center pl-4 pr-6 lg:(pl-6 pr-8) xl:(pl-10 pr-12)  will-change-transform'
-            >
-              <h5 className='mb-[10px] text-2xl font-bold text-white'>
-                How Was Made?
-              </h5>
-              <p className='text-sm leading-6 line-clamp-2 lg:line-clamp-4 text-neutral-grey'>
-                {product.howWasMade}
-              </p>
-            </motion.div>
-          </motion.div>
-          <div className='flex flex-col justify-between col-span-11 lg:col-span-3 lg:col-start-8 break-word'>
-            <motion.p
-              variants={posterDescriptionVariants}
-              initial='initial'
-              animate='animate'
-              className='leading-6 line-clamp-4 text-neutral-grey mb-11 lg:mb-0'
-            >
-              {product.posterDescription}
-            </motion.p>
-            <ShopNowButton
-              variants={ShopButtonVariants}
-              initial='initial'
-              animate='animate'
-              className='overflow-hidden whitespace-nowrap'
-            >
-              SHOP NOW{' '}
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                width='20'
-                height='20'
-                viewBox='0 0 20 20'
-                fill='none'
-                className='ml-3 text-primary-black'
-              >
-                <path
-                  d='M10.8334 5.41699L15.4167 10.0003M15.4167 10.0003L10.8334 14.5837M15.4167 10.0003H3.33335'
-                  stroke='#262D33'
-                  strokeWidth='1.2'
-                />
-              </svg>
-            </ShopNowButton>
-          </div>
-        </div>
-      </motion.div>
-
-      <motion.div
-        variants={teamKitWrapperVariants}
-        initial={index === 0 ? 'currentInitial' : 'upcomingInitial'}
-        animate={
-          index === 0
-            ? 'currentAnimate'
-            : currentSlide >= index
-            ? 'upcomingAnimate'
-            : 'upcomingInitial'
-        }
-        className={`absolute z-[8] flex items-center justify-center top-[35%] lg:top-1/2
+          className={`absolute z-[8] flex items-center justify-center top-[35%] lg:top-1/2
 				[--current-initial-left:70%] lg:[--current-initial-left:44%]
 				[--current-initial-width:60vw] md:[--current-initial-width:323px] xl:[--current-initial-width:420px] 2xl:[--current-initial-width:446px] 
 				`}
-      >
-        <motion.img
-          variants={teamKitImageVariants}
-          initial={currentSlide === index && 'initial'}
-          animate={currentSlide === index ? 'animate' : 'initial'}
-          src={product.poster}
-          alt={`${product.teamName} kit`}
-        />
-      </motion.div>
-      <div className='hidden overflow-hidden lg:block'>
-        <motion.div
-          variants={SkewedRectangleVariants}
-          initial='initial'
-          animate={index <= currentSlide ? 'animate' : 'initial'}
-          className={`absolute bottom-0 right-[106px] z-[5] w-full skew-x-[14deg] bg-neutral-light-grey 
+        >
+          <m.img
+            variants={teamKitImageVariants}
+            initial={currentSlide === index && 'initial'}
+            animate={currentSlide === index ? 'animate' : 'initial'}
+            src={product.poster}
+            alt={`${product.teamName} kit`}
+            width='100%'
+          />
+        </m.div>
+        <div className='hidden overflow-hidden lg:block'>
+          <m.div
+            variants={SkewedRectangleVariants}
+            initial='initial'
+            animate={index <= currentSlide ? 'animate' : 'initial'}
+            className={`absolute bottom-0 right-[106px] z-[5] w-full skew-x-[14deg] bg-neutral-light-grey 
 					lg:w-[17rem] xl:w-[20rem] 3xl:w-[24rem] `}
-        />
-      </div>
-    </motion.section>
+          />
+        </div>
+      </m.section>
+    </LazyMotion>
   )
 }
-
-const ShopNowButton = tw(
-  motion.button
-)`text-primary-black font-bold bg-white w-fit flex items-center justify-center py-3.5`
 
 export default HeaderSlide

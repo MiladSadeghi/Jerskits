@@ -1,5 +1,5 @@
 import * as yup from 'yup'
-import editProfileSchema from '../../pages/Profile/components/Edit/Edit.schema'
+import editProfileSchema from '../../pages/Profile/Edit/Edit.schema'
 
 export type TeditProfileSchema = yup.InferType<typeof editProfileSchema>
 

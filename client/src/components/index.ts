@@ -3,9 +3,8 @@ import LocationProvider from './Location/LocationProvider'
 import ProfilePopup from './Popups/ProfilePopup'
 import FullScreenLoader from './FullScreenLoader/FullScreenLoader'
 import HeaderController from './LandingPage/HeaderController'
-import { lazy } from 'react'
-
-const HeaderSlideLazy = lazy(() => import('./LandingPage/HeaderSlide'))
+import HeaderSlide from './LandingPage/HeaderSlide'
+import ProfileLink from './ProfileLink/ProfileLink'
 
 export {
   Navbar,
@@ -13,5 +12,6 @@ export {
   ProfilePopup,
   FullScreenLoader,
   HeaderController,
-  HeaderSlideLazy
+  HeaderSlide,
+  ProfileLink
 }

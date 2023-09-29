@@ -1,7 +1,7 @@
-import { Suspense, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { TLandingPageHeaderProduct } from '../../../shared/types/LandingPage.types'
-import { HeaderController, HeaderSlideLazy } from '../../../components'
+import { HeaderController, HeaderSlide } from '../../../components'
 
 type Props = {
   products: TLandingPageHeaderProduct[] | undefined
@@ -24,26 +24,24 @@ const Header = ({ products, isError, isLoading }: Props) => {
   }
 
   return (
-    <Suspense>
-      <header>
-        <div className='relative flex overflow-hidden' ref={containerRef}>
-          {products.map((product: TLandingPageHeaderProduct, index: number) => (
-            <HeaderSlideLazy
-              product={product}
-              currentSlide={currentSlide}
-              key={product._id}
-              index={index}
-            />
-          ))}
-        </div>
-        <HeaderController
-          ref={containerRef}
-          slide={currentSlide}
-          setSlide={setCurrentSlide}
-          maxSlide={products.length - 1}
-        />
-      </header>
-    </Suspense>
+    <header>
+      <div className='relative flex overflow-hidden' ref={containerRef}>
+        {products.map((product: TLandingPageHeaderProduct, index: number) => (
+          <HeaderSlide
+            product={product}
+            currentSlide={currentSlide}
+            key={product._id}
+            index={index}
+          />
+        ))}
+      </div>
+      <HeaderController
+        ref={containerRef}
+        slide={currentSlide}
+        setSlide={setCurrentSlide}
+        maxSlide={products.length - 1}
+      />
+    </header>
   )
 }
 

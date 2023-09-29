@@ -1,5 +1,5 @@
 import tw from 'twin.macro'
-import { TProfileLink } from '../../../utils/profile-links'
+import { TProfileLink } from '../../utils/profile-links'
 import { NavLink } from 'react-router-dom'
 
 type Props = TProfileLink & { key?: number }

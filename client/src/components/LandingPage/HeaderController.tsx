@@ -34,7 +34,11 @@ const HeaderController = forwardRef<HTMLDivElement, Props>(
     return (
       <div className='relative'>
         <div className='absolute bottom-[45px] right-[10%] z-50 flex gap-x-7'>
-          <ArrowIcon data-test-id='prev-slide' onClick={() => changeSlide(-1)}>
+          <ArrowIcon
+            aria-label='Previous slide'
+            data-test-id='prev-slide'
+            onClick={() => changeSlide(-1)}
+          >
             <svg
               width='24'
               height='24'
@@ -49,7 +53,11 @@ const HeaderController = forwardRef<HTMLDivElement, Props>(
               />
             </svg>
           </ArrowIcon>
-          <ArrowIcon data-testid='next-slide' onClick={() => changeSlide(+1)}>
+          <ArrowIcon
+            aria-label='Next slide'
+            data-testid='next-slide'
+            onClick={() => changeSlide(+1)}
+          >
             <svg
               width='24'
               height='24'

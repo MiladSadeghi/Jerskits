@@ -1,17 +1,22 @@
+import { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Landing, SignIn, SignUp } from './pages'
-import { Profile } from './pages'
-import Favorites from './pages/Profile/components/Favorites'
-import Orders from './pages/Profile/components/Orders'
-import Setting from './pages/Profile/components/Setting'
-import { Edit } from './pages/Profile/components'
+import {
+  Edit,
+  Favorites,
+  Landing,
+  Orders,
+  Setting,
+  SignIn,
+  SignUp
+} from './pages'
 import { AuthenticationLayout, Layout } from './layouts'
 import 'swiper/css'
 import 'react-loading-skeleton/dist/skeleton.css'
+import Profile from './layouts/ProfileLayout/ProfileLayout'
 
 function App() {
   return (
-    <div>
+    <Suspense>
       <main>
         <Routes>
           <Route path='/' element={<Layout />}>
@@ -33,7 +38,7 @@ function App() {
           />
         </Routes>
       </main>
-    </div>
+    </Suspense>
   )
 }
 
