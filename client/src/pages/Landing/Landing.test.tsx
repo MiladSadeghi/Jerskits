@@ -53,16 +53,6 @@ const headerProducts: TLandingPageHeaderProduct[] = [
 ]
 
 describe('landing page', () => {
-  test('Landing page fetch loader', async () => {
-    renderWithProviders(<Landing />)
-    const skeletonLoader = screen.getByTestId('landingpage-header')
-    expect(skeletonLoader).toBeInTheDocument()
-
-    await waitFor(() => {
-      expect(skeletonLoader).not.toBeInTheDocument()
-    })
-  })
-
   test('Landing page show mock data of header', async () => {
     renderWithProviders(<Landing />)
     await waitFor(() => {

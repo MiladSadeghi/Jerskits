@@ -5,16 +5,19 @@ import { BrowserRouter } from 'react-router-dom'
 import { renderWithProviders } from '../../utils/test-utils'
 
 describe('Sign In', () => {
-  test('render correctly', () => {
+  test('render correctly', async () => {
     renderWithProviders(
       <BrowserRouter>
         <SignIn />
       </BrowserRouter>
     )
-    const loginElement = screen.getByRole('heading', {
-      name: /Welcome to Jerskits/i
+
+    await waitFor(() => {
+      const loginElement = screen.getByRole('heading', {
+        name: /Welcome to Jerskits/i
+      })
+      expect(loginElement).toBeInTheDocument()
     })
-    expect(loginElement).toBeInTheDocument()
   })
 
   test('the form is working correctly', async () => {
@@ -24,12 +27,15 @@ describe('Sign In', () => {
         <SignIn />
       </BrowserRouter>
     )
-    const emailInput = screen.getByLabelText(/email/i)
-    await user.type(emailInput, 'test')
-    const submitButton = screen.getByRole('button', { name: /login/i })
-    await user.click(submitButton)
-    const emailErrorElement = screen.getByText(/Invalid email/i)
-    expect(emailErrorElement).toBeInTheDocument()
+
+    await waitFor(async () => {
+      const emailInput = screen.getByLabelText(/email/i)
+      await user.type(emailInput, 'test')
+      const submitButton = screen.getByRole('button', { name: /login/i })
+      await user.click(submitButton)
+      const emailErrorElement = screen.getByText(/Invalid email/i)
+      expect(emailErrorElement).toBeInTheDocument()
+    })
   })
 
   test('fetch access token after sign in', async () => {
@@ -39,13 +45,16 @@ describe('Sign In', () => {
         <SignIn />
       </BrowserRouter>
     )
-    const emailInput = screen.getByLabelText(/email/i)
-    const passwordInput = screen.getByLabelText(/^password$/i)
-    const submitButtonElement = screen.getByRole('button', { name: /login/i })
 
-    await user.type(emailInput, 'miladsadeghi2323@gmail.com')
-    await user.type(passwordInput, '123456')
-    await user.click(submitButtonElement)
+    await waitFor(async () => {
+      const emailInput = screen.getByLabelText(/email/i)
+      const passwordInput = screen.getByLabelText(/^password$/i)
+      const submitButtonElement = screen.getByRole('button', { name: /login/i })
+
+      await user.type(emailInput, 'miladsadeghi2323@gmail.com')
+      await user.type(passwordInput, '123456')
+      await user.click(submitButtonElement)
+    })
 
     await waitFor(() => {
       const regex = /ref=(\w+).*acc=(\w+)/

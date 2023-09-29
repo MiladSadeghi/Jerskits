@@ -176,7 +176,7 @@ function Navbar() {
   )
 }
 
-const Wrapper = tw.div`container mx-auto h-[90px] relative`
+const Wrapper = tw.div`container  mx-auto h-[90px] relative`
 const NavLink = styled(Link)`
   text-sm font-semibold text-primary-black
 `

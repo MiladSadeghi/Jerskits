@@ -1,19 +1,21 @@
-import { screen } from '@testing-library/react'
-import AuthenticationLayout from './AuthLayout'
-import { SignIn } from '../../pages'
-import { MemoryRouter } from 'react-router-dom'
+import { screen, waitFor } from '@testing-library/react'
+import { BrowserRouter } from 'react-router-dom'
 import { renderWithProviders } from '../../utils/test-utils'
+import { AuthenticationLayout } from '..'
+import SignIn from '../../pages/SignIn/SignIn'
 
 describe('Authentication Layout', () => {
-  test('children props work', () => {
+  test('children props work', async () => {
     renderWithProviders(
-      <MemoryRouter>
+      <BrowserRouter>
         <AuthenticationLayout children={<SignIn />} />
-      </MemoryRouter>
+      </BrowserRouter>
     )
-    const signInElement = screen.getByRole('heading', {
-      name: /Welcome to Jerskits/i
+    await waitFor(() => {
+      const signInElement = screen.getByRole('heading', {
+        name: /Welcome to Jerskits/i
+      })
+      expect(signInElement).toBeInTheDocument()
     })
-    expect(signInElement).toBeInTheDocument()
   })
 })

@@ -13,10 +13,11 @@ import { AuthenticationLayout, Layout } from './layouts'
 import 'swiper/css'
 import 'react-loading-skeleton/dist/skeleton.css'
 import Profile from './layouts/ProfileLayout/ProfileLayout'
+import { FullScreenLoader } from './components'
 
 function App() {
   return (
-    <Suspense>
+    <Suspense fallback={<FullScreenLoader />}>
       <main>
         <Routes>
           <Route path='/' element={<Layout />}>
