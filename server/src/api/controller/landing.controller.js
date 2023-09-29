@@ -18,7 +18,7 @@ const landingProvider = async (req, res, next) => {
 
     plainHeaderProducts[0].posterTitle = "HOME KIT 23/24";
     plainHeaderProducts[0].stadiumImage =
-      "https://s6.uupload.ir/files/inside-anfield-promo-10042023_6diy.jpg";
+      "https://s13.uupload.ir/files/miladsdgh/inside-anfield-promo-10042023_6diy.webp";
     plainHeaderProducts[0].teamLogo =
       "https://s6.uupload.ir/files/liverpool_fc.svg_jt8c.png";
     plainHeaderProducts[0].teamName = "liverpool";
@@ -30,7 +30,7 @@ const landingProvider = async (req, res, next) => {
 
     plainHeaderProducts[1].posterTitle = "23/24 HOME AUTHENTIC JERSEY";
     plainHeaderProducts[1].stadiumImage =
-      "https://s6.uupload.ir/files/gettyimages-1488651478_u6xx.jpg";
+      "https://s13.uupload.ir/files/miladsdgh/gettyimages-1488651478_u6xx.jpg";
     plainHeaderProducts[1].teamLogo =
       "https://s6.uupload.ir/files/real-madrid-c-f-logo-c08f61d801-seeklogo.com_ybry.png";
     plainHeaderProducts[1].teamName = "Real Madrid";
@@ -42,7 +42,7 @@ const landingProvider = async (req, res, next) => {
 
     plainHeaderProducts[2].posterTitle = "F.C. Barcelona 2023/24 Stadium Home";
     plainHeaderProducts[2].stadiumImage =
-      "https://s6.uupload.ir/files/fbl-esp-liga-barcelona-villarreal-2048x1366_bm84.jpg";
+      "https://s13.uupload.ir/files/miladsdgh/fbl-esp-liga-barcelona-villarreal-2048x1366_bm84.webp";
     plainHeaderProducts[2].teamLogo =
       "https://s6.uupload.ir/files/kisspng-fc-barcelona-logo-vector-graphics-football-image-5c71e47872d597.9276381515509679284704_b8rh.png";
     plainHeaderProducts[2].teamName = "Barcelona";
