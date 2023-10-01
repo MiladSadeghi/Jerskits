@@ -5,7 +5,9 @@ const provideBrandLogo = (brand: string) => {
     case 'adidas':
       return '/images/adidas-brand.png'
     case 'jordan':
-      return '/images/jordan-brand.img'
+      return '/images/jordan-brand.png'
+    case 'puma':
+      return '/images/puma-brand.png'
   }
 }
 
