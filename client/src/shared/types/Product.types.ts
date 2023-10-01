@@ -4,7 +4,7 @@ export interface IProduct {
   brand: 'nike' | 'adidas' | 'jordan' | 'puma'
   type: 'football' | 'basketball'
   price: number
-  offPrice?: number
+  offPrice: number
   gender: 'men' | 'women' | 'kid'
   color: string[]
   size: string[]
