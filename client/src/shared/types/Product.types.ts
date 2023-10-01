@@ -1,13 +1,13 @@
 export interface IProduct {
   _id: string
   name: string
-  brand: 'nike' | 'adidas' | 'jordan'
+  brand: 'nike' | 'adidas' | 'jordan' | 'puma'
   type: 'football' | 'basketball'
   price: number
   offPrice?: number
   gender: 'men' | 'women' | 'kid'
   color: string[]
-  size: ('XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | '2XL' | 'XXXL' | '3XL')[]
+  size: string[]
   slug: string
   gallery: string[]
   poster?: string

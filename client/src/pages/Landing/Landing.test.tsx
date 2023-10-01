@@ -4,6 +4,9 @@ import { Landing } from '..'
 import Header from './components/Header'
 import { TLandingPageHeaderProduct } from '../../shared/types/LandingPage.types'
 import HeaderSlide from '../../components/LandingPage/HeaderSlide'
+import KidCollection from './components/KidCollection'
+import { IProduct } from '../../shared/types/Product.types'
+import user from '@testing-library/user-event'
 
 const headerProducts: TLandingPageHeaderProduct[] = [
   {
@@ -136,6 +139,96 @@ describe('Landing page header slide', () => {
 
     await waitFor(() => {
       expect(teamName).toHaveStyle('font-size: 48px;')
+    })
+  })
+})
+
+describe('landing page kid collection', () => {
+  const kidsCollectionMockProducts: IProduct[] = [
+    {
+      _id: '1',
+      name: 'Jordan1',
+      brand: 'nike',
+      type: 'basketball',
+      size: ['5'],
+      price: 55,
+      offPrice: 46.97,
+      gender: 'kid',
+      color: ['red'],
+      slug: 'jordan-23-jersey',
+      gallery: [
+        'https://s21.uupload.ir/files/miladsdgh/jerskits/Jordan%2023%20Jersey%20-%20kid/f607022f-ffec-442c-a199-ae51721ab77f.webp'
+      ],
+      detail_product: [
+        {
+          title: 'Product Details',
+          description:
+            'Kiddos can wear the jersey with the name and number of one of the best to ever play the game, Michael Jordan. This jersey is made of breathable mesh fabric and is great for a pick-up game with friends or styled with a pair of jeans.',
+          specification: ['Shown: White', 'Style: 85A773-001']
+        }
+      ]
+    },
+    {
+      _id: '2',
+      name: 'Jordan2',
+      brand: 'nike',
+      type: 'basketball',
+      size: ['5'],
+      price: 55,
+      offPrice: 46.97,
+      gender: 'kid',
+      color: ['red'],
+      slug: 'jordan-23-jersey',
+      gallery: [
+        'https://s21.uupload.ir/files/miladsdgh/jerskits/Jordan%2023%20Jersey%20-%20kid/f607022f-ffec-442c-a199-ae51721ab77f.webp'
+      ],
+      detail_product: [
+        {
+          title: 'Product Details',
+          description:
+            'Kiddos can wear the jersey with the name and number of one of the best to ever play the game, Michael Jordan. This jersey is made of breathable mesh fabric and is great for a pick-up game with friends or styled with a pair of jeans.',
+          specification: ['Shown: White', 'Style: 85A773-001']
+        }
+      ]
+    }
+  ]
+  test('render without error', async () => {
+    renderWithProviders(
+      <KidCollection
+        products={kidsCollectionMockProducts}
+        isError={false}
+        isLoading={false}
+      />
+    )
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: /New Kids Collection/i }))
+      expect(screen.getByRole('heading', { name: /Jordan1/i }))
+    })
+  })
+
+  test('content change when click on the data controller', async () => {
+    user.setup()
+    renderWithProviders(
+      <KidCollection
+        products={kidsCollectionMockProducts}
+        isError={false}
+        isLoading={false}
+      />
+    )
+    await waitFor(async () => {
+      const nikeProducts = await screen.findAllByAltText('nike')
+      expect(nikeProducts.length).toBeGreaterThan(1)
+    })
+
+    await waitFor(async () => {
+      const changeContentButton = screen.getByAltText('jordan-content')
+      await user.click(changeContentButton)
+    })
+
+    await waitFor(async () => {
+      const jordanProducts = await screen.findAllByAltText('jordan')
+      expect(jordanProducts.length).toBeGreaterThan(1)
     })
   })
 })

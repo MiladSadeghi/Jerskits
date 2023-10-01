@@ -1,8 +1,10 @@
 import { rest } from 'msw'
 import {
+  TKidCollectionByBrandResponse,
   TLandingPageHeaderProduct,
   TLandingPageResponse
 } from '../../shared/types/LandingPage.types'
+import { IProduct } from '../../shared/types/Product.types'
 
 const HeaderResponse: TLandingPageHeaderProduct[] = [
   {
@@ -106,12 +108,75 @@ const HeaderResponse: TLandingPageHeaderProduct[] = [
   }
 ]
 
+const kidCollectionResponse: IProduct[] = [
+  {
+    _id: '1',
+    name: 'Jordan ',
+    brand: 'jordan',
+    type: 'basketball',
+    size: ['5'],
+    price: 55,
+    offPrice: 46.97,
+    gender: 'kid',
+    color: ['red'],
+    slug: 'jordan-23-jersey',
+    gallery: ['gallery'],
+    detail_product: [
+      {
+        title: 'Product Details',
+        description:
+          'Kiddos can wear the jersey with the name and number of one of the best to ever play the game, Michael Jordan. This jersey is made of breathable mesh fabric and is great for a pick-up game with friends or styled with a pair of jeans.',
+        specification: ['Shown: White', 'Style: 85A773-001']
+      }
+    ]
+  },
+
+  {
+    _id: '2',
+    name: 'Jordan ',
+    brand: 'jordan',
+    type: 'basketball',
+    size: ['5'],
+    price: 55,
+    offPrice: 46.97,
+    gender: 'kid',
+    color: ['red'],
+    slug: 'jordan-23-jersey',
+    gallery: ['gallery'],
+    detail_product: [
+      {
+        title: 'Product Details',
+        description:
+          'Kiddos can wear the jersey with the name and number of one of the best to ever play the game, Michael Jordan. This jersey is made of breathable mesh fabric and is great for a pick-up game with friends or styled with a pair of jeans.',
+        specification: ['Shown: White', 'Style: 85A773-001']
+      }
+    ]
+  }
+]
+
 export const getLandingPageMock = rest.get(
   `http://localhost:3001/api/`,
   (_req, res, ctx) => {
     return res(
       ctx.status(200),
-      ctx.json<TLandingPageResponse>({ error: false, header: HeaderResponse })
+      ctx.json<TLandingPageResponse>({
+        error: false,
+        header: HeaderResponse,
+        kidsCollection: kidCollectionResponse
+      })
+    )
+  }
+)
+
+export const getKidCollectionByBrand = rest.get(
+  'http://localhost:3001/api/kid-collection/:brand?',
+  (_req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json<TKidCollectionByBrandResponse>({
+        error: false,
+        kidsCollection: kidCollectionResponse
+      })
     )
   }
 )

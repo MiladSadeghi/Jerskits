@@ -13,4 +13,10 @@ export type TLandingPageHeaderProduct = IProduct & {
 export type TLandingPageResponse = {
   error: boolean
   header: TLandingPageHeaderProduct[]
+  kidsCollection: IProduct[]
+}
+
+export type TKidCollectionByBrandResponse = {
+  error: boolean
+  kidsCollection: IProduct[]
 }
