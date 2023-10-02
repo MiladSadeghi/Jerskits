@@ -5,6 +5,10 @@ import FullScreenLoader from './FullScreenLoader/FullScreenLoader'
 import HeaderController from './LandingPage/HeaderController'
 import HeaderSlide from './LandingPage/HeaderSlide'
 import ProfileLink from './ProfileLink/ProfileLink'
+import KidCollectionController from './LandingPage/KidCollectionSlideController'
+import KidCollectionSlider from './LandingPage/KidCollectionSlider'
+import ProductCard from './ProductCard/ProductCard'
+import ProductCardSkeleton from './ProductCard/ProductCardSkeleton'
 
 export {
   Navbar,
@@ -13,5 +17,9 @@ export {
   FullScreenLoader,
   HeaderController,
   HeaderSlide,
-  ProfileLink
+  ProfileLink,
+  KidCollectionController,
+  KidCollectionSlider,
+  ProductCard,
+  ProductCardSkeleton
 }
