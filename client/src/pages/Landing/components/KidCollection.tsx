@@ -6,6 +6,7 @@ import {
   KidCollectionSlider
 } from '../../../components'
 import { motion } from 'framer-motion'
+import { useLazyGetKidBrandCollectionQuery } from '../../../services'
 
 type Props = {
   products: IProduct[] | undefined
@@ -41,6 +42,15 @@ const KidCollection = ({ products, isError, isLoading }: Props) => {
   const sliderRef = useRef<HTMLDivElement | null>(null)
   const [brand, setBrand] = useState<TBrand>('nike')
   const [leftBrandIndicator, setLeftBrandIndicator] = useState<number>(0)
+  const [
+    getKidBrandCollection,
+    {
+      isError: isKidCollectionError,
+      data: kidCollectionProducts,
+      isSuccess,
+      isFetching
+    }
+  ] = useLazyGetKidBrandCollectionQuery()
 
   const controlSlide = (
     amount: string
@@ -61,6 +71,7 @@ const KidCollection = ({ products, isError, isLoading }: Props) => {
       if (brand !== newBrand) {
         setBrand(newBrand)
         setLeftBrandIndicator(leftAmount)
+        getKidBrandCollection({ brand: newBrand }, true)
       }
     }
   }
@@ -87,9 +98,9 @@ const KidCollection = ({ products, isError, isLoading }: Props) => {
           <KidCollectionController controlSlide={controlSlide} />
         </div>
         <KidCollectionSlider
-          products={products}
-          isLoading={isLoading}
-          isError={isError}
+          products={isSuccess ? kidCollectionProducts?.kidCollection : products}
+          isLoading={isLoading || isFetching}
+          isError={isError || isKidCollectionError}
           ref={sliderRef}
         />
       </div>

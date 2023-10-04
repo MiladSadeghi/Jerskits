@@ -24,11 +24,8 @@ const landingPageApi = createApi({
     >({
       query({ brand }) {
         return {
-          url: '/kid-collection',
-          method: 'GET',
-          params: {
-            brand
-          }
+          url: `/kid-collection/${brand}`,
+          method: 'GET'
         }
       }
     })

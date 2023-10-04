@@ -1,4 +1,4 @@
-import { IProduct } from './Product.types'
+import { IProduct, TBrand } from './Product.types'
 
 export type TLandingPageHeaderProduct = IProduct & {
   stadiumImage: string
@@ -18,9 +18,9 @@ export type TLandingPageResponse = {
 
 export type TKidBrandCollectionResponse = {
   error: boolean
-  kidsCollection: IProduct[]
+  kidCollection: IProduct[]
 }
 
 export type TKidBrandCollectionRequest = {
-  brand?: string
+  brand?: TBrand
 }

@@ -10,7 +10,10 @@ import {
   useUpdateUserProfileMutation
 } from './profileApi'
 
-import { useGetLandingPageQuery } from './LandingPageApi'
+import {
+  useGetLandingPageQuery,
+  useLazyGetKidBrandCollectionQuery
+} from './LandingPageApi'
 
 export {
   useSignUpMutation,
@@ -19,5 +22,6 @@ export {
   useLazyGetLocationQuery,
   useUpdateUserProfileMutation,
   useGetUserProfileQuery,
-  useGetLandingPageQuery
+  useGetLandingPageQuery,
+  useLazyGetKidBrandCollectionQuery
 }
