@@ -1,7 +1,7 @@
 export interface IProduct {
   _id: string
   name: string
-  brand: 'nike' | 'adidas' | 'jordan' | 'puma'
+  brand: TBrand
   type: 'football' | 'basketball'
   price: number
   offPrice: number
@@ -17,3 +17,5 @@ export interface IProduct {
     specification?: string[]
   }[]
 }
+
+export type TBrand = 'nike' | 'adidas' | 'jordan' | 'puma'

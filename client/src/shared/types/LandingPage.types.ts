@@ -16,7 +16,11 @@ export type TLandingPageResponse = {
   kidsCollection: IProduct[]
 }
 
-export type TKidCollectionByBrandResponse = {
+export type TKidBrandCollectionResponse = {
   error: boolean
   kidsCollection: IProduct[]
+}
+
+export type TKidBrandCollectionRequest = {
+  brand?: string
 }

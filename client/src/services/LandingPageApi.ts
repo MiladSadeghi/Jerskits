@@ -1,6 +1,10 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithAuth } from './api'
-import { TLandingPageResponse } from '../shared/types/LandingPage.types'
+import {
+  TKidBrandCollectionRequest,
+  TKidBrandCollectionResponse,
+  TLandingPageResponse
+} from '../shared/types/LandingPage.types'
 
 const landingPageApi = createApi({
   reducerPath: 'landingPageApi',
@@ -13,9 +17,24 @@ const landingPageApi = createApi({
           method: 'GET'
         }
       }
+    }),
+    getKidBrandCollection: build.query<
+      TKidBrandCollectionResponse,
+      TKidBrandCollectionRequest
+    >({
+      query({ brand }) {
+        return {
+          url: '/kid-collection',
+          method: 'GET',
+          params: {
+            brand
+          }
+        }
+      }
     })
   })
 })
 
 export { landingPageApi }
-export const { useGetLandingPageQuery } = landingPageApi
+export const { useGetLandingPageQuery, useLazyGetKidBrandCollectionQuery } =
+  landingPageApi
