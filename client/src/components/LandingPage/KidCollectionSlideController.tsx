@@ -57,9 +57,9 @@ const KidCollectionController = ({ controlSlide }: Props) => {
   )
 }
 
-const Wrapper = tw.div`flex flex-col w-80 overflow-hidden`
-const Title = tw.h1`text-7xl text-primary-black font-bold leading-[93.6px] mb-5`
-const Description = tw.p`text-neutral-dark-grey text-lg leading-7`
+const Wrapper = tw.div`flex flex-col w-full sm:w-80 overflow-hidden mb-12 xl:mb-0`
+const Title = tw.h1`text-5xl sm:text-6xl md:text-7xl text-primary-black font-bold leading-[63px] md:leading-[93.6px] mb-5`
+const Description = tw.p`text-neutral-dark-grey text-lg leading-7 break-words`
 const ArrowIcon = tw.button`p-3 border border-neutral-soft-grey rounded-full`
 
 export default KidCollectionController

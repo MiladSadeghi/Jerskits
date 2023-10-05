@@ -93,8 +93,8 @@ const KidCollection = ({ products, isError, isLoading }: Props) => {
           </div>
         ))}
       </div>
-      <div className='flex w-full mx-auto gap-x-24'>
-        <div className='ml-36'>
+      <div className='flex flex-col w-full mx-auto xl:flex-row gap-x-24'>
+        <div className='ml-4 sm:ml-4 md:ml-10'>
           <KidCollectionController controlSlide={controlSlide} />
         </div>
         <KidCollectionSlider
@@ -110,7 +110,7 @@ const KidCollection = ({ products, isError, isLoading }: Props) => {
 
 const Brand = tw.img`opacity-30 z-[6] relative w-fit h-fit`
 const BrandIndicator = styled(motion.div)`
-  ${tw`absolute top-0 w-2/12 h-full bg-primary-black z-[5] mix-blend-color-burn duration-200 bg-opacity-70 ease-linear`}
+  ${tw`absolute top-0 w-3/12 lg:w-2/12 h-full bg-primary-black z-[5] mix-blend-color-burn duration-200 bg-opacity-70 ease-linear`}
 `
 
 export default KidCollection
