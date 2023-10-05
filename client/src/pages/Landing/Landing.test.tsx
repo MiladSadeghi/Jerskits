@@ -217,17 +217,17 @@ describe('landing page kid collection', () => {
       />
     )
     await waitFor(async () => {
-      const nikeProducts = await screen.findAllByAltText('nike')
+      const nikeProducts = await screen.findAllByAltText('nike logo')
       expect(nikeProducts.length).toBeGreaterThan(1)
     })
 
     await waitFor(async () => {
-      const changeContentButton = screen.getByAltText('jordan-content')
+      const changeContentButton = screen.getByAltText('jordan')
       await user.click(changeContentButton)
     })
 
     await waitFor(async () => {
-      const jordanProducts = await screen.findAllByAltText('jordan')
+      const jordanProducts = await screen.findAllByAltText('jordan logo')
       expect(jordanProducts.length).toBeGreaterThan(1)
     })
   })

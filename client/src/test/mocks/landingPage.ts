@@ -1,6 +1,6 @@
 import { rest } from 'msw'
 import {
-  TKidCollectionByBrandResponse,
+  TKidBrandCollectionResponse,
   TLandingPageHeaderProduct,
   TLandingPageResponse
 } from '../../shared/types/LandingPage.types'
@@ -169,13 +169,13 @@ export const getLandingPageMock = rest.get(
 )
 
 export const getKidCollectionByBrand = rest.get(
-  'http://localhost:3001/api/kid-collection/:brand?',
-  (_req, res, ctx) => {
+  'http://localhost:3001/api/kid-collection/jordan',
+  (req, res, ctx) => {
     return res(
       ctx.status(200),
-      ctx.json<TKidCollectionByBrandResponse>({
+      ctx.json<TKidBrandCollectionResponse>({
         error: false,
-        kidsCollection: kidCollectionResponse
+        kidCollection: kidCollectionResponse
       })
     )
   }
