@@ -1,6 +1,7 @@
 import { useGetLandingPageQuery } from '../../services'
 import Header from './components/Header'
 import KidCollection from './components/KidCollection'
+import Feature from './components/Feature'
 
 const Landing = () => {
   const { data, isError, isLoading } = useGetLandingPageQuery()
@@ -12,6 +13,7 @@ const Landing = () => {
         isError={isError}
         isLoading={isLoading}
       />
+      <Feature />
     </>
   )
 }

@@ -94,7 +94,7 @@ const KidCollection = ({ products, isError, isLoading }: Props) => {
         ))}
       </div>
       <div className='flex flex-col w-full mx-auto xl:flex-row gap-x-24'>
-        <div className='ml-4 sm:ml-4 md:ml-10'>
+        <div className='ml-4 sm:ml-4 md:ml-10 lg:ml-14 xl:ml-16 2xl:ml-20 3xl:ml-28'>
           <KidCollectionController controlSlide={controlSlide} />
         </div>
         <KidCollectionSlider
