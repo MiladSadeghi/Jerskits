@@ -7,6 +7,7 @@ import { locationApi } from '../services/locationApi'
 import { authApi } from '../services/authApi'
 import userApi from '../services/userApi'
 import { landingPageApi } from '../services/LandingPageApi'
+import { productApi } from '../services/productApi'
 
 const rootReducer = combineReducers({
   auth: authSlice,
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
   [profileApi.reducerPath]: profileApi.reducer,
   [locationApi.reducerPath]: locationApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
-  [landingPageApi.reducerPath]: landingPageApi.reducer
+  [landingPageApi.reducerPath]: landingPageApi.reducer,
+  [productApi.reducerPath]: productApi.reducer
 })
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
@@ -27,7 +29,8 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         profileApi.middleware,
         locationApi.middleware,
         userApi.middleware,
-        landingPageApi.middleware
+        landingPageApi.middleware,
+        productApi.middleware
       ),
     preloadedState
   })

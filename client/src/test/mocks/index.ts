@@ -1,7 +1,8 @@
 import { SignInApiMock, SignUpApiMock } from './auth.mock'
 import { SignInWIthRefreshTokenMock } from './navbar.mock'
 import { GetProfileMock, SubmitProfileMock } from './profile.mock.ts'
-import { getLandingPageMock } from './landingPage.ts'
+import { getLandingPageMock } from './landingPage.mock.ts'
+import { getProducts } from './product.mock.ts'
 
 const handler = [
   SignUpApiMock,
@@ -9,7 +10,8 @@ const handler = [
   SignInWIthRefreshTokenMock,
   GetProfileMock,
   SubmitProfileMock,
-  getLandingPageMock
+  getLandingPageMock,
+  getProducts
 ]
 
 export default handler
