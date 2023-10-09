@@ -8,6 +8,7 @@ import {
   landingProvider,
 } from "../controller/landing.controller.js";
 import { isUserSignIn } from "../middleware/verifyJWT.js";
+import productRoute from "./product.route.js";
 
 const mainRoutes = Router();
 
@@ -15,6 +16,7 @@ mainRoutes.use("/auth", authRouter);
 mainRoutes.use("/profile", profileRouter);
 mainRoutes.use("/location", locationRouter);
 mainRoutes.use("/user", userRouter);
+mainRoutes.use("/", isUserSignIn, productRoute);
 mainRoutes.get("/", isUserSignIn, landingProvider);
 mainRoutes.get("/kid-collection/:brand?", isUserSignIn, kidCollectionProvider);
 

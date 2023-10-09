@@ -53,13 +53,11 @@ export const landingProvider = async (req, res, next) => {
       (product) => product.gender === "kid" && product.brand === "nike"
     );
 
-    return res
-      .status(200)
-      .json({
-        error: false,
-        header: headerProducts,
-        kidsCollection: kidsCollectionProducts,
-      });
+    return res.status(200).json({
+      error: false,
+      header: headerProducts,
+      kidsCollection: kidsCollectionProducts,
+    });
   } catch (error) {
     console.error(error);
     next(error);
