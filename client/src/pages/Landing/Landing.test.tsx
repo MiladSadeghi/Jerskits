@@ -7,6 +7,7 @@ import HeaderSlide from '../../components/LandingPage/HeaderSlide'
 import KidCollection from './components/KidCollection'
 import { IProduct } from '../../shared/types/Product.types'
 import user from '@testing-library/user-event'
+import Popular from './components/Popular'
 
 const headerProducts: TLandingPageHeaderProduct[] = [
   {
@@ -229,6 +230,19 @@ describe('landing page kid collection', () => {
     await waitFor(async () => {
       const jordanProducts = await screen.findAllByAltText('jordan logo')
       expect(jordanProducts.length).toBeGreaterThan(1)
+    })
+  })
+})
+
+describe('Popular products', () => {
+  test('popular products render api response product', async () => {
+    renderWithProviders(<Popular />)
+
+    await waitFor(() => {
+      const productNameElement = screen.getByRole('heading', {
+        name: /barcelona/i
+      })
+      expect(productNameElement).toBeInTheDocument()
     })
   })
 })
