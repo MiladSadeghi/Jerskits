@@ -15,7 +15,7 @@ function calculateDiscount(price: number, discountPrice: number): number {
 const ProductCard = ({ product }: Props) => {
   return (
     <Card className='group'>
-      <div className='h-[440px] relative bg-neutral-light-grey flex items-end justify-center'>
+      <div className='min-h-[440px] relative bg-neutral-light-grey flex items-end justify-center'>
         <CardImage src={product.gallery[0]} alt={product.name} />
         <BrandLogo
           src={provideBrandLogo(product.brand)}
@@ -43,7 +43,7 @@ const ProductCard = ({ product }: Props) => {
   )
 }
 
-const Card = tw.div`px-4 min-w-full sm:min-w-[380px] `
+const Card = tw.div`min-w-full sm:min-w-[380px]`
 const CardImage = tw.img`w-[85%] object-cover object-bottom bg-neutral-light-grey `
 const BrandLogo = tw.img`absolute left-7 top-7 w-10 h-10 duration-150 opacity-30 group-hover:opacity-70`
 const ProductName = tw.h1`text-primary-black text-text-xl leading-9 font-bold`

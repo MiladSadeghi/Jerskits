@@ -11,10 +11,12 @@ type Props = {
 
 const KidCollectionSlider = forwardRef<HTMLDivElement, Props>(
   ({ products, isLoading, isError }, ref) => {
+    const productCardSkeletonArray = new Array(3).fill(null)
+
     if (isLoading || !products || isError) {
       return (
         <div className='flex mb-24 overflow-hidden gap-x-7'>
-          {[0, 1, 2, 3].map((idx: number) => (
+          {productCardSkeletonArray.map((idx: number) => (
             <ProductCardSkeleton key={idx} />
           ))}
         </div>
@@ -30,6 +32,6 @@ const KidCollectionSlider = forwardRef<HTMLDivElement, Props>(
   }
 )
 
-const Wrapper = tw.div`overflow-hidden flex gap-x-7 mb-24 scroll-smooth`
+const Wrapper = tw.div`overflow-hidden flex gap-x-7 mb-24 scroll-smooth px-4`
 
 export default KidCollectionSlider
