@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react'
-import { TBrand, TType } from '../../shared/types/Product.types'
+import { TBrand, TGender, TType } from '../../shared/types/Product.types'
+import tw from 'twin.macro'
 
 type Price = {
   minPrice: number
@@ -17,6 +18,8 @@ type Props = {
   setColor?: setState<string>
   size?: string
   setSize?: setState<string>
+  gender?: TGender
+  setGender?: setState<TGender>
   brand?: TBrand
   setBrand?: setState<TBrand>
   type?: string
@@ -32,6 +35,8 @@ const FilterBar = ({
   setColor,
   size,
   setSize,
+  gender,
+  setGender,
   brand,
   setBrand,
   type,
@@ -39,7 +44,13 @@ const FilterBar = ({
   sort,
   setSort
 }: Props) => {
-  return <div>FilterBar</div>
+  return (
+    <Wrapper>
+      <div className='px-12 border py-7 border-neutral-soft-grey'></div>
+    </Wrapper>
+  )
 }
+
+const Wrapper = tw.div`container mx-auto mb-12 col-span-full`
 
 export default FilterBar

@@ -3,22 +3,42 @@ import FilterBar from '../FilterBar/FilterBar'
 import { ProductCard, ProductCardSkeleton } from '..'
 import { IProduct, TGender } from '../../shared/types/Product.types'
 import { useLazyGetProductsQuery } from '../../services'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { SpinnerCircular } from 'spinners-react'
+import { useProductFilterQuery } from '../../hooks/useProductFilterQuery'
 
 type Props = {
   title?: string
   gender?: TGender
 }
 
-const Products = ({ title }: Props) => {
-  const [getProducts, { isLoading, isError, data, isSuccess }] =
+const Products = ({ title, gender }: Props) => {
+  const [products, setProducts] = useState<IProduct[]>([])
+  const [getProducts, { isError, data, isSuccess, isFetching }] =
     useLazyGetProductsQuery()
 
+  const [page, setPage] = useState<number>(1)
+  const productCardSkeletonArray = new Array(6).fill(null)
+  const { generateQuery } = useProductFilterQuery()
+
   useEffect(() => {
-    getProducts({})
+    getProducts({ ...(gender && { gender }) })
   }, [])
 
-  const productCardSkeletonArray = new Array(6).fill(null)
+  useEffect(() => {
+    console.log(isSuccess)
+    if (isSuccess && data) {
+      console.log(data?.products)
+      setProducts((prevProducts) => [...prevProducts, ...data.products])
+    }
+  }, [isSuccess, data])
+
+  useEffect(() => {}, [])
+
+  const loadNextPage = () => {
+    setPage((prevPage) => prevPage + 1)
+    getProducts(generateQuery({ page: page + 1 }))
+  }
 
   return (
     <Wrapper>
@@ -26,21 +46,39 @@ const Products = ({ title }: Props) => {
       <FilterBar />
 
       <ProductWrapper>
-        {(isLoading || isError) &&
+        {(isFetching || isError) &&
           productCardSkeletonArray.map((_, index) => (
-            <ProductCardSkeleton key={index} />
+            <ProductCardSkeleton key={index + 423} />
           ))}
-        {isSuccess &&
-          data?.products.map((product: IProduct) => (
-            <ProductCard product={product} key={product._id} />
-          ))}
+        {products?.map((product: IProduct, index: number) => (
+          <ProductCard product={product} key={String(index)} />
+        ))}
       </ProductWrapper>
+      <LoadMore
+        aria-label='Load more products'
+        onClick={loadNextPage}
+        disabled={data?.currentPage === data?.totalPages || isFetching}
+      >
+        {isFetching ? (
+          <SpinnerCircular
+            size={36}
+            thickness={100}
+            speed={100}
+            color='rgba(38, 45, 51, 1)'
+            secondaryColor='rgba(231, 231, 231, 1)'
+            className='mx-auto'
+          />
+        ) : (
+          'SEE MORE PRODUCT'
+        )}
+      </LoadMore>
     </Wrapper>
   )
 }
 
-const Wrapper = tw.div`container mx-auto my-24 flex flex-col`
+const Wrapper = tw.div`container mx-auto py-24 flex flex-col`
 const Title = tw.h1`mb-12 text-center text-7xl font-bold leading-[93.6px] text-primary-black`
 const ProductWrapper = tw.div`gap-x-7 gap-y-12 grid grid-cols-3`
+const LoadMore = tw.button`border border-neutral-soft-grey px-20 py-4 text-base font-bold leading-6 self-center mt-24 text-primary-black w-80 disabled:opacity-70 transition-all`
 
 export default Products
