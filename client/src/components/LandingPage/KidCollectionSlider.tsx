@@ -16,7 +16,7 @@ const KidCollectionSlider = forwardRef<HTMLDivElement, Props>(
     if (isLoading || !products || isError) {
       return (
         <div className='flex mb-24 overflow-hidden gap-x-7'>
-          {productCardSkeletonArray.map((idx: number) => (
+          {productCardSkeletonArray.map((_, idx: number) => (
             <ProductCardSkeleton key={idx} />
           ))}
         </div>

@@ -1,12 +1,18 @@
 import { createApi } from '@reduxjs/toolkit/dist/query/react'
 import { baseQueryWithAuth } from './api'
-import { TBrand, TProductsResponse, TType } from '../shared/types/Product.types'
+import {
+  TBrand,
+  TGender,
+  TProductsResponse,
+  TType
+} from '../shared/types/Product.types'
 
 type TGetProductsRequest = {
   minPrice?: number
   maxPrice?: number
   color?: string
   size?: string
+  gender?: TGender
   brand?: TBrand
   type?: TType
   sort?: 'first' | 'last' | 'lowprice' | 'highprice'
