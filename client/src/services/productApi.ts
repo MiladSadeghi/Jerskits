@@ -19,30 +19,12 @@ const productApi = createApi({
   baseQuery: baseQueryWithAuth,
   endpoints: (build) => ({
     getProducts: build.query<TProductsResponse, TGetProductsRequest>({
-      query({
-        minPrice,
-        maxPrice,
-        color,
-        size,
-        brand,
-        type,
-        sort,
-        page,
-        perPage
-      }) {
+      query(args) {
         return {
           url: '/products',
           method: 'GET',
           params: {
-            minPrice,
-            maxPrice,
-            color,
-            size,
-            brand,
-            type,
-            sort,
-            page,
-            perPage
+            ...args
           }
         }
       }
