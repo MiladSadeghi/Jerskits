@@ -14,7 +14,7 @@ function calculateDiscount(price: number, discountPrice: number): string {
 
 const ProductCard = ({ product }: Props) => {
   return (
-    <Card className='group'>
+    <Card className='h-full group'>
       <div className='h-[440px] w-full relative bg-neutral-light-grey flex items-end justify-center'>
         <CardImage src={product.gallery[0]} alt={product.name} />
         <BrandLogo
@@ -24,13 +24,11 @@ const ProductCard = ({ product }: Props) => {
       </div>
       <CardContent>
         <ProductName className='line-clamp-2'>{product.name}</ProductName>
-        <div className='flex'>
-          <ProductType>{product.type}</ProductType>
-        </div>
+        <ProductType>{product.type}</ProductType>
         <div className='flex items-center'>
           <Price $isDiscount={product.offPrice !== 0}>${product.price}</Price>
           {product.offPrice !== 0 && (
-            <div className='flex items-center w-full justify-between'>
+            <div className='flex items-center justify-between w-full'>
               <DiscountPrice>${product.offPrice}</DiscountPrice>
               <DiscountPercent>
                 {calculateDiscount(product.price, product.offPrice)}% Off
@@ -43,11 +41,11 @@ const ProductCard = ({ product }: Props) => {
   )
 }
 
-const Card = tw.div`min-w-full sm:min-w-[380px]`
-const CardImage = tw.img`w-[70%] object-cover object-bottom bg-neutral-light-grey `
+const Card = tw.div`min-w-full sm:min-w-[380px] flex flex-col justify-between`
+const CardImage = tw.img`w-[70%] object-contain object-bottom bg-neutral-light-grey h-[440px]`
 const BrandLogo = tw.img`absolute left-7 top-7 w-10 h-10 duration-150 opacity-30 group-hover:opacity-70`
 const ProductName = tw.h1`text-primary-black text-text-xl leading-9 font-bold`
-const CardContent = tw.div`w-full mt-2.5 gap-y-2.5`
+const CardContent = tw.div`w-full h-full mt-2.5 gap-y-2.5 flex flex-col justify-between`
 const ProductType = tw.p`text-neutral-dark-grey text-text-lg font-normal leading-7`
 const Price = styled.h2<{ $isDiscount: boolean }>`
   ${tw`relative font-bold leading-9 text-text-xl`}
