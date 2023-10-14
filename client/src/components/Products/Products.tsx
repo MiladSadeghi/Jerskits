@@ -12,12 +12,21 @@ type Props = {
   gender?: TGender
 }
 
+type Price = {
+  minPrice: number
+  maxPrice: number
+}
+
 const Products = ({ title, gender }: Props) => {
   const [products, setProducts] = useState<IProduct[]>([])
   const [getProducts, { isError, data, isSuccess, isFetching }] =
     useLazyGetProductsQuery()
 
   const [page, setPage] = useState<number>(1)
+  const [price, setPrice] = useState<Price>({
+    minPrice: 0,
+    maxPrice: 0
+  })
   const productCardSkeletonArray = new Array(6).fill(null)
   const { generateQuery } = useProductFilterQuery()
 
@@ -26,9 +35,7 @@ const Products = ({ title, gender }: Props) => {
   }, [])
 
   useEffect(() => {
-    console.log(isSuccess)
     if (isSuccess && data) {
-      console.log(data?.products)
       setProducts((prevProducts) => [...prevProducts, ...data.products])
     }
   }, [isSuccess, data])
@@ -44,14 +51,13 @@ const Products = ({ title, gender }: Props) => {
     <Wrapper>
       {title && <Title>{title}</Title>}
       <FilterBar />
-
       <ProductWrapper>
         {(isFetching || isError) &&
           productCardSkeletonArray.map((_, index) => (
-            <ProductCardSkeleton key={index + 423} />
+            <ProductCardSkeleton key={index} />
           ))}
-        {products?.map((product: IProduct, index: number) => (
-          <ProductCard product={product} key={String(index)} />
+        {products?.map((product: IProduct) => (
+          <ProductCard product={product} key={product._id} />
         ))}
       </ProductWrapper>
       <LoadMore
