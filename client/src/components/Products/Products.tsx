@@ -1,7 +1,13 @@
 import tw from 'twin.macro'
 import FilterBar from '../FilterBar/FilterBar'
 import { ProductCard, ProductCardSkeleton } from '..'
-import { IProduct, TGender } from '../../shared/types/Product.types'
+import {
+  IProduct,
+  Price,
+  TBrand,
+  TGender,
+  TType
+} from '../../shared/types/Product.types'
 import { useLazyGetProductsQuery } from '../../services'
 import { useEffect, useState } from 'react'
 import { SpinnerCircular } from 'spinners-react'
@@ -12,27 +18,34 @@ type Props = {
   gender?: TGender
 }
 
-type Price = {
-  minPrice: number
-  maxPrice: number
-}
-
 const Products = ({ title, gender }: Props) => {
   const [products, setProducts] = useState<IProduct[]>([])
   const [getProducts, { isError, data, isSuccess, isFetching }] =
     useLazyGetProductsQuery()
 
   const [page, setPage] = useState<number>(1)
-  const [price, setPrice] = useState<Price>({
-    minPrice: 0,
-    maxPrice: 0
-  })
+  const [price, setPrice] = useState<Price | undefined>()
+  const [color, setColor] = useState<string | undefined>()
+  const [size, setSize] = useState<string | undefined>()
+  const [brand, setBrand] = useState<TBrand | undefined>()
+  const [type, setType] = useState<TType | undefined>()
+
   const productCardSkeletonArray = new Array(6).fill(null)
   const { generateQuery } = useProductFilterQuery()
 
   useEffect(() => {
-    getProducts({ ...(gender && { gender }) })
-  }, [])
+    getProducts(
+      generateQuery({
+        gender,
+        minPrice: price?.minPrice,
+        maxPrice: price?.maxPrice,
+        color,
+        size,
+        brand,
+        type
+      })
+    )
+  }, [price, color, size, brand, type])
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -44,13 +57,35 @@ const Products = ({ title, gender }: Props) => {
 
   const loadNextPage = () => {
     setPage((prevPage) => prevPage + 1)
-    getProducts(generateQuery({ page: page + 1 }))
+    getProducts(
+      generateQuery({
+        page: page + 1,
+        ...(gender && { gender }),
+        minPrice: price?.minPrice,
+        maxPrice: price?.maxPrice,
+        color,
+        size,
+        brand,
+        type
+      })
+    )
   }
 
   return (
     <Wrapper>
       {title && <Title>{title}</Title>}
-      <FilterBar />
+      <FilterBar
+        price={price}
+        setPrice={setPrice}
+        color={color}
+        setColor={setColor}
+        size={size}
+        setSize={setSize}
+        brand={brand}
+        setBrand={setBrand}
+        type={type}
+        setType={setType}
+      />
       <ProductWrapper>
         {(isFetching || isError) &&
           productCardSkeletonArray.map((_, index) => (
