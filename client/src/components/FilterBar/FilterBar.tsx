@@ -1,69 +1,79 @@
-import { RefObject, useRef, useState } from 'react'
-import { Dispatch, SetStateAction } from 'react'
-import { TBrand, TGender, TType } from '../../shared/types/Product.types'
+import { RefObject, useRef, useState, ReactNode } from 'react'
+import { Price, Sort, TBrand, TType } from '../../shared/types/Product.types'
 import tw from 'twin.macro'
 import { FilterContentModal } from '../../modals'
-
-type Price = {
-  minPrice: number
-  maxPrice: number
-}
-
-type Sort = 'first' | 'last' | 'lowprice' | 'highprice'
-
-type setState<T> = Dispatch<SetStateAction<T>>
+import PriceFilter from './components/PriceFilter'
+import ColorFilter from './components/ColorFilter'
+import SizeFilter from './components/SizeFilter'
+import TypeFilter from './components/TypeFilter'
+import BrandFilter from './components/BrandFilter'
 
 type Props = {
-  price?: Price
-  setPrice?: setState<Price>
-  color?: string
-  setColor?: setState<string>
-  size?: string
-  setSize?: setState<string>
-  gender?: TGender
-  setGender?: setState<TGender>
-  brand?: TBrand
-  setBrand?: setState<TBrand>
-  type?: string
-  setType?: setState<TType>
-  sort?: Sort
-  setSort?: setState<Sort>
+  price: Price
+  setPrice: setState<Price>
+  color: string
+  setColor: setState<string>
+  size: string
+  setSize: setState<string>
+  brand: TBrand
+  setBrand: setState<TBrand>
+  type: TType
+  setType: setState<TType>
+  sort: Sort
+  setSort: setState<Sort>
 }
 
 type TFilterItems = {
   title: string
   btnRef: RefObject<HTMLButtonElement>
   modalWidth: number
+  filterContent: ReactNode
 }
 
-const FilterBar = () => {
+const FilterBar = ({
+  price,
+  setPrice,
+  color,
+  setColor,
+  size,
+  setSize,
+  brand,
+  setBrand,
+  type,
+  setType
+}: Partial<Props>) => {
   const [openModal, setOpenModal] = useState<number | null>(null)
 
   const filterItems: TFilterItems[] = [
     {
       title: 'Price',
       btnRef: useRef<HTMLButtonElement>(null),
-      modalWidth: 320
+      modalWidth: 320,
+      filterContent: <PriceFilter price={price} setPrice={setPrice} />
     },
     {
       title: 'Color',
       btnRef: useRef<HTMLButtonElement>(null),
-      modalWidth: 320
+      modalWidth: 320,
+      filterContent: <ColorFilter color={color} setColor={setColor} />
     },
     {
       title: 'Size',
       btnRef: useRef<HTMLButtonElement>(null),
-      modalWidth: 320
+      modalWidth: 320,
+      filterContent: <SizeFilter size={size} setSize={setSize} />
     },
     {
       title: 'Brand',
       btnRef: useRef<HTMLButtonElement>(null),
-      modalWidth: 320
+      modalWidth: 320,
+      filterContent: <BrandFilter brand={brand} setBrand={setBrand} />
     },
     {
       title: 'Type',
       btnRef: useRef<HTMLButtonElement>(null),
-      modalWidth: 320
+      modalWidth: 320,
+      filterContent: <TypeFilter type={type} setType={setType} />
     }
   ]
 
@@ -105,7 +115,7 @@ const FilterBar = () => {
                   onClose={() => setOpenModal(null)}
                   width={item.modalWidth}
                 >
-                  <div>{item.title} Modal</div>
+                  {item.filterContent}
                 </FilterContentModal>
               </div>
             </div>

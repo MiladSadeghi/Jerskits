@@ -20,6 +20,13 @@ export type TType = 'football' | 'basketball'
 
 export type TGender = 'men' | 'women' | 'kid'
 
+export type Price = {
+  minPrice: number
+  maxPrice: number
+}
+
+export type Sort = 'first' | 'last' | 'lowprice' | 'highprice'
+
 export type TDetailProduct = {
   title: string
   description?: string
