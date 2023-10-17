@@ -38,4 +38,5 @@ export type TProductsResponse = {
   products: IProduct[]
   totalPages: number
   currentPage: number
+  highestPrice: number
 }

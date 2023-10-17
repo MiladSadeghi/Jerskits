@@ -7,6 +7,8 @@ type Props = {
   children: ReactNode
   btnRef: RefObject<HTMLButtonElement>
   width: number
+  title: string
+  applyHandler: () => void
 }
 
 const FilterContentModal = ({
@@ -14,10 +16,11 @@ const FilterContentModal = ({
   onClose,
   children,
   btnRef,
-  width
+  width,
+  title,
+  applyHandler
 }: Props) => {
   const ref = useRef<HTMLDialogElement | null>(null)
-
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       if (
@@ -41,7 +44,9 @@ const FilterContentModal = ({
 
   return open ? (
     <Modal open ref={ref} width={width}>
-      <div>{children}</div>
+      <ModalTitle>{title}</ModalTitle>
+      {children}
+      <ModalApplyBtn onClick={applyHandler}>APPLY</ModalApplyBtn>
     </Modal>
   ) : null
 }
@@ -50,5 +55,7 @@ const Modal = styled.dialog<{ width: number }>`
   ${tw`bg-white p-[30px] absolute left-0 top-[calc(100%+45px)] border border-neutral-soft-grey m-0 z-10`}
   width: ${({ width }) => `${width}px`};
 `
+const ModalTitle = tw.h1`font-bold text-lg text-primary-black leading-7 mb-[30px]`
+const ModalApplyBtn = tw.button`w-full text-white bg-primary-black text-base font-bold leading-6 py-[18px] text-center mt-[30px]`
 
 export default FilterContentModal

@@ -25,6 +25,7 @@ type Props = {
 
 type TFilterItems = {
   title: string
+  modalTitle: string
   btnRef: RefObject<HTMLButtonElement>
   modalWidth: number
   filterContent: ReactNode
@@ -40,37 +41,43 @@ const FilterBar = ({
   brand,
   setBrand,
   type,
-  setType
-}: Partial<Props>) => {
+  setType,
+  applyHandler
+}: Partial<Props> & { applyHandler: () => void }) => {
   const [openModal, setOpenModal] = useState<number | null>(null)
 
   const filterItems: TFilterItems[] = [
     {
       title: 'Price',
+      modalTitle: 'Price Range',
       btnRef: useRef<HTMLButtonElement>(null),
-      modalWidth: 320,
+      modalWidth: 380,
       filterContent: <PriceFilter price={price} setPrice={setPrice} />
     },
     {
       title: 'Color',
+      modalTitle: 'Select Color',
       btnRef: useRef<HTMLButtonElement>(null),
       modalWidth: 320,
       filterContent: <ColorFilter color={color} setColor={setColor} />
     },
     {
       title: 'Size',
+      modalTitle: 'Select Size',
       btnRef: useRef<HTMLButtonElement>(null),
       modalWidth: 320,
       filterContent: <SizeFilter size={size} setSize={setSize} />
     },
     {
       title: 'Brand',
+      modalTitle: 'Select Brand',
       btnRef: useRef<HTMLButtonElement>(null),
       modalWidth: 320,
       filterContent: <BrandFilter brand={brand} setBrand={setBrand} />
     },
     {
       title: 'Type',
+      modalTitle: 'Select Type',
       btnRef: useRef<HTMLButtonElement>(null),
       modalWidth: 320,
       filterContent: <TypeFilter type={type} setType={setType} />
@@ -108,16 +115,17 @@ const FilterBar = ({
                   />
                 </svg>
               </Button>
-              <div>
-                <FilterContentModal
-                  btnRef={item.btnRef}
-                  open={openModal === index}
-                  onClose={() => setOpenModal(null)}
-                  width={item.modalWidth}
-                >
-                  {item.filterContent}
-                </FilterContentModal>
-              </div>
+
+              <FilterContentModal
+                btnRef={item.btnRef}
+                open={openModal === index}
+                onClose={() => setOpenModal(null)}
+                width={item.modalWidth}
+                title={item.modalTitle}
+                applyHandler={applyHandler}
+              >
+                {item.filterContent}
+              </FilterContentModal>
             </div>
           ))}
         </div>

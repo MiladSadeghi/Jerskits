@@ -36,6 +36,26 @@ const Products = ({ title, gender }: Props) => {
   useEffect(() => {
     getProducts(
       generateQuery({
+        gender
+      })
+    )
+  }, [])
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      setProducts((prevProducts) => [...prevProducts, ...data.products])
+      setPrice({
+        minPrice: 0,
+        maxPrice: data.highestPrice
+      })
+    }
+  }, [isSuccess, data])
+
+  const loadNextPage = () => {
+    setPage((prevPage) => prevPage + 1)
+    getProducts(
+      generateQuery({
+        page: page + 1,
         gender,
         minPrice: price?.minPrice,
         maxPrice: price?.maxPrice,
@@ -45,22 +65,12 @@ const Products = ({ title, gender }: Props) => {
         type
       })
     )
-  }, [price, color, size, brand, type])
+  }
 
-  useEffect(() => {
-    if (isSuccess && data) {
-      setProducts((prevProducts) => [...prevProducts, ...data.products])
-    }
-  }, [isSuccess, data])
-
-  useEffect(() => {}, [])
-
-  const loadNextPage = () => {
-    setPage((prevPage) => prevPage + 1)
+  const applyFilter = () => {
     getProducts(
       generateQuery({
-        page: page + 1,
-        ...(gender && { gender }),
+        gender,
         minPrice: price?.minPrice,
         maxPrice: price?.maxPrice,
         color,
@@ -85,6 +95,7 @@ const Products = ({ title, gender }: Props) => {
         setBrand={setBrand}
         type={type}
         setType={setType}
+        applyHandler={applyFilter}
       />
       <ProductWrapper>
         {(isFetching || isError) &&
