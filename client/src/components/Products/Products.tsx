@@ -24,12 +24,13 @@ const Products = ({ title, gender }: Props) => {
     useLazyGetProductsQuery()
 
   const [page, setPage] = useState<number>(1)
-  const [price, setPrice] = useState<Price | undefined>()
-  const [color, setColor] = useState<string | undefined>()
-  const [size, setSize] = useState<string | undefined>()
-  const [brand, setBrand] = useState<TBrand | undefined>()
-  const [type, setType] = useState<TType | undefined>()
+  const [price, setPrice] = useState<Price>()
+  const [color, setColor] = useState<string>()
+  const [size, setSize] = useState<string>()
+  const [brand, setBrand] = useState<TBrand>()
+  const [type, setType] = useState<TType>()
 
+  const [highestPrice, setHighestPrice] = useState<number>()
   const productCardSkeletonArray = new Array(6).fill(null)
   const { generateQuery } = useProductFilterQuery()
 
@@ -38,16 +39,16 @@ const Products = ({ title, gender }: Props) => {
       generateQuery({
         gender
       })
-    )
+    ).then((result) => {
+      setHighestPrice(result.data?.highestPrice)
+    })
   }, [])
 
   useEffect(() => {
     if (isSuccess && data) {
-      setProducts((prevProducts) => [...prevProducts, ...data.products])
-      setPrice({
-        minPrice: 0,
-        maxPrice: data.highestPrice
-      })
+      if (page === data.currentPage) setProducts(data.products)
+      if (page !== data.currentPage)
+        setProducts((prevProducts) => [...prevProducts, ...data.products])
     }
   }, [isSuccess, data])
 
@@ -95,6 +96,7 @@ const Products = ({ title, gender }: Props) => {
         setBrand={setBrand}
         type={type}
         setType={setType}
+        highestPrice={highestPrice}
         applyHandler={applyFilter}
       />
       <ProductWrapper>
