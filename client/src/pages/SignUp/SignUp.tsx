@@ -42,6 +42,7 @@ function SignUp() {
 
   useEffect(() => {
     if (error) {
+      console.log(error)
       const SignUpError = error as TAuthResponseError
       if (
         SignUpError.status === 409 &&

@@ -3,7 +3,7 @@ import SignUp from './SignUp'
 import user from '@testing-library/user-event'
 import { renderWithProviders } from '../../utils/test-utils'
 import { BrowserRouter } from 'react-router-dom'
-import { toast } from 'react-hot-toast'
+import toast from 'react-hot-toast'
 import { vi } from 'vitest'
 
 describe('Sign Up', () => {
@@ -20,7 +20,6 @@ describe('Sign Up', () => {
   })
 
   test('the form working correctly', async () => {
-    user.setup()
     renderWithProviders(
       <BrowserRouter>
         <SignUp />
@@ -35,12 +34,7 @@ describe('Sign Up', () => {
   })
 
   test('fetching & receive an accessToken after clicking the create account button', async () => {
-    vi.mock('react-hot-toast', () => ({
-      toast: {
-        success: vi.fn(),
-        error: vi.fn()
-      }
-    }))
+    const toastSuccess = vi.spyOn(toast, 'success')
     renderWithProviders(
       <BrowserRouter>
         <SignUp />
@@ -64,7 +58,10 @@ describe('Sign Up', () => {
     await user.click(submitButtonElement)
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled()
+      expect(toastSuccess).toHaveBeenCalled()
+      expect(toastSuccess).toHaveBeenCalledWith(
+        'thanks for sign up, now you can sign in!'
+      )
     })
   })
 })

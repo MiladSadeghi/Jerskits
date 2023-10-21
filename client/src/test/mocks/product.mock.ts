@@ -58,7 +58,8 @@ export const getProducts = rest.get(
         error: false,
         products: mockData,
         currentPage: 1,
-        totalPages: 3
+        totalPages: 3,
+        highestPrice: 100
       })
     )
   }

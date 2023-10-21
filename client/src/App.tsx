@@ -9,10 +9,9 @@ import {
   SignIn,
   SignUp
 } from './pages'
-import { AuthenticationLayout, Layout } from './layouts'
+import { AuthenticationLayout, Layout, ProfileLayout } from './layouts'
 import 'swiper/css'
 import 'react-loading-skeleton/dist/skeleton.css'
-import Profile from './layouts/ProfileLayout/ProfileLayout'
 import { FullScreenLoader } from './components'
 
 function App() {
@@ -22,7 +21,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Layout />}>
             <Route index element={<Landing />} />
-            <Route path='profile' element={<Profile />}>
+            <Route path='profile' element={<ProfileLayout />}>
               <Route path='edit' element={<Edit />} />
               <Route path='favorites' element={<Favorites />} />
               <Route path='orders' element={<Orders />} />

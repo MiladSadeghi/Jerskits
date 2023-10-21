@@ -1,15 +1,15 @@
 import { screen, waitFor } from '@testing-library/react'
 import { SignIn } from '..'
 import user from '@testing-library/user-event'
-import { BrowserRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router-dom'
 import { renderWithProviders } from '../../utils/test-utils'
 
 describe('Sign In', () => {
   test('render correctly', async () => {
     renderWithProviders(
-      <BrowserRouter>
+      <MemoryRouter>
         <SignIn />
-      </BrowserRouter>
+      </MemoryRouter>
     )
 
     await waitFor(() => {
@@ -23,9 +23,9 @@ describe('Sign In', () => {
   test('the form is working correctly', async () => {
     user.setup()
     renderWithProviders(
-      <BrowserRouter>
+      <MemoryRouter>
         <SignIn />
-      </BrowserRouter>
+      </MemoryRouter>
     )
 
     await waitFor(async () => {
@@ -41,9 +41,9 @@ describe('Sign In', () => {
   test('fetch access token after sign in', async () => {
     user.setup()
     renderWithProviders(
-      <BrowserRouter>
+      <MemoryRouter>
         <SignIn />
-      </BrowserRouter>
+      </MemoryRouter>
     )
 
     await waitFor(async () => {

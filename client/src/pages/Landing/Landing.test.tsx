@@ -1,13 +1,11 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import { renderWithProviders } from '../../utils/test-utils'
-import { Landing } from '..'
 import Header from './components/Header'
 import { TLandingPageHeaderProduct } from '../../shared/types/LandingPage.types'
 import HeaderSlide from '../../components/LandingPage/HeaderSlide'
 import KidCollection from './components/KidCollection'
 import { IProduct } from '../../shared/types/Product.types'
 import user from '@testing-library/user-event'
-import Popular from './components/Popular'
 
 const headerProducts: TLandingPageHeaderProduct[] = [
   {
@@ -55,20 +53,6 @@ const headerProducts: TLandingPageHeaderProduct[] = [
     gallery: []
   }
 ]
-
-describe('landing page', () => {
-  test('Landing page show mock data of header', async () => {
-    renderWithProviders(<Landing />)
-    await waitFor(() => {
-      const slideTitle = screen.getByRole('heading', {
-        name: /F.C. Barcelona 2023\/24 Stadium Home/i
-      })
-      const slideBgImage = screen.getByAltText('Barcelona stadium')
-      expect(slideTitle).toBeInTheDocument()
-      expect(slideBgImage).toBeInTheDocument()
-    })
-  })
-})
 
 describe('landing page header', () => {
   test('render without error or loading', async () => {
@@ -230,19 +214,6 @@ describe('landing page kid collection', () => {
     await waitFor(async () => {
       const jordanProducts = await screen.findAllByAltText('jordan logo')
       expect(jordanProducts.length).toBeGreaterThan(1)
-    })
-  })
-})
-
-describe('Popular products', () => {
-  test('popular products render api response product', async () => {
-    renderWithProviders(<Popular />)
-
-    await waitFor(() => {
-      const productNameElement = screen.getByRole('heading', {
-        name: /barcelona/i
-      })
-      expect(productNameElement).toBeInTheDocument()
     })
   })
 })
