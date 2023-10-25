@@ -76,7 +76,7 @@ const FilterBar = ({
     {
       title: 'Brand',
       modalTitle: 'Select Brand',
-      modalWidth: 320,
+      modalWidth: 400,
       filterContent: <BrandFilter brand={brand} setBrand={setBrand} />
     },
     {
