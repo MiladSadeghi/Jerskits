@@ -9,6 +9,7 @@ type Props = {
 }
 
 const PriceFilter = ({ price, setPrice, highestPrice }: Props) => {
+  console.log(price, highestPrice)
   return highestPrice ? (
     <div>
       <div className='w-full mb-[70px]'>
@@ -42,18 +43,20 @@ const PriceFilter = ({ price, setPrice, highestPrice }: Props) => {
                 }}
               >
                 {children}
-                {price?.minPrice && price?.minPrice >= 16 ? (
+                {(price?.minPrice ?? 0) >= 16 ? (
                   <PriceRange className='left-0'>$0</PriceRange>
                 ) : (
                   <PriceRange className='left-0 text-primary-black'>
-                    {`$${price?.minPrice}` ?? '$0'}
+                    {`$${price?.minPrice ?? 0}`}
                   </PriceRange>
                 )}
                 {price?.maxPrice && price.maxPrice <= 96 ? (
-                  <PriceRange className='right-0'>{`$${highestPrice}`}</PriceRange>
+                  <PriceRange className='right-0'>{`$${
+                    highestPrice ?? 0
+                  }`}</PriceRange>
                 ) : (
                   <PriceRange className='right-0 text-primary-black'>
-                    {`$${price?.maxPrice}` ?? `$${highestPrice}`}
+                    {`$${price?.maxPrice ?? highestPrice}`}
                   </PriceRange>
                 )}
               </div>
@@ -72,9 +75,10 @@ const PriceFilter = ({ price, setPrice, highestPrice }: Props) => {
                 (index === 1 && price?.maxPrice && price?.maxPrice <= 96)) && (
                 <h5 className='absolute self-center text-base font-bold top-6 text-primary-black'>
                   {`$${
-                    [price?.minPrice ?? 0, price?.maxPrice ?? highestPrice][
-                      index
-                    ]
+                    [
+                      price?.minPrice ?? 0,
+                      price?.maxPrice ?? highestPrice ?? 0
+                    ][index]
                   }`}
                 </h5>
               )}

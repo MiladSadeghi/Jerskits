@@ -22,7 +22,6 @@ const Products = ({ title, gender }: Props) => {
   const [products, setProducts] = useState<IProduct[]>([])
   const [getProducts, { isError, data, isSuccess, isFetching }] =
     useLazyGetProductsQuery()
-
   const [page, setPage] = useState<number>(1)
   const [price, setPrice] = useState<Price>()
   const [color, setColor] = useState<string>()

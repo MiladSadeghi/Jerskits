@@ -9,6 +9,7 @@ import KidCollectionController from './LandingPage/KidCollectionSlideController'
 import KidCollectionSlider from './LandingPage/KidCollectionSlider'
 import ProductCard from './ProductCard/ProductCard'
 import ProductCardSkeleton from './ProductCard/ProductCardSkeleton'
+import Products from './Products/Products'
 
 export {
   Navbar,
@@ -21,5 +22,6 @@ export {
   KidCollectionController,
   KidCollectionSlider,
   ProductCard,
-  ProductCardSkeleton
+  ProductCardSkeleton,
+  Products
 }
