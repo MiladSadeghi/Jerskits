@@ -82,7 +82,7 @@ const FilterBar = ({
     {
       title: 'Type',
       modalTitle: 'Select Type',
-      modalWidth: 320,
+      modalWidth: 380,
       filterContent: <TypeFilter type={type} setType={setType} />
     }
   ]
