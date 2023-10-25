@@ -9,7 +9,6 @@ type Props = {
 }
 
 const PriceFilter = ({ price, setPrice, highestPrice }: Props) => {
-  console.log(price, highestPrice)
   return highestPrice ? (
     <div>
       <div className='w-full mb-[70px]'>

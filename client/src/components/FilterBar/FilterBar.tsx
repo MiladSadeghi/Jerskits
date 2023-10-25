@@ -64,7 +64,7 @@ const FilterBar = ({
     {
       title: 'Color',
       modalTitle: 'Select Color',
-      modalWidth: 320,
+      modalWidth: 400,
       filterContent: <ColorFilter color={color} setColor={setColor} />
     },
     {
