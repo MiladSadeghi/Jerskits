@@ -70,7 +70,7 @@ const FilterBar = ({
     {
       title: 'Size',
       modalTitle: 'Select Size',
-      modalWidth: 320,
+      modalWidth: 400,
       filterContent: <SizeFilter size={size} setSize={setSize} />
     },
     {
