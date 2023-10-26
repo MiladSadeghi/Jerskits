@@ -38,9 +38,7 @@ const Products = ({ title, gender }: Props) => {
       generateQuery({
         gender
       })
-    ).then((result) => {
-      setHighestPrice(result.data?.highestPrice)
-    })
+    ).then((result) => setHighestPrice(result.data?.highestPrice))
   }, [])
 
   useEffect(() => {

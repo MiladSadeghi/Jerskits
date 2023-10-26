@@ -4,7 +4,7 @@ import tw from 'twin.macro'
 
 type Props = {
   price?: Price
-  setPrice: setState<Price>
+  setPrice?: setState<Price>
   highestPrice?: number
 }
 
@@ -49,7 +49,7 @@ const PriceFilter = ({ price, setPrice, highestPrice }: Props) => {
                     {`$${price?.minPrice ?? 0}`}
                   </PriceRange>
                 )}
-                {price?.maxPrice && price.maxPrice <= 96 ? (
+                {price?.maxPrice && price.maxPrice <= highestPrice - 30 ? (
                   <PriceRange className='right-0'>{`$${
                     highestPrice ?? 0
                   }`}</PriceRange>
@@ -71,7 +71,9 @@ const PriceFilter = ({ price, setPrice, highestPrice }: Props) => {
                 <div className='absolute w-3 h-3 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full top-1/2 left-1/2' />
               </div>
               {((index === 0 && price?.minPrice && price?.minPrice >= 16) ||
-                (index === 1 && price?.maxPrice && price?.maxPrice <= 96)) && (
+                (index === 1 &&
+                  price?.maxPrice &&
+                  price?.maxPrice <= highestPrice - 30)) && (
                 <h5 className='absolute self-center text-base font-bold top-6 text-primary-black'>
                   {`$${
                     [
@@ -90,6 +92,7 @@ const PriceFilter = ({ price, setPrice, highestPrice }: Props) => {
           <PriceLabel htmlFor='lowest_price_input'>Lowest</PriceLabel>
           <PriceInput
             step={0.01}
+            min={0}
             type='number'
             id='lowest_price_input'
             placeholder='Lowest price'
@@ -106,6 +109,7 @@ const PriceFilter = ({ price, setPrice, highestPrice }: Props) => {
           <PriceInput
             type='number'
             step={0.01}
+            max={highestPrice}
             id='highest_price_input'
             placeholder='Highest'
             value={price?.maxPrice ?? highestPrice}

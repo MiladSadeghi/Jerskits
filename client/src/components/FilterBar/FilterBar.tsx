@@ -30,6 +30,7 @@ type TFilterItems = {
   modalTitle: string
   modalWidth: number
   filterContent: ReactNode
+  resetFilter: () => void
 }
 
 const FilterBar = ({
@@ -53,6 +54,7 @@ const FilterBar = ({
       title: 'Price',
       modalTitle: 'Price Range',
       modalWidth: 380,
+      resetFilter: setPrice,
       filterContent: (
         <PriceFilter
           price={price}
@@ -65,24 +67,28 @@ const FilterBar = ({
       title: 'Color',
       modalTitle: 'Select Color',
       modalWidth: 400,
+      resetFilter: setColor,
       filterContent: <ColorFilter color={color} setColor={setColor} />
     },
     {
       title: 'Size',
       modalTitle: 'Select Size',
       modalWidth: 400,
+      resetFilter: setSize,
       filterContent: <SizeFilter size={size} setSize={setSize} />
     },
     {
       title: 'Brand',
       modalTitle: 'Select Brand',
       modalWidth: 400,
+      resetFilter: setBrand,
       filterContent: <BrandFilter brand={brand} setBrand={setBrand} />
     },
     {
       title: 'Type',
       modalTitle: 'Select Type',
       modalWidth: 380,
+      resetFilter: setType,
       filterContent: <TypeFilter type={type} setType={setType} />
     }
   ]
@@ -126,6 +132,7 @@ const FilterBar = ({
                 width={item.modalWidth}
                 title={item.modalTitle}
                 applyHandler={applyHandler}
+                resetFilter={item.resetFilter}
               >
                 {item.filterContent}
               </FilterContentModal>
