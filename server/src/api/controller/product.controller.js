@@ -11,9 +11,9 @@ export const getProducts = async (req, res, next) => {
 			type,
 			sort,
 			page = 1,
-			perPage = 6,
 		} = req.query;
 
+		const perPage = 6;
 		const query = {};
 
 		if (minPrice) {
@@ -71,7 +71,20 @@ export const getProducts = async (req, res, next) => {
 				$group: {
 					_id: null,
 					products: { $push: "$$ROOT" },
-					highestPrice: { $max: "$price" },
+					highestPrice: {
+						$max: {
+							$cond: [
+								{
+									$eq: ["$brand", brand],
+									$eq: ["$color", color],
+									$eq: ["$size", size],
+									$eq: ["$type", type],
+								},
+								"$price",
+								"$$ROOT.price",
+							],
+						},
+					},
 				},
 			},
 		]);
@@ -86,6 +99,7 @@ export const getProducts = async (req, res, next) => {
 			totalPages,
 			currentPage: Number(page),
 			highestPrice: highestPrice,
+			filterItems,
 		});
 	} catch (error) {
 		console.error(error);
