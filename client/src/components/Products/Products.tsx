@@ -43,14 +43,19 @@ const Products = ({ title, gender }: Props) => {
 
   useEffect(() => {
     if (isSuccess && data) {
-      if (page === data.currentPage) setProducts(data.products)
-      if (page !== data.currentPage)
+      if (page !== data.currentPage) setProducts(data.products)
+      if (page === data.currentPage)
         setProducts((prevProducts) => [...prevProducts, ...data.products])
+      setHighestPrice(data.highestPrice)
     }
   }, [isSuccess, data])
 
+  useEffect(() => {
+    setPrice(undefined)
+  }, [color, size, brand, type])
+
   const loadNextPage = () => {
-    setPage((prevPage) => prevPage + 1)
+    setPage(page + 1)
     getProducts(
       generateQuery({
         page: page + 1,
@@ -66,8 +71,10 @@ const Products = ({ title, gender }: Props) => {
   }
 
   const applyFilter = () => {
+    setPage(1)
     getProducts(
       generateQuery({
+        page: 1,
         gender,
         minPrice: price?.minPrice,
         maxPrice: price?.maxPrice,
@@ -97,13 +104,13 @@ const Products = ({ title, gender }: Props) => {
         applyHandler={applyFilter}
       />
       <ProductWrapper>
-        {(isFetching || isError) &&
-          productCardSkeletonArray.map((_, index) => (
-            <ProductCardSkeleton key={index} />
-          ))}
-        {products?.map((product: IProduct) => (
-          <ProductCard product={product} key={product._id} />
-        ))}
+        {isFetching || isError
+          ? productCardSkeletonArray.map((_, index) => (
+              <ProductCardSkeleton key={index} />
+            ))
+          : products?.map((product: IProduct) => (
+              <ProductCard product={product} key={product._id} />
+            ))}
       </ProductWrapper>
       <LoadMore
         aria-label='Load more products'
