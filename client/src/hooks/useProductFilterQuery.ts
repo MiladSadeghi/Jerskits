@@ -1,4 +1,4 @@
-import { TBrand, TGender, TType } from '../shared/types/Product.types'
+import { TBrand, TGender, TSort, TType } from '../shared/types/Product.types'
 
 type Props = {
   minPrice?: number
@@ -8,7 +8,7 @@ type Props = {
   gender?: TGender
   brand?: TBrand
   type?: TType
-  sort?: 'first' | 'last' | 'lowprice' | 'highprice'
+  sort?: TSort
   page?: number
 }
 

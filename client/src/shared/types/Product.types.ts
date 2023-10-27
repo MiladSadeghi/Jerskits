@@ -25,7 +25,7 @@ export type Price = {
   maxPrice: number
 }
 
-export type Sort = 'first' | 'last' | 'lowprice' | 'highprice'
+export type TSort = 'relevance' | 'new arrivals' | 'price:low' | 'price:high'
 
 export type TDetailProduct = {
   title: string

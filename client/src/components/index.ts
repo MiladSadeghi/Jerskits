@@ -1,3 +1,4 @@
+import { lazy } from 'react'
 import Navbar from './Navbar/Navbar'
 import LocationProvider from './Location/LocationProvider'
 import ProfilePopup from './Popups/ProfilePopup'
@@ -9,7 +10,7 @@ import KidCollectionController from './LandingPage/KidCollectionSlideController'
 import KidCollectionSlider from './LandingPage/KidCollectionSlider'
 import ProductCard from './ProductCard/ProductCard'
 import ProductCardSkeleton from './ProductCard/ProductCardSkeleton'
-import Products from './Products/Products'
+const Products = lazy(() => import('./Products/Products'))
 
 export {
   Navbar,

@@ -4,6 +4,7 @@ import {
   TBrand,
   TGender,
   TProductsResponse,
+  TSort,
   TType
 } from '../shared/types/Product.types'
 
@@ -15,7 +16,7 @@ type TGetProductsRequest = {
   gender?: TGender
   brand?: TBrand
   type?: TType
-  sort?: 'first' | 'last' | 'lowprice' | 'highprice'
+  sort?: TSort
   page?: number
   perPage?: number
 }

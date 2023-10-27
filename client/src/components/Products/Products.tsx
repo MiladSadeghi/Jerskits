@@ -6,6 +6,7 @@ import {
   Price,
   TBrand,
   TGender,
+  TSort,
   TType
 } from '../../shared/types/Product.types'
 import { useLazyGetProductsQuery } from '../../services'
@@ -28,62 +29,61 @@ const Products = ({ title, gender }: Props) => {
   const [size, setSize] = useState<string>()
   const [brand, setBrand] = useState<TBrand>()
   const [type, setType] = useState<TType>()
+  const [sort, setSort] = useState<TSort>()
 
   const [highestPrice, setHighestPrice] = useState<number>()
   const productCardSkeletonArray = new Array(6).fill(null)
   const { generateQuery } = useProductFilterQuery()
 
   useEffect(() => {
-    getProducts(
-      generateQuery({
-        gender
-      })
-    ).then((result) => setHighestPrice(result.data?.highestPrice))
+    getProducts(generateQuery({ gender })).then((result) =>
+      setHighestPrice(result.data?.highestPrice)
+    )
   }, [])
 
   useEffect(() => {
     if (isSuccess && data) {
-      if (page !== data.currentPage) setProducts(data.products)
-      if (page === data.currentPage)
+      if (data.currentPage <= 1) setProducts(data.products)
+      if (data.currentPage > 1)
         setProducts((prevProducts) => [...prevProducts, ...data.products])
-      setHighestPrice(data.highestPrice)
+      if (
+        data.currentPage <= 1 &&
+        !price?.minPrice &&
+        !price?.maxPrice &&
+        (brand || color || size || type)
+      ) {
+        setHighestPrice(data?.highestPrice)
+      }
     }
-  }, [isSuccess, data])
+  }, [data, isSuccess])
 
   useEffect(() => {
     setPrice(undefined)
-  }, [color, size, brand, type])
+  }, [brand, color, size, type])
 
-  const loadNextPage = () => {
-    setPage(page + 1)
-    getProducts(
+  const fetchProducts = async (page: number) => {
+    await getProducts(
       generateQuery({
-        page: page + 1,
+        page,
         gender,
         minPrice: price?.minPrice,
         maxPrice: price?.maxPrice,
         color,
         size,
         brand,
-        type
+        type,
+        sort
       })
     )
+    setPage(page)
+  }
+
+  const loadNextPage = () => {
+    fetchProducts(page + 1)
   }
 
   const applyFilter = () => {
-    setPage(1)
-    getProducts(
-      generateQuery({
-        page: 1,
-        gender,
-        minPrice: price?.minPrice,
-        maxPrice: price?.maxPrice,
-        color,
-        size,
-        brand,
-        type
-      })
-    )
+    fetchProducts(1)
   }
 
   return (
@@ -102,6 +102,8 @@ const Products = ({ title, gender }: Props) => {
         setType={setType}
         highestPrice={highestPrice}
         applyHandler={applyFilter}
+        sort={sort}
+        setSort={setSort}
       />
       <ProductWrapper>
         {isFetching || isError
