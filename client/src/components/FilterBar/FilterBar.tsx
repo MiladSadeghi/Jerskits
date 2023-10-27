@@ -1,5 +1,5 @@
 import { useRef, useState, ReactNode } from 'react'
-import { Price, Sort, TBrand, TType } from '../../shared/types/Product.types'
+import { Price, TBrand, TSort, TType } from '../../shared/types/Product.types'
 import tw from 'twin.macro'
 import { FilterContentModal } from '../../modals'
 import PriceFilter from './components/PriceFilter'
@@ -7,6 +7,7 @@ import ColorFilter from './components/ColorFilter'
 import SizeFilter from './components/SizeFilter'
 import TypeFilter from './components/TypeFilter'
 import BrandFilter from './components/BrandFilter'
+import SortDropdown from './components/SortDropdown'
 
 type Props = {
   price?: Price
@@ -19,10 +20,9 @@ type Props = {
   setBrand?: setState<TBrand>
   type?: TType
   setType?: setState<TType>
-  sort?: Sort
-  setSort?: setState<Sort>
+  setSort?: setState<TSort>
   highestPrice?: number
-  applyHandler: () => void
+  applyHandler: (sortValue?: TSort) => void
 }
 
 type TFilterItems = {
@@ -99,7 +99,7 @@ const FilterBar = ({
 
   return (
     <Wrapper>
-      <div className='px-12 border py-7 border-neutral-soft-grey'>
+      <div className='flex items-center justify-between px-12 border py-7 border-neutral-soft-grey'>
         <div className='flex items-center gap-x-7'>
           {filterItems.map((item, index: number) => (
             <div key={item.title} className='relative'>
@@ -139,6 +139,7 @@ const FilterBar = ({
             </div>
           ))}
         </div>
+        <SortDropdown onSortChange={applyHandler} />
       </div>
     </Wrapper>
   )

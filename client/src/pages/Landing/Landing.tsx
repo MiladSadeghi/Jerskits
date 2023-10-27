@@ -2,6 +2,7 @@ import { useGetLandingPageQuery } from '../../services'
 import Header from './components/Header'
 import KidCollection from './components/KidCollection'
 import Feature from './components/Feature'
+import { Products } from '../../components'
 
 const Landing = () => {
   const { data, isError, isLoading } = useGetLandingPageQuery()
@@ -14,6 +15,7 @@ const Landing = () => {
         isLoading={isLoading}
       />
       <Feature />
+      <Products title='Popular For You' />
     </>
   )
 }

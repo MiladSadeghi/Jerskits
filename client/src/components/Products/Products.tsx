@@ -29,7 +29,6 @@ const Products = ({ title, gender }: Props) => {
   const [size, setSize] = useState<string>()
   const [brand, setBrand] = useState<TBrand>()
   const [type, setType] = useState<TType>()
-  const [sort, setSort] = useState<TSort>()
 
   const [highestPrice, setHighestPrice] = useState<number>()
   const productCardSkeletonArray = new Array(6).fill(null)
@@ -61,7 +60,7 @@ const Products = ({ title, gender }: Props) => {
     setPrice(undefined)
   }, [brand, color, size, type])
 
-  const fetchProducts = async (page: number) => {
+  const fetchProducts = async (page: number, sortValue?: TSort) => {
     await getProducts(
       generateQuery({
         page,
@@ -72,7 +71,7 @@ const Products = ({ title, gender }: Props) => {
         size,
         brand,
         type,
-        sort
+        sort: sortValue
       })
     )
     setPage(page)
@@ -82,8 +81,8 @@ const Products = ({ title, gender }: Props) => {
     fetchProducts(page + 1)
   }
 
-  const applyFilter = () => {
-    fetchProducts(1)
+  const applyFilter = (sort?: TSort) => {
+    fetchProducts(1, sort)
   }
 
   return (
@@ -102,8 +101,6 @@ const Products = ({ title, gender }: Props) => {
         setType={setType}
         highestPrice={highestPrice}
         applyHandler={applyFilter}
-        sort={sort}
-        setSort={setSort}
       />
       <ProductWrapper>
         {isFetching || isError
