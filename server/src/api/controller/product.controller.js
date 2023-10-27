@@ -47,16 +47,16 @@ export const getProducts = async (req, res, next) => {
 		let sortBy = "createdAt";
 		let sortDirection = 1;
 
-		if (sort === "first") {
+		if (sort === "relevance") {
 			sortBy = "createdAt";
 			sortDirection = 1;
-		} else if (sort === "last") {
+		} else if (sort === "new arrivals") {
 			sortBy = "createdAt";
 			sortDirection = -1;
-		} else if (sort === "lowprice") {
+		} else if (sort === "price:low") {
 			sortBy = "price";
 			sortDirection = 1;
-		} else if (sort === "highprice") {
+		} else if (sort === "price:high") {
 			sortBy = "price";
 			sortDirection = -1;
 		}
@@ -89,9 +89,21 @@ export const getProducts = async (req, res, next) => {
 			},
 		]);
 
+		const highestPriceAggregate = await ProductModel.aggregate([
+			{ $match: query },
+			{ $sort: { [sortBy]: sortDirection } },
+			{
+				$group: {
+					_id: undefined,
+					highestPrice: { $max: "$price" },
+				},
+			},
+		]);
+
 		const totalProductsCount = await ProductModel.countDocuments(query);
 		const totalPages = Math.ceil(totalProductsCount / perPage);
-		const { products, highestPrice } = aggregateResult[0];
+		const { products } = aggregateResult[0];
+		const { highestPrice } = highestPriceAggregate[0];
 
 		return res.json({
 			error: false,
@@ -99,7 +111,6 @@ export const getProducts = async (req, res, next) => {
 			totalPages,
 			currentPage: Number(page),
 			highestPrice: highestPrice,
-			filterItems,
 		});
 	} catch (error) {
 		console.error(error);
