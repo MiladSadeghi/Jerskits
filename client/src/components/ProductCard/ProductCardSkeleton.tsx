@@ -7,8 +7,8 @@ type Props = {
 
 const ProductCardSkeleton: FC<Props> = () => {
   return (
-    <div className='min-w-[370px]'>
-      <Skeleton className='h-[460px] w-full mb-5' />
+    <div className='min-w-full w-full xl:min-w-[380px]'>
+      <Skeleton className='h-[440px] w-full mb-5' />
       <div className='leading-9 mb-2.5'>
         <Skeleton count={1.5} />
       </div>

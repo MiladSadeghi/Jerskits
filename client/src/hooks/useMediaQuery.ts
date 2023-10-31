@@ -5,7 +5,7 @@ export function useMediaQuery(query: string): boolean {
 
   const getMatches = (query: string): boolean => {
     if (typeof window !== 'undefined') {
-      window.matchMedia(query).matches
+      return window.matchMedia(query).matches
     }
     return false
   }

@@ -26,7 +26,7 @@ const SortDropdown = ({ onSortChange }: Props) => {
       isSearchable={false}
       classNames={{
         control: () =>
-          `!rounded-none h-full !border-none !shadow-none font-italic w-48 !justify-end`,
+          `!rounded-none h-full !border-none !shadow-none font-italic w-48 !justify-end !bg-transparent`,
         indicatorSeparator: () => 'hidden',
         option: (state) =>
           `${state.isSelected && '!bg-black !text-white'} ${

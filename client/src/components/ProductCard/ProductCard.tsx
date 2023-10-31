@@ -41,7 +41,7 @@ const ProductCard = ({ product }: Props) => {
   )
 }
 
-const Card = tw.div`min-w-full sm:min-w-[380px] flex flex-col justify-between`
+const Card = tw.div`min-w-full w-full xl:min-w-[380px] flex flex-col justify-between`
 const CardImage = tw.img`w-[70%] object-contain object-bottom bg-neutral-light-grey h-[440px]`
 const BrandLogo = tw.img`absolute left-7 top-7 w-10 h-10 duration-150 opacity-30 group-hover:opacity-70`
 const ProductName = tw.h1`text-primary-black text-text-xl leading-9 font-bold`

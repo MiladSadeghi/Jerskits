@@ -135,7 +135,7 @@ const Products = ({ title, gender }: Props) => {
 
 const Wrapper = tw.div`container mx-auto py-24 flex flex-col`
 const Title = tw.h1`mb-12 text-center text-7xl font-bold leading-[93.6px] text-primary-black`
-const ProductWrapper = tw.div`gap-x-7 gap-y-12 grid grid-cols-3`
+const ProductWrapper = tw.div`gap-x-7 gap-y-12 grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3`
 const LoadMore = tw.button`border border-neutral-soft-grey px-20 py-4 text-base font-bold leading-6 self-center mt-24 text-primary-black w-80 disabled:opacity-70 transition-all`
 
 export default Products
