@@ -3,6 +3,7 @@ import Header from './components/Header'
 import KidCollection from './components/KidCollection'
 import Feature from './components/Feature'
 import { Products } from '../../components'
+import Newsletter from './components/Newsletter'
 
 const Landing = () => {
   const { data, isError, isLoading } = useGetLandingPageQuery()
@@ -16,6 +17,7 @@ const Landing = () => {
       />
       <Feature />
       <Products title='Popular For You' />
+      <Newsletter />
     </>
   )
 }
