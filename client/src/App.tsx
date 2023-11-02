@@ -12,7 +12,7 @@ import {
 import { AuthenticationLayout, Layout, ProfileLayout } from './layouts'
 import 'swiper/css'
 import 'react-loading-skeleton/dist/skeleton.css'
-import { FullScreenLoader } from './components'
+import { FullScreenLoader, Products } from './components'
 
 function App() {
   return (
@@ -21,6 +21,18 @@ function App() {
         <Routes>
           <Route path='/' element={<Layout />}>
             <Route index element={<Landing />} />
+            <Route
+              path='men'
+              element={<Products gender='men' title='Men’s Jerskits' />}
+            />
+            <Route
+              path='women'
+              element={<Products gender='women' title='Women’s Jerskits' />}
+            />
+            <Route
+              path='kid'
+              element={<Products gender='kid' title='Kid’s Jerskits' />}
+            />
             <Route path='profile' element={<ProfileLayout />}>
               <Route path='edit' element={<Edit />} />
               <Route path='favorites' element={<Favorites />} />

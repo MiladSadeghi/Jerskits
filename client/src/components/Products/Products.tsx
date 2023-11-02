@@ -20,6 +20,7 @@ type Props = {
 }
 
 const Products = ({ title, gender }: Props) => {
+  console.log(gender)
   const [products, setProducts] = useState<IProduct[]>([])
   const [getProducts, { isError, data, isSuccess, isFetching }] =
     useLazyGetProductsQuery()
@@ -38,7 +39,7 @@ const Products = ({ title, gender }: Props) => {
     getProducts(generateQuery({ gender })).then((result) =>
       setHighestPrice(result.data?.highestPrice)
     )
-  }, [])
+  }, [gender])
 
   useEffect(() => {
     if (isSuccess && data) {

@@ -91,10 +91,9 @@ function Navbar() {
           </Link>
         </div>
         <div className='flex gap-10'>
-          <NavLink to='/category/mens'>Men</NavLink>
-          <NavLink to='/category/womans'>Woman</NavLink>
-          <NavLink to='/category/kids'>Kids</NavLink>
-          <NavLink to='/category/brands'>Brands</NavLink>
+          <NavLink to='/men'>Men</NavLink>
+          <NavLink to='/women'>Women</NavLink>
+          <NavLink to='/kid'>Kids</NavLink>
         </div>
         <div className='flex gap-10'>
           <button aria-label='search'>
