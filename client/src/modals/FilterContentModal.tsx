@@ -53,7 +53,7 @@ const FilterContentModal = ({
   }, [open, onClose])
 
   return (
-    (isLarge ? open : true) && (
+    (isLarge ? open : true && open) && (
       <>
         <div
           className={`fixed bottom-0 left-0 w-full h-screen bg-primary-black transition-all duration-200 lg:hidden ${

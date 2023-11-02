@@ -7,7 +7,7 @@ type Props = {
 
 type TOption = {
   label: string
-  value: TSort
+  value: TSort | string
 }
 
 const sortOptions: TOption[] = [
@@ -21,8 +21,10 @@ const SortDropdown = ({ onSortChange }: Props) => {
   return (
     <Select
       options={sortOptions}
-      defaultValue={sortOptions[0]}
-      onChange={(selectedOption) => onSortChange(selectedOption?.value)}
+      defaultValue={{ label: 'SortBy', value: 'SortBy' }}
+      onChange={(selectedOption) =>
+        onSortChange(selectedOption?.value as TSort)
+      }
       isSearchable={false}
       classNames={{
         control: () =>
