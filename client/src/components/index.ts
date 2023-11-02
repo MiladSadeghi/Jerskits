@@ -10,6 +10,7 @@ import KidCollectionController from './LandingPage/KidCollectionSlideController'
 import KidCollectionSlider from './LandingPage/KidCollectionSlider'
 import ProductCard from './ProductCard/ProductCard'
 import ProductCardSkeleton from './ProductCard/ProductCardSkeleton'
+import Footer from './Footer/Footer'
 const Products = lazy(() => import('./Products/Products'))
 
 export {
@@ -24,5 +25,6 @@ export {
   KidCollectionSlider,
   ProductCard,
   ProductCardSkeleton,
-  Products
+  Products,
+  Footer
 }
