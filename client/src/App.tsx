@@ -10,11 +10,19 @@ import {
   SignUp
 } from './pages'
 import { AuthenticationLayout, Layout, ProfileLayout } from './layouts'
+import { FullScreenLoader, Products } from './components'
+import { useGetUserQuery } from './services/userApi'
+
 import 'swiper/css'
 import 'react-loading-skeleton/dist/skeleton.css'
-import { FullScreenLoader, Products } from './components'
 
 function App() {
+  const getUser = useGetUserQuery()
+
+  if (getUser.isLoading) {
+    return <FullScreenLoader />
+  }
+
   return (
     <Suspense fallback={<FullScreenLoader />}>
       <main>

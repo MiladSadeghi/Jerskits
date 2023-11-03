@@ -12,10 +12,7 @@ import {
   useGetUserProfileQuery,
   useUpdateUserProfileMutation
 } from '../../../services/profileApi.ts'
-import {
-  Option,
-  TeditProfileSchema
-} from '../../../shared/types/Profile.types.ts'
+import { TEditProfileSchema } from '../../../shared/types/Profile.types.ts'
 
 function Edit() {
   const profileAvatar = useRef<HTMLInputElement>(null)
@@ -37,7 +34,7 @@ function Edit() {
     setValue,
     control,
     reset
-  } = useForm<TeditProfileSchema>({
+  } = useForm<TEditProfileSchema>({
     resolver: yupResolver(editProfileSchema),
     reValidateMode: 'onChange',
     mode: 'onChange',
@@ -121,7 +118,7 @@ function Edit() {
     }
   }
 
-  const updateProfileHandler = async (data: TeditProfileSchema) => {
+  const updateProfileHandler = async (data: TEditProfileSchema) => {
     const formData = new FormData()
     if (data.avatar) formData.append('avatar', data.avatar as File)
     if (data.firstName) formData.append('firstName', data.firstName)

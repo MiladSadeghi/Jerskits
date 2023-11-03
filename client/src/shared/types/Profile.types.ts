@@ -1,12 +1,7 @@
 import * as yup from 'yup'
 import editProfileSchema from '../../pages/Profile/Edit/Edit.schema'
 
-export type TeditProfileSchema = yup.InferType<typeof editProfileSchema>
-
-export type Option = {
-  label: string
-  value: string
-}
+export type TEditProfileSchema = yup.InferType<typeof editProfileSchema>
 
 interface IProfile {
   fullName?: string
