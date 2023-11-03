@@ -20,7 +20,6 @@ type Props = {
 }
 
 const Products = ({ title, gender }: Props) => {
-  console.log(gender)
   const [products, setProducts] = useState<IProduct[]>([])
   const [getProducts, { isError, data, isSuccess, isFetching }] =
     useLazyGetProductsQuery()
