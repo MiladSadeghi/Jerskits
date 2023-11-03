@@ -3,15 +3,14 @@ import ProductModel from "../models/product.model.js";
 export const landingProvider = async (req, res, next) => {
   const { isUser } = req;
   try {
-    const products = await ProductModel.find();
     const headerProductsId = [
       "64e3d7bf8d4a87d9b5ee29b2",
       "64e65e04b7c149604dc3c79a",
       "64f988cf965a3409ef664c90",
     ];
-    const headerProducts = products
-      .filter((product) => headerProductsId.includes(product._id.toString()))
-      .map((product) => product.toObject());
+    const headerProducts = await ProductModel.find({
+      _id: headerProductsId,
+    }).lean();
 
     headerProducts[0].posterTitle = "HOME KIT 23/24";
     headerProducts[0].stadiumImage =
@@ -49,9 +48,10 @@ export const landingProvider = async (req, res, next) => {
       "The recycled polyester used in Nike products begins as recycled plastic bottles, which are cleaned, shredded into flakes and converted into pellets. From there, the pellets are spun into new, high-quality yarn used in our products, delivering peak performance with a lower impact on the environment.";
     headerProducts[2].kitLogo = headerProducts[2].gallery[5];
 
-    const kidsCollectionProducts = products.filter(
-      (product) => product.gender === "kid" && product.brand === "nike"
-    );
+    const kidsCollectionProducts = await ProductModel.find({
+      gender: "kid",
+      brand: "nike",
+    });
 
     return res.status(200).json({
       error: false,
