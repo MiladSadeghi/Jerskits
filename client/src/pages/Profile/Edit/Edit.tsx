@@ -12,7 +12,10 @@ import {
   useGetUserProfileQuery,
   useUpdateUserProfileMutation
 } from '../../../services/profileApi.ts'
-import { TEditProfileSchema } from '../../../shared/types/Profile.types.ts'
+import {
+  IProfile,
+  TEditProfileSchema
+} from '../../../shared/types/Profile.types.ts'
 
 function Edit() {
   const profileAvatar = useRef<HTMLInputElement>(null)
@@ -119,26 +122,23 @@ function Edit() {
   }
 
   const updateProfileHandler = async (data: TEditProfileSchema) => {
-    const formData = new FormData()
-    if (data.avatar) formData.append('avatar', data.avatar as File)
-    if (data.firstName) formData.append('firstName', data.firstName)
-    if (data.lastName) formData.append('lastName', data.lastName)
-    if (data.contactEmail) formData.append('contactEmail', data.contactEmail)
-    if (data.phoneNumber) formData.append('phoneNumber', data.phoneNumber)
+    const updateOption: Omit<IProfile, 'avatar'> & { saveAddress?: boolean } =
+      {}
+    if (data.firstName) updateOption.firstName = data.firstName
+    if (data.lastName) updateOption.lastName = data.lastName
+    if (data.contactEmail) updateOption.contactEmail = data.contactEmail
+    if (data.phoneNumber) updateOption.phoneNumber = data.phoneNumber
     if (data.saveAddress) {
-      formData.append('saveAddress', 'true')
-      formData.append('shippingAddress[address]', data.shippingAddress.address)
-      formData.append('shippingAddress[country]', selectedCountry!.value)
-      formData.append(
-        'shippingAddress[postalCode]',
-        String(data.shippingAddress.postalCode)
-      )
-      if (selectedState)
-        formData.append('shippingAddress[state]', selectedState.value)
-      if (selectedCity)
-        formData.append('shippingAddress[city]', selectedCity.value)
+      data.saveAddress = true
+      updateOption.shippingAddress = {
+        address: data.shippingAddress.address,
+        country: selectedCountry!.value,
+        state: selectedState?.value,
+        city: selectedCity?.value,
+        postalCode: Number(data.shippingAddress.postalCode)
+      }
     }
-    await updateProfile(formData)
+    await updateProfile(updateOption)
   }
 
   if (isFetching) {

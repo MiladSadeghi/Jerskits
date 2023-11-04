@@ -4,11 +4,11 @@ import editProfileSchema from '../../pages/Profile/Edit/Edit.schema'
 export type TEditProfileSchema = yup.InferType<typeof editProfileSchema>
 
 interface IProfile {
+  avatar?: string
   fullName?: string
   email?: string
   firstName?: string
   lastName?: string
-  avatar?: File | string
   contactEmail?: string
   phoneNumber?: string
   saveAddress?: boolean

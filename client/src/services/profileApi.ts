@@ -34,7 +34,10 @@ export const profileApi = createApi({
         }
       }
     }),
-    updateUserProfile: build.mutation<{ profile: IProfile }, FormData>({
+    updateUserProfile: build.mutation<
+      { profile: IProfile },
+      Omit<IProfile, 'avatar'>
+    >({
       query(profile) {
         return {
           url: '/profile',
