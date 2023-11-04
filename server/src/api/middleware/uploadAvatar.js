@@ -1,6 +1,7 @@
 import multer from "multer";
 import { v4 } from "uuid";
 import path from "path";
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "images");
@@ -21,9 +22,9 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-const uploadProfile = multer({
+const uploadAvatar = multer({
   storage: storage,
   fileFilter: fileFilter,
 });
 
-export default uploadProfile;
+export default uploadAvatar;

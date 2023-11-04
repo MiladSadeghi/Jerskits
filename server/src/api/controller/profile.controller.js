@@ -9,7 +9,7 @@ export const getUserProfile = async (req, res, next) => {
       _id,
       email,
       fullName,
-    }).populate("shippingAddress");
+    });
     if (!findUser) {
       const err = new Error("User not found");
       err.status = 404;
@@ -93,7 +93,6 @@ export const updateUserProfile = async (req, res, next) => {
   }
 
   const { firstName, lastName, contactEmail, phoneNumber } = req.body;
-  const avatar = req.file;
   const { email, fullName } = req.decoded;
 
   try {
@@ -112,9 +111,6 @@ export const updateUserProfile = async (req, res, next) => {
       ...(phoneNumber && { phoneNumber }),
     };
 
-    if (avatar) {
-      updateOptions.avatar = req.file.filename;
-    }
     if (req.body?.saveAddress) {
       const shippingAddress = {
         address: req.body.shippingAddress?.address,
@@ -139,6 +135,36 @@ export const updateUserProfile = async (req, res, next) => {
     ).select("-_id -password");
 
     return res.status(200).json({ profile: updatedUser });
+  } catch (error) {
+    console.error(error);
+    const err = new Error("Server error");
+    err.status = 500;
+    return next(err);
+  }
+};
+
+export const updateUserAvatar = async (req, res, next) => {
+  const { _id, email, fullName } = req.decoded;
+
+  try {
+    const findUser = await UserModel.findOne({
+      _id,
+      email,
+      fullName,
+    });
+    if (!findUser) {
+      const err = new Error("User not found");
+      err.status = 404;
+      return next();
+    }
+    console.log(findUser);
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      findUser?._id,
+      { avatar: req.file?.filename },
+      { new: true }
+    ).select("avatar");
+
+    return res.status(200).json({ error: false, avatar: updatedUser?.avatar });
   } catch (error) {
     console.error(error);
     const err = new Error("Server error");
