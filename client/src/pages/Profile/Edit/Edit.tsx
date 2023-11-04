@@ -5,28 +5,36 @@ import { css } from 'twin.macro'
 import { yupResolver } from '@hookform/resolvers/yup'
 import editProfileSchema from './Edit.schema.ts'
 import { ErrorMessage } from '@hookform/error-message'
-import { useEffect, useRef, useState } from 'react'
+import { ChangeEvent, DragEvent, useEffect, useRef, useState } from 'react'
 import LocationProvider from '../../../components/Location/LocationProvider.tsx'
 import toast from 'react-hot-toast'
 import {
   useGetUserProfileQuery,
-  useUpdateUserProfileMutation
+  useUpdateUserProfileMutation,
+  useUploadProfileAvatarMutation
 } from '../../../services/profileApi.ts'
 import {
   IProfile,
   TEditProfileSchema
 } from '../../../shared/types/Profile.types.ts'
+import Upload from '../../../icons/Upload.tsx'
+import { useAppSelector } from '../../../App/hooks.ts'
+import { RootState } from '../../../App/store.ts'
 
 function Edit() {
-  const profileAvatar = useRef<HTMLInputElement>(null)
-  const [previewAvatar, setPreviewAvatar] = useState<string | null>(null)
+  const profileAvatarRef = useRef<HTMLInputElement>(null)
+  const userAvatar = useAppSelector((state: RootState) => state.profile.avatar)
+  const [isAvatarDragged, setIsAvatarDragged] = useState<boolean>(false)
   const [selectedCountry, setSelectedCountry] = useState<Option | null>(null)
   const [selectedState, setSelectedState] = useState<Option | null>(null)
   const [selectedCity, setSelectedCity] = useState<Option | null>(null)
+  const acceptedImageTypes = ['image/png', 'image/jpeg', 'image/jpg']
 
   const { data: profileData, isFetching, isSuccess } = useGetUserProfileQuery()
   const [updateProfile, { isLoading, isSuccess: updateProfileSuccessfully }] =
     useUpdateUserProfileMutation()
+
+  const [uploadAvatar] = useUploadProfileAvatarMutation()
 
   const {
     register,
@@ -107,20 +115,6 @@ function Edit() {
     }
   }, [updateProfileSuccessfully])
 
-  const showProfilePreview = (file: File) => {
-    if (file) {
-      setValue('avatar', file)
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        const dataUrl = event.target?.result
-        if (typeof dataUrl === 'string') {
-          setPreviewAvatar(dataUrl)
-        }
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
   const updateProfileHandler = async (data: TEditProfileSchema) => {
     const updateOption: Omit<IProfile, 'avatar'> & { saveAddress?: boolean } =
       {}
@@ -141,6 +135,50 @@ function Edit() {
     await updateProfile(updateOption)
   }
 
+  const uploadAvatarErrorHandler = async (image: File) => {
+    if (!acceptedImageTypes.includes(image.type) || image.size > 1000000) {
+      toast.error(
+        "The image type isn't valid or image size is too bigger than 1MB.",
+        {
+          position: 'top-right'
+        }
+      )
+      return
+    }
+    const formData = new FormData()
+    formData.append('avatar', image)
+
+    await uploadAvatar(formData)
+
+    toast.success('The avatar has been uploaded.', {
+      position: 'top-right'
+    })
+  }
+
+  const handleUploadInputAvatar = (e: ChangeEvent<HTMLInputElement>) => {
+    const image = e.target.files![0]
+    uploadAvatarErrorHandler(image)
+  }
+
+  const handleAvatarDragOver = (e: DragEvent<HTMLFormElement>) => {
+    e.stopPropagation()
+    e.preventDefault()
+    setIsAvatarDragged(true)
+  }
+
+  const handleAvatarDragLeave = () => {
+    setIsAvatarDragged(false)
+  }
+
+  const handleDropAvatar = async (e: DragEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsAvatarDragged(true)
+
+    const image = e.dataTransfer.files[0]
+    await uploadAvatarErrorHandler(image)
+    setIsAvatarDragged(false)
+  }
+
   if (isFetching) {
     return (
       <SpinnerDiamond
@@ -155,34 +193,42 @@ function Edit() {
   }
 
   return (
-    <Wrapper onSubmit={handleSubmit(updateProfileHandler)}>
+    <Wrapper
+      onSubmit={handleSubmit(updateProfileHandler)}
+      onDragOver={handleAvatarDragOver}
+      onDragLeave={handleAvatarDragLeave}
+      onDrop={handleDropAvatar}
+    >
       <h5 className='font-bold text-primary-black text-text-2xl leading-[150%]'>
         Edit Account
       </h5>
-      <div className='flex items-center'>
-        <div className='flex max-w-[100px] max-h-[100px]'>
-          {previewAvatar ? (
-            <ProfileImage src={previewAvatar} />
-          ) : profileData &&
-            profileData?.profile &&
-            profileData?.profile?.avatar ? (
-            <ProfileImage
-              crossOrigin='anonymous'
-              src={`${import.meta.env.VITE_SERVER_URL.replace(
-                '/api',
-                ''
-              )}/images/${profileData.profile.avatar}`}
-            />
-          ) : (
-            <div className='bg-[#e4e6e7] rounded-full'>
-              <ProfileImage src='/blank-profile-picture.png' className='p-4' />
-            </div>
-          )}
+      <div className='flex items-center '>
+        <div
+          className={`absolute left-0 top-0 p-10 w-full h-full transition-all duration-150 bg-gradient-to-b from-primary-black via-transparent to-transparent  ${
+            isAvatarDragged ? 'opacity-100 z-10' : 'opacity-0 -z-10'
+          }`}
+        >
+          <div className='rounded-2xl bg-white w-full py-4 flex justify-center items-center'>
+            <Upload />
+          </div>
         </div>
+        {userAvatar ? (
+          <ProfileImage
+            crossOrigin='anonymous'
+            src={`${import.meta.env.VITE_SERVER_URL.replace(
+              '/api',
+              ''
+            )}/images/${userAvatar}`}
+          />
+        ) : (
+          <div className='bg-[#e4e6e7] rounded-full'>
+            <ProfileImage src='/blank-profile-picture.png' className='p-4' />
+          </div>
+        )}
         <div className='w-full ml-7'>
           <AvatarInput
             onClick={() =>
-              profileAvatar.current && profileAvatar?.current.click()
+              profileAvatarRef.current && profileAvatarRef.current.click()
             }
           >
             <p className='text-text-sm text-neutral-grey'>
@@ -205,15 +251,11 @@ function Edit() {
           </AvatarInput>
           <input
             type='file'
-            ref={profileAvatar}
+            ref={profileAvatarRef}
             className='hidden'
             hidden
-            accept={'image/png, image/jpeg, image/jpg'}
-            onChange={(e) => {
-              if (e.target.files) {
-                showProfilePreview(e.target.files[0])
-              }
-            }}
+            accept={acceptedImageTypes.toString()}
+            onChange={handleUploadInputAvatar}
           />
           <ErrorMessage
             errors={errors}
@@ -399,7 +441,7 @@ function Edit() {
   )
 }
 
-const Wrapper = tw.form`flex flex-col space-y-7`
+const Wrapper = tw.form`flex flex-col space-y-7 relative px-5 py-5`
 
 const FormLabel = tw.label`text-primary-black font-medium text-text-sm`
 const FormInput = styled.input<{
@@ -415,7 +457,7 @@ const FormInput = styled.input<{
   `}
 `
 const FormError = tw.p`text-red-600 text-sm`
-const ProfileImage = tw.img` rounded-full object-contain`
+const ProfileImage = tw.img` rounded-full object-cover w-[100px] h-[100px]`
 const AvatarInput = tw.div`w-full h-12 px-5 py-4 border outline-none border-neutral-grey flex items-center justify-between`
 const SubmitButton = styled.button`
   ${tw`w-full font-bold text-white h-14 bg-primary-black flex items-center justify-center`}

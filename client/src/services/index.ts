@@ -7,7 +7,8 @@ import {
 import { useLazyGetLocationQuery } from './locationApi'
 import {
   useGetUserProfileQuery,
-  useUpdateUserProfileMutation
+  useUpdateUserProfileMutation,
+  useUploadProfileAvatarMutation
 } from './profileApi'
 
 import {
@@ -26,5 +27,6 @@ export {
   useGetUserProfileQuery,
   useGetLandingPageQuery,
   useLazyGetKidBrandCollectionQuery,
-  useLazyGetProductsQuery
+  useLazyGetProductsQuery,
+  useUploadProfileAvatarMutation
 }

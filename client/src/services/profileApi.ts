@@ -1,8 +1,13 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithReauth } from './api'
-import { setProfile } from '../App/feature/profile/profileSlice'
+import { setAvatar, setProfile } from '../App/feature/profile/profileSlice'
 import toast from 'react-hot-toast'
-import { IProfile, TGetProfileResponse } from '../shared/types/Profile.types'
+import {
+  IProfile,
+  TGetProfileResponse,
+  TUploadProfileAvatarRequest,
+  TUploadProfileAvatarResponse
+} from '../shared/types/Profile.types'
 
 export const profileApi = createApi({
   reducerPath: 'profileApi',
@@ -15,7 +20,7 @@ export const profileApi = createApi({
           url: '/profile'
         }
       },
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
           dispatch(setProfile(data.profile))
@@ -45,7 +50,7 @@ export const profileApi = createApi({
           body: profile
         }
       },
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
           dispatch(setProfile(data.profile))
@@ -56,9 +61,35 @@ export const profileApi = createApi({
           }
         }
       }
+    }),
+    uploadProfileAvatar: build.mutation<
+      TUploadProfileAvatarResponse,
+      TUploadProfileAvatarRequest
+    >({
+      query(avatar) {
+        return {
+          url: '/profile/profile-avatar',
+          method: 'PUT',
+          body: avatar
+        }
+      },
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          dispatch(setAvatar(data.avatar))
+        } catch (error) {
+          if (typeof error === 'object' && error !== null) {
+            const err = error as Record<string, unknown>
+            toast.error(String(err.message))
+          }
+        }
+      }
     })
   })
 })
 
-export const { useGetUserProfileQuery, useUpdateUserProfileMutation } =
-  profileApi
+export const {
+  useGetUserProfileQuery,
+  useUpdateUserProfileMutation,
+  useUploadProfileAvatarMutation
+} = profileApi

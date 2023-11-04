@@ -31,4 +31,15 @@ type TGetProfileResponse = IProfile & {
   }
 }
 
-export type { IProfile, TGetProfileResponse }
+type TUploadProfileAvatarRequest = FormData
+
+type TUploadProfileAvatarResponse = {
+  avatar: string
+}
+
+export type {
+  IProfile,
+  TGetProfileResponse,
+  TUploadProfileAvatarRequest,
+  TUploadProfileAvatarResponse
+}

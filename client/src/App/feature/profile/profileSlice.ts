@@ -35,9 +35,12 @@ const profileSlice = createSlice({
         ...state.shippingAddress,
         ...(payload?.shippingAddress ?? {})
       }
+    },
+    setAvatar: (state, { payload }: PayloadAction<string>) => {
+      state.avatar = payload
     }
   }
 })
 
-export const { setProfile } = profileSlice.actions
+export const { setProfile, setAvatar } = profileSlice.actions
 export default profileSlice.reducer
