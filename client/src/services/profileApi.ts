@@ -77,6 +77,9 @@ export const profileApi = createApi({
         try {
           const { data } = await queryFulfilled
           dispatch(setAvatar(data.avatar))
+          toast.success('The avatar has been uploaded.', {
+            position: 'top-right'
+          })
         } catch (error) {
           if (typeof error === 'object' && error !== null) {
             const err = error as Record<string, unknown>

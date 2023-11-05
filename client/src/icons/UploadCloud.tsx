@@ -1,4 +1,4 @@
-const Upload = () => {
+const UploadCloud = () => {
   return (
     <svg
       id='Group_21'
@@ -24,4 +24,4 @@ const Upload = () => {
   )
 }
 
-export default Upload
+export default UploadCloud

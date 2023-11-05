@@ -17,7 +17,7 @@ interface IProfile {
     country?: string
     state?: string
     city?: string
-    postalCode?: number
+    postalCode?: string
   }
 }
 
@@ -27,7 +27,6 @@ type TGetProfileResponse = IProfile & {
     country?: Option
     state?: Option
     city?: Option
-    postalCode?: number
   }
 }
 

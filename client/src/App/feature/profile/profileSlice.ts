@@ -15,7 +15,7 @@ const initialState: IProfile = {
     country: '',
     state: '',
     city: '',
-    postalCode: 0
+    postalCode: ''
   }
 }
 

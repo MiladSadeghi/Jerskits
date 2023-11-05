@@ -13,27 +13,7 @@ const editProfileSchema = yup.object().shape({
     .test('max', 'Too Long!', (val) => !val || val.length <= 15)
     .nullable()
     .defined(),
-  avatar: yup
-    .mixed()
-    .nullable()
-    .default(null)
-    .test('fileSize', 'File Size is too large', (value) => {
-      if (!value || typeof value === 'string') {
-        return true
-      }
-      console.log(value)
-      return (value as File).size <= 1000000
-    })
-    .test('fileFormat', 'Invalid file format', (value) => {
-      if (!value || typeof value === 'string') {
-        return true
-      }
-      const validTypes = ['image/png', 'image/jpeg', 'image/jpg']
-      return validTypes.includes((value as File).type)
-    }),
-
   contactEmail: yup.string().email('Invalid email').nullable().defined(),
-
   phoneNumber: yup
     .string()
     .test(
@@ -47,11 +27,11 @@ const editProfileSchema = yup.object().shape({
   shippingAddress: yup
     .object()
     .shape({
-      address: yup.string().default(''),
-      country: yup.string().default(''),
-      state: yup.string().default(''),
-      city: yup.string().default(''),
-      postalCode: yup.number().default(null)
+      address: yup.string(),
+      country: yup.string(),
+      state: yup.string(),
+      city: yup.string(),
+      postalCode: yup.string()
     })
     .when('saveAddress', {
       is: true,
@@ -61,7 +41,7 @@ const editProfileSchema = yup.object().shape({
           country: yup.string().required('required'),
           state: yup.string().notRequired(),
           city: yup.string().notRequired(),
-          postalCode: yup.number().required('required')
+          postalCode: yup.string().required('required')
         }),
       otherwise: () => yup.object().strip()
     })
