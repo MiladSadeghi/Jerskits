@@ -15,21 +15,23 @@ export function useMediaQuery(query: string): boolean {
   }
 
   useEffect(() => {
-    const matchMedia = window.matchMedia(query)
+    if (typeof window !== 'undefined') {
+      const matchMedia = window.matchMedia(query)
 
-    handleChange()
+      handleChange()
 
-    if (matchMedia.addListener) {
-      matchMedia.addListener(handleChange)
-    } else {
-      matchMedia.addEventListener('change', handleChange)
-    }
-
-    return () => {
-      if (matchMedia.removeListener) {
-        matchMedia.removeListener(handleChange)
+      if (matchMedia.addListener) {
+        matchMedia.addListener(handleChange)
       } else {
-        matchMedia.removeEventListener('change', handleChange)
+        matchMedia.addEventListener('change', handleChange)
+      }
+
+      return () => {
+        if (matchMedia.removeListener) {
+          matchMedia.removeListener(handleChange)
+        } else {
+          matchMedia.removeEventListener('change', handleChange)
+        }
       }
     }
   }, [query])

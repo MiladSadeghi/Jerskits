@@ -1,6 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithAuth } from './api'
-import { Option } from '../shared/types/Profile.types'
 
 type LocationResponse = {
   error: string

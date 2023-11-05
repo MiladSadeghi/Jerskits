@@ -4,6 +4,15 @@ import { vi } from 'vitest'
 import user from '@testing-library/user-event'
 
 describe('FilterBar', () => {
+  window.matchMedia = vi.fn().mockImplementation((query) => {
+    return {
+      matches: true,
+      media: query,
+      addListener: vi.fn(),
+      removeListener: vi.fn()
+    }
+  })
+
   user.setup()
   test('render all filter buttons with correct titles', () => {
     render(<FilterBar applyHandler={vi.fn()} />)

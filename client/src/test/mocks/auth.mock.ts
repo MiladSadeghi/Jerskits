@@ -2,7 +2,7 @@ import { rest } from 'msw'
 import { TSignInRequest, TSignUpRequest } from '../../shared/types/Auth.types'
 
 const SignUpApiMock = rest.post<TSignUpRequest>(
-  `http://localhost:3001/api/auth/sign-up`,
+  `${import.meta.env.VITE_SERVER_URL}/auth/sign-up`,
   async (req, res, ctx) => {
     const { email, fullName, password } = await req.json()
     if (email && fullName && password) {

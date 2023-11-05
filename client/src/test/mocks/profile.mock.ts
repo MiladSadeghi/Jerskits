@@ -24,3 +24,13 @@ export const SubmitProfileMock = rest.patch<SubmitProfileMockAPI>(
     )
   }
 )
+
+export const getLocation = rest.get<{ country: Option[] }>(
+  `${import.meta.env.VITE_SERVER_URL}/location`,
+  (_req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({ country: [{ value: 'IR', label: 'iran' }] })
+    )
+  }
+)

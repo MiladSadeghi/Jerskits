@@ -24,9 +24,8 @@ describe('Navbar', () => {
     )
     const homeElement = screen.getByAltText('Home')
     const menElement = screen.getByRole('link', { name: 'Men' })
-    const womanElement = screen.getByRole('link', { name: 'Woman' })
+    const womenElement = screen.getByRole('link', { name: 'Women' })
     const kidsElement = screen.getByRole('link', { name: 'Kids' })
-    const brandsElement = screen.getByRole('link', { name: 'Brands' })
     const searchElement = screen.getByRole('button', {
       name: 'search'
     })
@@ -40,9 +39,8 @@ describe('Navbar', () => {
     await waitFor(() => {
       expect(homeElement).toBeInTheDocument()
       expect(menElement).toBeInTheDocument()
-      expect(womanElement).toBeInTheDocument()
+      expect(womenElement).toBeInTheDocument()
       expect(kidsElement).toBeInTheDocument()
-      expect(brandsElement).toBeInTheDocument()
       expect(searchElement).toBeInTheDocument()
       expect(bagListElement).toBeInTheDocument()
       expect(favoriteListElement).toBeInTheDocument()
@@ -67,19 +65,14 @@ describe('Navbar', () => {
     )
     const homeLink = screen.getByAltText(/home/i)
     const menLink = screen.getByRole('link', { name: 'Men' })
-    const womanLink = screen.getByRole('link', { name: 'Woman' })
+    const womenLink = screen.getByRole('link', { name: 'Women' })
     const kidsLink = screen.getByRole('link', { name: 'Kids' })
-    const brandsLink = screen.getByRole('link', { name: 'Brands' })
 
     await waitFor(() => {
       expect(homeLink.closest('a')).toHaveAttribute('href', '/')
-      expect(menLink.closest('a')).toHaveAttribute('href', '/category/mens')
-      expect(womanLink.closest('a')).toHaveAttribute('href', '/category/womans')
-      expect(kidsLink.closest('a')).toHaveAttribute('href', '/category/kids')
-      expect(brandsLink.closest('a')).toHaveAttribute(
-        'href',
-        '/category/brands'
-      )
+      expect(menLink.closest('a')).toHaveAttribute('href', '/men')
+      expect(womenLink.closest('a')).toHaveAttribute('href', '/women')
+      expect(kidsLink.closest('a')).toHaveAttribute('href', '/kid')
       const signInLink = screen.getByRole('link', { name: 'Sign In' })
       expect(signInLink.closest('a')).toHaveAttribute('href', '/sign-in')
     })

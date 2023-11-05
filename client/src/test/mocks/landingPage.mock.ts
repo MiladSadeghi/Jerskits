@@ -155,7 +155,7 @@ const kidCollectionResponse: IProduct[] = [
 ]
 
 export const getLandingPageMock = rest.get(
-  `http://localhost:3001/api/`,
+  `${import.meta.env.VITE_SERVER_URL}`,
   (_req, res, ctx) => {
     return res(
       ctx.status(200),
@@ -169,7 +169,7 @@ export const getLandingPageMock = rest.get(
 )
 
 export const getKidCollectionByBrand = rest.get(
-  'http://localhost:3001/api/kid-collection/jordan',
+  `${import.meta.env.VITE_SERVER_URL}/kid-collection/jordan`,
   (req, res, ctx) => {
     return res(
       ctx.status(200),

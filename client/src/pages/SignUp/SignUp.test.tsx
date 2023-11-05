@@ -34,12 +34,12 @@ describe('Sign Up', () => {
   })
 
   test('fetching & receive an accessToken after clicking the create account button', async () => {
-    const toastSuccess = vi.spyOn(toast, 'success')
     renderWithProviders(
       <BrowserRouter>
         <SignUp />
       </BrowserRouter>
     )
+    const toastSuccess = vi.spyOn(toast, 'success')
 
     const emailInput = screen.getByLabelText(/email/i)
     const fullNameInput = screen.getByLabelText(/full name/i)

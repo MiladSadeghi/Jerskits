@@ -50,7 +50,7 @@ const mockData: IProduct[] = [
 ]
 
 export const getProducts = rest.get(
-  `http://localhost:3001/api/products`,
+  `${import.meta.env.VITE_SERVER_URL}/products`,
   (_req, res, ctx) => {
     return res(
       ctx.status(200),
