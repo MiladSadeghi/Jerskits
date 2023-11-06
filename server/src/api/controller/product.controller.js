@@ -122,3 +122,22 @@ export const getProducts = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const getProduct = async (req, res, next) => {
+  try {
+    const { slug } = req.params;
+    const product = await ProductModel.findOne({ slug });
+
+    if (!product) {
+      return res.status(404).json({
+        error: true,
+        message:
+          "Unfortunately, we couldn't locate the product you were looking for.",
+      });
+    }
+
+    return res.status(200).json({ error: false, product });
+  } catch (error) {
+    return next(error);
+  }
+};

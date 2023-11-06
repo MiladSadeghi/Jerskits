@@ -20,19 +20,3 @@ export const verifyJWT = async (req, res, next) => {
     return res.sendStatus(500);
   }
 };
-
-export const isUserSignIn = async (req, res, next) => {
-  const accToken = req.cookies.acc;
-  jwt.verify(accToken, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-    if (!err) {
-      const decodedJWT = {
-        _id: decoded._id,
-        email: decoded.email,
-        fullName: decoded.fullName,
-      };
-      req.isUser = true;
-      req.user = decodedJWT;
-    }
-    return next();
-  });
-};
