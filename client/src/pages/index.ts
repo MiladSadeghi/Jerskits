@@ -7,5 +7,6 @@ const Favorites = lazy(() => import('./Profile/Favorites'))
 const Orders = lazy(() => import('./Profile/Orders'))
 const Setting = lazy(() => import('./Profile/Setting'))
 const Landing = lazy(() => import('./Landing/Landing'))
+const Product = lazy(() => import('./Product/Product'))
 
-export { SignIn, SignUp, Edit, Favorites, Orders, Setting, Landing }
+export { SignIn, SignUp, Edit, Favorites, Orders, Setting, Landing, Product }

@@ -40,3 +40,8 @@ export type TProductsResponse = {
   currentPage: number
   highestPrice: number
 }
+
+export type TProductResponse = {
+  error: boolean
+  product: IProduct
+}

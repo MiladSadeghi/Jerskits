@@ -5,6 +5,7 @@ import {
   Favorites,
   Landing,
   Orders,
+  Product,
   Setting,
   SignIn,
   SignUp
@@ -41,6 +42,7 @@ function App() {
               path='kid'
               element={<Products gender='kid' title='Kid’s Jerskits' />}
             />
+            <Route path=':slug' element={<Product />} />
             <Route path='profile' element={<ProfileLayout />}>
               <Route path='edit' element={<Edit />} />
               <Route path='favorites' element={<Favorites />} />

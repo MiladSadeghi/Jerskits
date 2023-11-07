@@ -1,5 +1,9 @@
 import { rest } from 'msw'
-import { IProduct, TProductsResponse } from '../../shared/types/Product.types'
+import {
+  IProduct,
+  TProductResponse,
+  TProductsResponse
+} from '../../shared/types/Product.types'
 
 const mockData: IProduct[] = [
   {
@@ -62,5 +66,32 @@ export const getProducts = rest.get(
         highestPrice: 100
       })
     )
+  }
+)
+
+export const getProduct = rest.get(
+  `${import.meta.env.VITE_SERVER_URL}/products/:slug`,
+  (req, res, ctx) => {
+    const { slug } = req.params
+    const product = mockData.find((product) => product.slug === slug)
+
+    if (product) {
+      return res(
+        ctx.status(200),
+        ctx.json<TProductResponse>({
+          error: false,
+          product
+        })
+      )
+    } else {
+      return res(
+        ctx.status(404),
+        ctx.json<{ error: boolean; message: string }>({
+          error: true,
+          message:
+            "Unfortunately, we couldn't locate the product you were looking for."
+        })
+      )
+    }
   }
 )
