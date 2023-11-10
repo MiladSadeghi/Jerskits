@@ -5,7 +5,7 @@ import {
   getLandingPageMock,
   getKidCollectionByBrand
 } from './landingPage.mock.ts'
-import { getProducts } from './product.mock.ts'
+import { getProducts, getProduct } from './product.mock.ts'
 import { getLocation } from './profile.mock.ts'
 
 const handler = [
@@ -17,7 +17,8 @@ const handler = [
   getLandingPageMock,
   getProducts,
   getLocation,
-  getKidCollectionByBrand
+  getKidCollectionByBrand,
+  getProduct
 ]
 
 export default handler
