@@ -16,7 +16,7 @@ import {
   useLazyGetKidBrandCollectionQuery
 } from './LandingPageApi'
 
-import { useLazyGetProductsQuery } from './productApi'
+import { useLazyGetProductsQuery, useGetProductQuery } from './productApi'
 
 export {
   useSignUpMutation,
@@ -28,5 +28,6 @@ export {
   useGetLandingPageQuery,
   useLazyGetKidBrandCollectionQuery,
   useLazyGetProductsQuery,
-  useUploadProfileAvatarMutation
+  useUploadProfileAvatarMutation,
+  useGetProductQuery
 }

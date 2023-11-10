@@ -41,6 +41,8 @@ export type TProductsResponse = {
   highestPrice: number
 }
 
+export type TProductRequest = string
+
 export type TProductResponse = {
   error: boolean
   product: IProduct

@@ -12,6 +12,8 @@ import ProductCard from './ProductCard/ProductCard'
 import ProductCardSkeleton from './ProductCard/ProductCardSkeleton'
 import Footer from './Footer/Footer'
 const Products = lazy(() => import('./Products/Products'))
+import ProductSkeleton from './ProductSkeleton/ProductSkeleton'
+import Accordion from './Accordion/Accordion'
 
 export {
   Navbar,
@@ -26,5 +28,7 @@ export {
   ProductCard,
   ProductCardSkeleton,
   Products,
-  Footer
+  Footer,
+  ProductSkeleton,
+  Accordion
 }
