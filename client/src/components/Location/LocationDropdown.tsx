@@ -2,13 +2,13 @@ import { useEffect } from 'react'
 import { SingleValue } from 'react-select'
 import { Control, Controller } from 'react-hook-form'
 import ReactSelect from 'react-select'
-import { Option, TeditProfileSchema } from '../../shared/types/Profile.types'
+import { TEditProfileSchema } from '../../shared/types/Profile.types'
 
 interface Props {
   options: Option[] | undefined
   name: 'country' | 'state' | 'city'
   isDisabled: boolean
-  control: Control<TeditProfileSchema>
+  control: Control<TEditProfileSchema>
   state: [Option | null, (value: Option | null) => void]
 }
 

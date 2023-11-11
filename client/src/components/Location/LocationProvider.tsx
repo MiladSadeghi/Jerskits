@@ -2,13 +2,13 @@ import { useEffect } from 'react'
 import { Control } from 'react-hook-form'
 import LocationDropdown from './LocationDropdown.tsx'
 import { useLazyGetLocationQuery } from '../../services/locationApi.ts'
-import { Option, TeditProfileSchema } from '../../shared/types/Profile.types.ts'
+import { TEditProfileSchema } from '../../shared/types/Profile.types.ts'
 
 type Props = {
   onSelect: (value: Option | null) => void
   selectedValue: Option | null
   dropdownDisable: boolean
-  control: Control<TeditProfileSchema>
+  control: Control<TEditProfileSchema>
   selectedCountry?: Option | null
   selectedState?: Option | null
   selectedCity?: Option | null

@@ -14,6 +14,13 @@ import Footer from './Footer/Footer'
 const Products = lazy(() => import('./Products/Products'))
 import ProductSkeleton from './ProductSkeleton/ProductSkeleton'
 import Accordion from './Accordion/Accordion'
+import {
+  ProductPrice,
+  ProductDiscountPrice,
+  ProductDiscountPercent,
+  ProductShopCardBtn,
+  ProductShopCardSizeBtn
+} from './Products/Product.styles'
 
 export {
   Navbar,
@@ -30,5 +37,10 @@ export {
   Products,
   Footer,
   ProductSkeleton,
-  Accordion
+  Accordion,
+  ProductPrice,
+  ProductDiscountPrice,
+  ProductDiscountPercent,
+  ProductShopCardBtn,
+  ProductShopCardSizeBtn
 }
