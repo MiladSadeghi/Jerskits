@@ -1,7 +1,7 @@
 import { LazyMotion, Variants, domAnimation, m } from 'framer-motion'
-import { TLandingPageHeaderProduct } from '../../shared/types/LandingPage.types'
-import provideBrandLogo from '../../utils/brand-logo'
 import { useEffect, useState } from 'react'
+import { TLandingPageHeaderProduct } from '../../../../shared/types/LandingPage.types'
+import provideBrandLogo from '../../../../utils/brand-logo'
 
 type Props = {
   product: TLandingPageHeaderProduct
@@ -262,8 +262,8 @@ const HeaderSlide = ({ product, currentSlide, index }: Props) => {
 						[--content-paddingTop:44px]
 						lg:[--content-paddingTop:88px]
 						[--content-marginLeft:30px]
-						xl:[--content-marginLeft:50px] 
-						2xl:[--content-marginLeft:70px] 
+						xl:[--content-marginLeft:50px]
+						2xl:[--content-marginLeft:70px]
 						3xl:[--content-marginLeft:130px]'
         >
           <div>
@@ -392,7 +392,7 @@ const HeaderSlide = ({ product, currentSlide, index }: Props) => {
           }
           className={`absolute z-[8] flex items-center justify-center top-[35%] lg:top-1/2
 				[--current-initial-left:70%] lg:[--current-initial-left:44%]
-				[--current-initial-width:60vw] md:[--current-initial-width:323px] xl:[--current-initial-width:420px] 2xl:[--current-initial-width:446px] 
+				[--current-initial-width:60vw] md:[--current-initial-width:323px] xl:[--current-initial-width:420px] 2xl:[--current-initial-width:446px]
 				`}
         >
           <m.img
@@ -409,7 +409,7 @@ const HeaderSlide = ({ product, currentSlide, index }: Props) => {
             variants={SkewedRectangleVariants}
             initial='initial'
             animate={index <= currentSlide ? 'animate' : 'initial'}
-            className={`absolute bottom-0 right-[106px] z-[5] w-full skew-x-[14deg] bg-neutral-light-grey 
+            className={`absolute bottom-0 right-[106px] z-[5] w-full skew-x-[14deg] bg-neutral-light-grey
 					lg:w-[17rem] xl:w-[20rem] 3xl:w-[24rem] `}
           />
         </div>

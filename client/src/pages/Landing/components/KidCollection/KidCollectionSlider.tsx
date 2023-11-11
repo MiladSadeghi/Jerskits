@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
-import { IProduct } from '../../shared/types/Product.types'
-import { ProductCard, ProductCardSkeleton } from '..'
+import { IProduct } from '../../../../shared/types/Product.types'
+import { ProductCard, ProductCardSkeleton } from '../../../../components'
 import tw from 'twin.macro'
 
 type Props = {

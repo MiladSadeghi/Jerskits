@@ -13,7 +13,6 @@ type Props = {
 const Accordion = ({ detailProduct, active, handleActive }: Props) => {
   const { title, description, specification } = detailProduct
   const contentEl = useRef<HTMLDivElement>(null)
-  console.log(contentEl.current?.scrollHeight)
   return (
     <div>
       <AccordionWrapper>

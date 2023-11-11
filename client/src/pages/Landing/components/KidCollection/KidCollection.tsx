@@ -1,12 +1,10 @@
 import { MouseEventHandler, useRef, useState } from 'react'
 import tw, { styled } from 'twin.macro'
-import { IProduct, TBrand } from '../../../shared/types/Product.types'
-import {
-  KidCollectionController,
-  KidCollectionSlider
-} from '../../../components'
+import { IProduct, TBrand } from '../../../../shared/types/Product.types'
 import { motion } from 'framer-motion'
-import { useLazyGetKidBrandCollectionQuery } from '../../../services'
+import { useLazyGetKidBrandCollectionQuery } from '../../../../services'
+import KidCollectionController from './KidCollectionSlideController'
+import KidCollectionSlider from './KidCollectionSlider'
 
 type Props = {
   products: IProduct[] | undefined
@@ -108,7 +106,7 @@ const KidCollection = ({ products, isError, isLoading }: Props) => {
   )
 }
 
-const Brand = tw.img`opacity-30 z-[6] relative w-fit h-fit`
+const Brand = tw.img`opacity-30 z-[6] relative w-fit h-fit cursor-pointer`
 const BrandIndicator = styled(motion.div)`
   ${tw`absolute top-0 w-3/12 lg:w-2/12 h-full bg-primary-black z-[5] mix-blend-color-burn duration-200 bg-opacity-70 ease-linear`}
 `

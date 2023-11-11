@@ -1,15 +1,8 @@
-import { ReactNode, ReactElement } from 'react'
+import { ReactNode } from 'react'
 import { IProfile } from './Profile.types'
 
 export interface IAuthenticationLayoutProps {
   children: ReactNode
-}
-
-export interface ICard {
-  background: string
-  icon: ReactElement
-  title: string
-  desc: string
 }
 
 export interface IAuthSlice {

@@ -4,6 +4,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import ProfileLinks from '../../utils/profile-links'
 import { useSignOutMutation } from '../../services'
 import { ProfileLink } from '../../components'
+import { ArrowDown } from '../../icons'
 
 function ProfileLayout() {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
@@ -13,6 +14,7 @@ function ProfileLayout() {
 
   if (!isAuthenticated)
     return <Navigate to='/' state={{ from: location }} replace />
+
   return (
     <Wrapper>
       <div className='flex justify-between'>
@@ -37,22 +39,11 @@ function ProfileLayout() {
               onClick={() => signOut()}
             >
               Logout{' '}
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                width='24'
-                height='25'
-                viewBox='0 0 24 25'
-                fill='none'
-              >
-                <path
-                  d='M8.90997 20.4201L15.43 13.9001C16.2 13.1301 16.2 11.8701 15.43 11.1001L8.90997 4.58008'
-                  stroke='#B9B9B9'
-                  strokeWidth='1.5'
-                  strokeMiterlimit='10'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                />
-              </svg>
+              <ArrowDown
+                className='-rotate-90 opacity-30'
+                width={22}
+                height={22}
+              />
             </button>
           </div>
         </div>

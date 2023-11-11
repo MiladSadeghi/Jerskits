@@ -1,11 +1,11 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import { renderWithProviders } from '../../utils/test-utils'
-import Header from './components/Header'
+import Header from './components/Header/Header'
 import { TLandingPageHeaderProduct } from '../../shared/types/LandingPage.types'
-import HeaderSlide from '../../components/LandingPage/HeaderSlide'
-import KidCollection from './components/KidCollection'
 import { IProduct } from '../../shared/types/Product.types'
 import user from '@testing-library/user-event'
+import HeaderSlide from './components/Header/HeaderSlide'
+import KidCollection from './components/KidCollection/KidCollection'
 
 const headerProducts: TLandingPageHeaderProduct[] = [
   {

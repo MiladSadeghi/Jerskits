@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
-import { TLandingPageHeaderProduct } from '../../../shared/types/LandingPage.types'
-import { HeaderController, HeaderSlide } from '../../../components'
+import { TLandingPageHeaderProduct } from '../../../../shared/types/LandingPage.types'
+import HeaderSlide from './HeaderSlide'
+import HeaderController from './HeaderController'
 
 type Props = {
   products: TLandingPageHeaderProduct[] | undefined

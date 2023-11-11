@@ -1,6 +1,4 @@
-import { ICard } from '../../shared/types/Auth.types'
-
-function Card({ icon, title, desc, background }: ICard) {
+function Card({ icon, title, description, background }: IFeature) {
   return (
     <div className='relative z-20 h-full'>
       <img
@@ -16,7 +14,9 @@ function Card({ icon, title, desc, background }: ICard) {
         <div className='z-10 flex flex-col items-center'>
           <div className='mb-5'>{icon}</div>
           <h5 className='mb-5 text-2xl font-bold text-white'>{title}</h5>
-          <p className='text-base text-center text-neutral-grey'>{desc}</p>
+          <p className='text-base text-center text-neutral-grey'>
+            {description}
+          </p>
         </div>
       </div>
     </div>

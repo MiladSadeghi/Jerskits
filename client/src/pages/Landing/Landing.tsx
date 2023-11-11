@@ -1,6 +1,6 @@
 import { useGetLandingPageQuery } from '../../services'
-import Header from './components/Header'
-import KidCollection from './components/KidCollection'
+import Header from './components/Header/Header'
+import KidCollection from './components/KidCollection/KidCollection'
 import Feature from './components/Feature'
 import { Products } from '../../components'
 import Newsletter from './components/Newsletter'
