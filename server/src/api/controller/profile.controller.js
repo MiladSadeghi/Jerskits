@@ -1,6 +1,5 @@
 import { Country, State } from "country-state-city";
 import UserModel from "../models/user.model.js";
-import { validationResult } from "express-validator";
 
 export const getUserProfile = async (req, res, next) => {
   try {

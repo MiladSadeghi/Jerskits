@@ -1,4 +1,5 @@
 import ProductModel from "../models/product.model.js";
+import ReviewModel from "../models/review.model.js";
 
 export const getProducts = async (req, res, next) => {
   try {
@@ -118,8 +119,10 @@ export const getProducts = async (req, res, next) => {
       highestPrice: highestPrice,
     });
   } catch (error) {
-    console.error(error);
-    return next(error);
+    console.log(error);
+    const err = new Error("Server error");
+    err.status = 500;
+    return next(err);
   }
 };
 
@@ -127,7 +130,6 @@ export const getProduct = async (req, res, next) => {
   try {
     const { slug } = req.params;
     const product = await ProductModel.findOne({ slug });
-
     if (!product) {
       return res.status(404).json({
         error: true,
@@ -136,8 +138,16 @@ export const getProduct = async (req, res, next) => {
       });
     }
 
-    return res.status(200).json({ error: false, product });
+    const reviews = await ReviewModel.find({ productId: product._id }).populate(
+      "user",
+      "-_id firstName lastName fullName avatar"
+    );
+
+    return res.status(200).json({ error: false, product, reviews });
   } catch (error) {
-    return next(error);
+    console.log(error);
+    const err = new Error("Server error");
+    err.status = 500;
+    return next(err);
   }
 };
