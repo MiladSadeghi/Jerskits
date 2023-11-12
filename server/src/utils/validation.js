@@ -1,4 +1,4 @@
-import { check, body } from "express-validator";
+import { check, body, param } from "express-validator";
 import { City, State } from "country-state-city";
 
 export const validateSignUpBody = [
@@ -82,4 +82,18 @@ export const validateUpdateUserAvatar = [
     }
     return true;
   }),
+];
+
+export const validateSubmitReview = [
+  check("text")
+    .notEmpty()
+    .withMessage("Comment text is required and must be a non-empty string"),
+
+  check("rating")
+    .notEmpty()
+    .withMessage("Rating is required")
+    .isNumeric()
+    .withMessage("Rating must be a number")
+    .isInt({ min: 1, max: 5 })
+    .withMessage("Rating must be between 1 and 5"),
 ];

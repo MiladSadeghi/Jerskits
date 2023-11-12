@@ -8,6 +8,7 @@ import {
   landingProvider,
 } from "../controller/landing.controller.js";
 import productRoute from "./product.route.js";
+import reviewRoute from "./review.route.js";
 
 const mainRoutes = Router();
 
@@ -18,5 +19,6 @@ mainRoutes.use("/user", userRouter);
 mainRoutes.use("/products", productRoute);
 mainRoutes.get("/", landingProvider);
 mainRoutes.get("/kid-collection/:brand?", kidCollectionProvider);
+mainRoutes.use("/review", reviewRoute);
 
 export default mainRoutes;
