@@ -61,7 +61,7 @@ function SignUp() {
   return (
     <div className='max-w-[400px] w-full'>
       <div className='space-y-5 mb-7'>
-        <Link to='/'>
+        <Link to='/' aria-label='go back to landing page'>
           <svg
             width='24'
             height='24'

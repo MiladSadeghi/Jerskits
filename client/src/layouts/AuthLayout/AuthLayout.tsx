@@ -1,42 +1,13 @@
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Pagination, Autoplay } from 'swiper/modules'
-import 'swiper/css/pagination'
-import './AuthLayout.style.scss'
-import Card from './AuthLayout.card'
 import { IAuthenticationLayoutProps } from '../../shared/types/Auth.types'
-import FeatureContent from '../../shared/FeatureContent'
+import AuthLayoutSlider from './AuthLayoutSlider'
 
 function AuthenticationLayout({ children }: IAuthenticationLayoutProps) {
-  const featureContent = FeatureContent({ color: 'white' })
   return (
-    <div className='grid h-screen grid-cols-12'>
-      <div className='col-span-3'>
-        <Swiper
-          autoplay={{
-            delay: 2500,
-            disableOnInteraction: false
-          }}
-          pagination={{
-            clickable: true,
-            renderBullet: function (_, className) {
-              return `<div class="h-[0.2px] w-[30px] bg-white ${className} rounded-none !-mt-[40px]"></div>`
-            }
-          }}
-          className='h-full'
-          modules={[Pagination, Autoplay]}
-        >
-          <SwiperSlide>
-            <Card {...featureContent[0]} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <Card {...featureContent[1]} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <Card {...featureContent[2]} />
-          </SwiperSlide>
-        </Swiper>
+    <div className='grid h-screen grid-cols-1 xl:grid-cols-12'>
+      <div className='order-2 col-span-3 mt-12 xl:mt-0 xl:order-1'>
+        <AuthLayoutSlider />
       </div>
-      <div className='flex items-center justify-center col-span-9'>
+      <div className='flex items-center justify-center order-1 col-span-9 mt-24 xl:mt-0 xl:order-2'>
         {children}
       </div>
     </div>

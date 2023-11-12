@@ -14,7 +14,6 @@ import { AuthenticationLayout, Layout, ProfileLayout } from './layouts'
 import { FullScreenLoader, Products } from './components'
 import { useGetUserQuery } from './services/userApi'
 
-import 'swiper/css'
 import 'react-loading-skeleton/dist/skeleton.css'
 
 function App() {
