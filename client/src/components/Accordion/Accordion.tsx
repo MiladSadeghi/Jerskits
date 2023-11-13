@@ -1,17 +1,24 @@
 import { TDetailProduct } from '../../shared/types/Product.types'
 import tw from 'twin.macro'
-import { useRef } from 'react'
+import { useRef, ReactNode } from 'react'
 import { ArrowDown } from '../../icons'
 
 type Props = {
-  detailProduct: TDetailProduct
+  detailProduct?: TDetailProduct
   active: boolean
   handleActive: () => void
-  key: string | number
+  content?: ReactNode
+  title?: string
+  key?: string | number
 }
 
-const Accordion = ({ detailProduct, active, handleActive }: Props) => {
-  const { title, description, specification } = detailProduct
+const Accordion = ({
+  detailProduct,
+  active,
+  handleActive,
+  content,
+  title
+}: Props) => {
   const contentEl = useRef<HTMLDivElement>(null)
   return (
     <div>
@@ -20,7 +27,7 @@ const Accordion = ({ detailProduct, active, handleActive }: Props) => {
           onClick={() => handleActive()}
           className='flex items-center justify-between py-5'
         >
-          <AccordionTitle>{title}</AccordionTitle>
+          <AccordionTitle>{title ?? detailProduct?.title}</AccordionTitle>
           <ArrowDown
             className={`transition-all ${active ? 'rotate-180' : ''}`}
           />
@@ -37,20 +44,28 @@ const Accordion = ({ detailProduct, active, handleActive }: Props) => {
               : { height: 0 })
           }}
         >
-          {description && (
-            <AccordionDescription>{description}</AccordionDescription>
-          )}
-          {specification && (
-            <ul className='list-disc list-inside'>
-              {specification.map((spec, idx) => (
-                <li
-                  key={idx}
-                  className='text-base leading-6 text-primary-black'
-                >
-                  {spec}
-                </li>
-              ))}
-            </ul>
+          {content ? (
+            content
+          ) : (
+            <>
+              {detailProduct?.description && (
+                <AccordionDescription>
+                  {detailProduct.description}
+                </AccordionDescription>
+              )}{' '}
+              {detailProduct?.specification && (
+                <ul className='list-disc list-inside'>
+                  {detailProduct.specification.map((spec, idx) => (
+                    <li
+                      key={idx}
+                      className='text-base leading-6 text-primary-black'
+                    >
+                      {spec}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </>
           )}
         </div>
       </AccordionWrapper>

@@ -9,6 +9,7 @@ import Heart from './Heart'
 import FreeShipping from './FreeShipping'
 import SecurePayments from './SecurePayments'
 import BestQualityMaterial from './BestQualityMaterial'
+import Star from './Star'
 
 export {
   ArrowDown,
@@ -21,5 +22,6 @@ export {
   Heart,
   FreeShipping,
   SecurePayments,
-  BestQualityMaterial
+  BestQualityMaterial,
+  Star
 }

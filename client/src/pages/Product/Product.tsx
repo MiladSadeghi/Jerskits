@@ -5,6 +5,7 @@ import { ProductSkeleton } from '../../components'
 import ProductImageSlider from './components/ProductImageSlider'
 import ProductShopCard from './components/ProductShopCard'
 import ProductInformation from './components/ProductInformation'
+import { TDetailProduct } from '../../shared/types/Product.types'
 
 type TError = {
   status: number
@@ -41,7 +42,10 @@ const Product = () => {
         />
         <ProductShopCard product={data.product} />
         <div className='mt-14'>
-          <ProductInformation details={data?.product?.detail_product} />
+          <ProductInformation
+            details={data?.product?.detail_product as TDetailProduct[]}
+            reviews={data?.reviews}
+          />
         </div>
       </div>
     </div>
