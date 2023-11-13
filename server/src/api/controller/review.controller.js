@@ -22,7 +22,9 @@ export const submitReview = async (req, res, next) => {
 
     await newReview.save();
 
-    return res.status(200).json({ error: false, message: "Review submitted" });
+    return res
+      .status(200)
+      .json({ error: false, message: "Review submitted", newReview });
   } catch (error) {
     console.log(error);
     const err = new Error("Server error");
