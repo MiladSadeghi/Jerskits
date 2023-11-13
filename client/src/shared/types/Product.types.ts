@@ -1,3 +1,5 @@
+import { TReview } from './Review.types'
+
 export interface IProduct {
   _id: string
   name: string
@@ -46,4 +48,5 @@ export type TProductRequest = string
 export type TProductResponse = {
   error: boolean
   product: IProduct
+  reviews: TReview[]
 }

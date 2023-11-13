@@ -4,8 +4,9 @@ import {
   TProductResponse,
   TProductsResponse
 } from '../../shared/types/Product.types'
+import { TReview } from '../../shared/types/Review.types'
 
-const mockData: IProduct[] = [
+export const mockData: IProduct[] = [
   {
     _id: '1',
     name: 'Liverpool',
@@ -53,6 +54,31 @@ const mockData: IProduct[] = [
   }
 ]
 
+const mockReview: TReview[] = [
+  {
+    _id: '324',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    productId: '2',
+    rating: 4,
+    text: 'I LIKE IT',
+    user: {
+      fullName: 'Milad Sadeghi'
+    }
+  },
+  {
+    _id: '222',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    productId: '2',
+    rating: 2,
+    text: 'I NOT LIKE IT',
+    user: {
+      fullName: 'Rostam Dastan'
+    }
+  }
+]
+
 export const getProducts = rest.get(
   `${import.meta.env.VITE_SERVER_URL}/products`,
   (_req, res, ctx) => {
@@ -80,7 +106,8 @@ export const getProduct = rest.get(
         ctx.status(200),
         ctx.json<TProductResponse>({
           error: false,
-          product
+          product,
+          reviews: mockReview
         })
       )
     } else {

@@ -46,6 +46,7 @@ const AuthLayoutSlider = () => {
         {featureContent.map((_, index) => (
           <div
             onClick={() => handleChangeSlide(index)}
+            key={index}
             className={`bg-white rounded-full h-2 w-2  ${
               activeSlide === index ? 'bg-white' : 'bg-white/30'
             }`}

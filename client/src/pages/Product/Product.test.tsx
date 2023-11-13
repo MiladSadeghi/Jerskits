@@ -4,8 +4,13 @@ import { renderWithProviders } from '../../utils/test-utils'
 import { screen, waitFor } from '@testing-library/react'
 import toast from 'react-hot-toast'
 import { vi } from 'vitest'
+import user from '@testing-library/user-event'
+import { setAuthStatus } from '../../App/feature/auth/authSlice'
 
 describe('Product', () => {
+  user.setup()
+  const toastSuccess = vi.spyOn(toast, 'success')
+  const toastError = vi.spyOn(toast, 'error')
   test('render without throwing an error', () => {
     renderWithProviders(
       <BrowserRouter>
@@ -37,7 +42,6 @@ describe('Product', () => {
 
   test('returns a error message when the slug does not exist', async () => {
     const slug = 'please-like-my-project-:)'
-    const toastError = vi.spyOn(toast, 'error')
 
     renderWithProviders(
       <MemoryRouter initialEntries={[`/${slug}`]}>
@@ -52,6 +56,57 @@ describe('Product', () => {
       expect(toastError).toHaveBeenCalledWith(
         "Unfortunately, we couldn't locate the product you were looking for."
       )
+    })
+  })
+
+  test('display product reviews', async () => {
+    const slug = 'fc-barcelona-2023-24-match-home'
+    renderWithProviders(
+      <MemoryRouter initialEntries={[`/${slug}`]}>
+        <Routes>
+          <Route path='/:slug' element={<Product />} />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    await waitFor(async () => {
+      const reviewsAccordion = screen.getByRole('heading', { name: /Review/i })
+      await user.click(reviewsAccordion)
+
+      const reviewElements = screen.getAllByTestId('review')
+      expect(reviewElements.length).toBe(2)
+
+      expect(reviewElements[0]).toHaveTextContent('I LIKE IT')
+      expect(reviewElements[1]).toHaveTextContent('I NOT LIKE IT')
+    })
+  })
+
+  test('submit review and display it', async () => {
+    const slug = 'fc-barcelona-2023-24-match-home'
+    const { store } = renderWithProviders(
+      <MemoryRouter initialEntries={[`/${slug}`]}>
+        <Routes>
+          <Route path='/:slug' element={<Product />} />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    store.dispatch(setAuthStatus(true))
+
+    await waitFor(async () => {
+      const reviewElement = screen.getByPlaceholderText(/Your review/i)
+      await user.type(reviewElement, 'very good product')
+
+      const ratingElements = screen.getAllByTestId('rating')
+      await user.click(ratingElements[4])
+
+      const submitReviewBtn = screen.getByRole('button', { name: /submit/i })
+      await user.click(submitReviewBtn)
+    })
+
+    await waitFor(async () => {
+      expect(toastSuccess).toHaveBeenCalled()
+      expect(toastSuccess).toHaveBeenCalledWith('Review submitted')
     })
   })
 })

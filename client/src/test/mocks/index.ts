@@ -7,6 +7,7 @@ import {
 } from './landingPage.mock.ts'
 import { getProducts, getProduct } from './product.mock.ts'
 import { getLocation } from './profile.mock.ts'
+import { submitReviewMock } from './review.mock.ts'
 
 const handler = [
   SignUpApiMock,
@@ -18,7 +19,8 @@ const handler = [
   getProducts,
   getLocation,
   getKidCollectionByBrand,
-  getProduct
+  getProduct,
+  submitReviewMock
 ]
 
 export default handler

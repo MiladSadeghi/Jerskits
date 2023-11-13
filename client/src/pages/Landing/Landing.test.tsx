@@ -6,6 +6,7 @@ import { IProduct } from '../../shared/types/Product.types'
 import user from '@testing-library/user-event'
 import HeaderSlide from './components/Header/HeaderSlide'
 import KidCollection from './components/KidCollection/KidCollection'
+import { BrowserRouter } from 'react-router-dom'
 
 const headerProducts: TLandingPageHeaderProduct[] = [
   {
@@ -55,6 +56,7 @@ const headerProducts: TLandingPageHeaderProduct[] = [
 ]
 
 describe('landing page header', () => {
+  user.setup()
   test('render without error or loading', async () => {
     renderWithProviders(
       <Header products={headerProducts} isError={false} isLoading={false} />
@@ -177,29 +179,34 @@ describe('landing page kid collection', () => {
       ]
     }
   ]
+
   test('render without error', async () => {
     renderWithProviders(
-      <KidCollection
-        products={kidsCollectionMockProducts}
-        isError={false}
-        isLoading={false}
-      />
+      <BrowserRouter>
+        <KidCollection
+          products={kidsCollectionMockProducts}
+          isError={false}
+          isLoading={false}
+        />
+      </BrowserRouter>
     )
 
     await waitFor(() => {
       expect(screen.getByRole('heading', { name: /New Kids Collection/i }))
-      expect(screen.getByRole('heading', { name: /Jordan1/i }))
+      expect(screen.getByRole('link', { name: /Jordan1/i }))
     })
   })
 
   test('content change when click on the data controller', async () => {
     user.setup()
     renderWithProviders(
-      <KidCollection
-        products={kidsCollectionMockProducts}
-        isError={false}
-        isLoading={false}
-      />
+      <BrowserRouter>
+        <KidCollection
+          products={kidsCollectionMockProducts}
+          isError={false}
+          isLoading={false}
+        />
+      </BrowserRouter>
     )
     await waitFor(async () => {
       const nikeProducts = await screen.findAllByAltText('nike logo')
