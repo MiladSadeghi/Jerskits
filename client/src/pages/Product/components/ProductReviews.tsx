@@ -9,7 +9,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useParams } from 'react-router-dom'
 import { useSubmitReviewMutation } from '../../../services/reviewApi'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { SpinnerCircular } from 'spinners-react'
 
@@ -22,24 +22,31 @@ const ProductReviews = ({ reviews }: Props) => {
   const isAuthenticated = useAppSelector(
     (state: RootState) => state.auth.isAuthenticated
   )
-  const [reviewsList, setReviewsList] = useState<TReview[]>(reviews)
 
   const {
     control,
     handleSubmit,
     register,
-    formState: { errors, isValid }
+    formState: { errors, isValid },
+    reset
   } = useForm<TSubmitReviewSchema>({
     resolver: yupResolver(SubmitReviewSchema)
   })
-  const [submitReview, { isLoading, data }] = useSubmitReviewMutation()
+  const [submitReview, { isLoading, data, error, isError }] =
+    useSubmitReviewMutation()
 
   useEffect(() => {
     if (data) {
       toast.success(data.message)
-      setReviewsList((prevReviews) => [...prevReviews, data.newReview])
+      reset()
     }
   }, [data])
+
+  useEffect(() => {
+    if (isError) {
+      toast.error((error as Error).message)
+    }
+  }, [isError])
 
   const onSubmitReview = async (formValues: TSubmitReviewSchema) => {
     await submitReview({
@@ -50,7 +57,7 @@ const ProductReviews = ({ reviews }: Props) => {
   }
 
   return (
-    <div className='h-full'>
+    <div className='h-full max-h-full min-h-full'>
       {isAuthenticated && (
         <>
           <form
@@ -83,7 +90,7 @@ const ProductReviews = ({ reviews }: Props) => {
 
             <button
               type='submit'
-              className='flex justify-center w-full py-4 text-lg font-semibold text-white bg-primary-black items-cetner disabled:opacity-60'
+              className='flex items-center justify-center w-full py-4 text-lg font-semibold text-white bg-primary-black disabled:opacity-60'
               aria-label='submit review'
               disabled={!isValid}
             >
@@ -100,10 +107,9 @@ const ProductReviews = ({ reviews }: Props) => {
               )}
             </button>
           </form>
-          <div className='border-b border-neutral-grey-grey h-0.5 my-7' />
         </>
       )}
-      {reviewsList.map((review) => (
+      {reviews.map((review) => (
         <Review review={review} key={review._id} />
       ))}
     </div>

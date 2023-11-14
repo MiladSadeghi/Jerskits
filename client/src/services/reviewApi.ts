@@ -22,6 +22,9 @@ const reviewApi = createApi({
             rating
           }
         }
+      },
+      transformErrorResponse(baseQueryReturnValue) {
+        return baseQueryReturnValue.data
       }
     })
   })
