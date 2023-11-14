@@ -25,7 +25,11 @@ const ProductCard = ({ product }: Props) => {
         />
       </div>
       <CardContent>
-        <ProductName to={`/${product.slug}`} className='line-clamp-2'>
+        <ProductName
+          to={`/${product.slug}`}
+          className='line-clamp-2'
+          aria-label={`go to ${`product.name`} details`}
+        >
           {product.name}
         </ProductName>
         <ProductType>{product.type}</ProductType>

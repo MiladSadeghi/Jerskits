@@ -25,6 +25,7 @@ const ProductShopCard = ({ product }: TProductShopCardProps) => {
           width={50}
           height={50}
           src={provideBrandLogo(brand)}
+          alt='brand logo'
         />
         <h1 className='text-[32px] leading-[48px] font-bold mb-2.5'>{name}</h1>
         <div className='flex items-center justify-between w-full mb-2.5'>
@@ -59,10 +60,16 @@ const ProductShopCard = ({ product }: TProductShopCardProps) => {
             </ProductShopCardSizeBtn>
           ))}
         </div>
-        <ProductShopCardBtn className='mb-4 text-white bg-primary-black'>
+        <ProductShopCardBtn
+          className='mb-4 text-white bg-primary-black'
+          aria-label='add product to bag'
+        >
           ADD TO BAG
         </ProductShopCardBtn>
-        <ProductShopCardBtn className='border border-neutral-soft-grey'>
+        <ProductShopCardBtn
+          className='border border-neutral-soft-grey'
+          aria-label='add product to favorite'
+        >
           FAVORITE
         </ProductShopCardBtn>
       </div>

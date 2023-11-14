@@ -25,7 +25,6 @@ const ProductImageSlider = ({
         <img
           className='object-contain w-full h-full'
           src={images[currentImageIdx - 1]}
-          loading='lazy'
           key={`${productName}-${currentImageIdx}-image`}
           alt={`${productName}`}
         />
