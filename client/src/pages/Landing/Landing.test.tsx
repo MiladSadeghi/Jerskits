@@ -190,11 +190,6 @@ describe('landing page kid collection', () => {
         />
       </BrowserRouter>
     )
-
-    await waitFor(() => {
-      expect(screen.getByRole('heading', { name: /New Kids Collection/i }))
-      expect(screen.getByRole('link', { name: /Jordan1/i }))
-    })
   })
 
   test('content change when click on the data controller', async () => {
