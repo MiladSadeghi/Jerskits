@@ -13,6 +13,19 @@ export const submitReview = async (req, res, next) => {
       return next(err);
     }
 
+    if (_id) {
+      const review = await ReviewModel.findOne({
+        user: _id,
+        productId: product._id,
+      });
+
+      if (review) {
+        const err = new Error("You have already reviewed this product");
+        err.status = 409;
+        return next(err);
+      }
+    }
+
     const newReview = new ReviewModel({
       user: _id,
       text,
