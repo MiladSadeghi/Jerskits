@@ -24,12 +24,12 @@ const ReviewRating = ({ rate, changeRate, disabled, error }: Props) => {
             />
             <div className={`${disabled ? '' : 'cursor-pointer'}`}>
               <Star
-                colorClass={
+                colorsClassName={
                   givenRating < rate || givenRating === rate
-                    ? 'fill-secondary-yellow stroke-secondary-yellow'
+                    ? 'fill-primary-black stroke-secondary-primary-black'
                     : error
-                    ? ' stroke-red-500 fill-neutral-soft-grey'
-                    : 'fill-neutral-soft-grey stroke-neutral-soft-grey'
+                    ? ' stroke-red-500'
+                    : 'fill-white stroke-primary-black'
                 }
               />
             </div>

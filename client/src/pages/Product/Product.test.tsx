@@ -94,7 +94,7 @@ describe('Product', () => {
     store.dispatch(setAuthStatus(true))
 
     await waitFor(async () => {
-      const reviewElement = screen.getByPlaceholderText(/Your review/i)
+      const reviewElement = screen.getByLabelText('Review')
       await user.type(reviewElement, 'very good product')
 
       const ratingElements = screen.getAllByTestId('rating')
