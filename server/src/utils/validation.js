@@ -97,3 +97,27 @@ export const validateSubmitReview = [
     .isInt({ min: 1, max: 5 })
     .withMessage("Rating must be between 1 and 5"),
 ];
+
+export const validateProductId = (path) => {
+  if (path === "body") {
+    return [
+      body("productId")
+        .isString()
+        .withMessage("Invalid product ID format")
+        .isMongoId()
+        .withMessage("Invalid product ID")
+        .notEmpty()
+        .withMessage("Product ID is required"),
+    ];
+  } else {
+    return [
+      param("productId")
+        .isString()
+        .withMessage("Invalid product ID format")
+        .isMongoId()
+        .withMessage("Invalid product ID")
+        .notEmpty()
+        .withMessage("Product ID is required"),
+    ];
+  }
+};
