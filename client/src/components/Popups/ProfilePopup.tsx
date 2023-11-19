@@ -42,7 +42,7 @@ const ProfilePopup = forwardRef<HTMLDivElement, Props>((props, ref) => {
 })
 
 const Wrapper = styled.div<{ $isShow?: boolean }>`
-  ${tw`absolute z-20 right-0 top-[90px] bg-white shadow-md w-80 p-7 space-y-7 border border-neutral-soft-grey`}
+  ${tw`absolute z-20 right-0 top-[82px] bg-white shadow-md w-80 p-7 space-y-7 border border-neutral-soft-grey`}
   ${({ $isShow }) => ($isShow ? tw`block` : tw`hidden`)}
 `
 const Link = tw(RouterLink)`

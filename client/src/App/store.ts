@@ -9,10 +9,12 @@ import userApi from '../services/userApi'
 import { landingPageApi } from '../services/LandingPageApi'
 import { productApi } from '../services/productApi'
 import { reviewApi } from '../services/reviewApi'
+import userSlice from './feature/userSlice'
 
 const rootReducer = combineReducers({
   auth: authSlice,
   profile: profileSlice,
+  user: userSlice,
   [authApi.reducerPath]: authApi.reducer,
   [profileApi.reducerPath]: profileApi.reducer,
   [locationApi.reducerPath]: locationApi.reducer,

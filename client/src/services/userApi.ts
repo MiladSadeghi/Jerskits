@@ -4,6 +4,7 @@ import { baseQueryWithReauth } from './api'
 import { setProfile } from '../App/feature/profile/profileSlice'
 import toast from 'react-hot-toast'
 import { setAuthStatus } from '../App/feature/auth/authSlice'
+import { setFavorites } from '../App/feature/userSlice'
 
 const userApi = createApi({
   reducerPath: 'userApi',
@@ -20,6 +21,7 @@ const userApi = createApi({
           const { data } = await queryFulfilled
           dispatch(setProfile(data.profile))
           dispatch(setAuthStatus(true))
+          dispatch(setFavorites(data.favorites))
         } catch (error: unknown) {
           if (typeof error === 'object' && error !== null) {
             const err = error as Record<string, unknown>
