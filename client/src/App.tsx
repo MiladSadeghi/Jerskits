@@ -12,7 +12,7 @@ import {
 } from './pages'
 import { AuthenticationLayout, Layout, ProfileLayout } from './layouts'
 import { FullScreenLoader, Products } from './components'
-import { useGetUserQuery } from './services/userApi'
+import { useGetUserQuery } from './services'
 
 import 'react-loading-skeleton/dist/skeleton.css'
 

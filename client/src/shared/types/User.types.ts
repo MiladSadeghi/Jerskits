@@ -9,3 +9,13 @@ export interface IGetUserResponse {
 export interface IUserState {
   favorites: IProduct[]
 }
+
+export interface IGetUserFavoritesResponse {
+  error: boolean
+  favorites: IProduct[]
+}
+
+export interface IFavoriteOperationResponse {
+  success: boolean
+  message: string
+}

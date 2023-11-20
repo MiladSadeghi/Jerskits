@@ -18,6 +18,13 @@ import {
 
 import { useLazyGetProductsQuery, useGetProductQuery } from './productApi'
 
+import {
+  useGetUserQuery,
+  useGetUserFavoritesQuery,
+  useAddProductToFavoritesMutation,
+  useRemoveProductFromFavoritesMutation
+} from './userApi'
+
 export {
   useSignUpMutation,
   useSignInMutation,
@@ -29,5 +36,9 @@ export {
   useLazyGetKidBrandCollectionQuery,
   useLazyGetProductsQuery,
   useUploadProfileAvatarMutation,
-  useGetProductQuery
+  useGetProductQuery,
+  useGetUserQuery,
+  useGetUserFavoritesQuery,
+  useAddProductToFavoritesMutation,
+  useRemoveProductFromFavoritesMutation
 }

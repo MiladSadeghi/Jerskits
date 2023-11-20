@@ -1,5 +1,9 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import { IGetUserResponse } from '../shared/types/User.types'
+import {
+  IFavoriteOperationResponse,
+  IGetUserFavoritesResponse,
+  IGetUserResponse
+} from '../shared/types/User.types'
 import { baseQueryWithReauth } from './api'
 import { setProfile } from '../App/feature/profile/profileSlice'
 import toast from 'react-hot-toast'
@@ -36,10 +40,52 @@ const userApi = createApi({
           }
         }
       }
+    }),
+    getUserFavorites: build.query<IGetUserFavoritesResponse, void>({
+      query() {
+        return {
+          url: '/user/favorites'
+        }
+      },
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          dispatch(setFavorites(data.favorites))
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    }),
+    addProductToFavorites: build.mutation<IFavoriteOperationResponse, string>({
+      query(productId) {
+        return {
+          url: '/user/favorites',
+          method: 'POST',
+          body: {
+            productId
+          }
+        }
+      }
+    }),
+    removeProductFromFavorites: build.mutation<
+      IFavoriteOperationResponse,
+      string
+    >({
+      query(productId) {
+        return {
+          url: `user/favorites/${productId}`,
+          method: 'DELETE'
+        }
+      }
     })
   })
 })
 
-export const { useGetUserQuery } = userApi
+export const {
+  useGetUserQuery,
+  useGetUserFavoritesQuery,
+  useAddProductToFavoritesMutation,
+  useRemoveProductFromFavoritesMutation
+} = userApi
 
 export default userApi
