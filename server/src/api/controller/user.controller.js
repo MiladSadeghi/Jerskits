@@ -21,13 +21,11 @@ export const getUser = async (req, res, next) => {
     const favoritesList = await FavoriteModel.findOne({ user: _id }).populate(
       "favorites"
     );
-    return res
-      .status(200)
-      .json({
-        error: false,
-        profile: foundedUser,
-        favorites: favoritesList.favorites,
-      });
+    return res.status(200).json({
+      error: false,
+      profile: foundedUser,
+      favorites: favoritesList.favorites,
+    });
   } catch (error) {
     console.log(error);
     return res
@@ -43,7 +41,9 @@ export const getUserFavorites = async (req, res, next) => {
         user: req.decoded._id,
       }).populate("favorites")) || [];
 
-    return res.status(200).json({ error: false, favorites: favoritesList });
+    return res
+      .status(200)
+      .json({ error: false, favorites: favoritesList.favorites });
   } catch (error) {
     console.log(error);
     const err = new Error("Server error");
