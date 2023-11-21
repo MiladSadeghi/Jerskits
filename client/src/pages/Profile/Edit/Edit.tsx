@@ -202,22 +202,24 @@ function Edit() {
             <UploadCloud />
           </div>
         </div>
-        {userAvatar !== '' ? (
-          <ProfileImage
-            crossOrigin='anonymous'
-            src={`${import.meta.env.VITE_SERVER_URL.replace(
-              '/api',
-              ''
-            )}/images/${userAvatar}`}
-          />
-        ) : (
-          <div className='bg-[#e4e6e7] rounded-full w-[100px] h-[100px]'>
+        <div className='max-w-[100px] max-h-[100px]'>
+          {userAvatar !== '' ? (
             <ProfileImage
-              src='/images/blank-profile-picture.png'
-              className='p-4'
+              crossOrigin='anonymous'
+              src={`${import.meta.env.VITE_SERVER_URL.replace(
+                '/api',
+                ''
+              )}/images/${userAvatar}`}
             />
-          </div>
-        )}
+          ) : (
+            <div className='bg-[#e4e6e7] rounded-full w-[100px] h-[100px]'>
+              <ProfileImage
+                src='/images/blank-profile-picture.png'
+                className='p-4'
+              />
+            </div>
+          )}
+        </div>
         <div className='w-full ml-7'>
           <AvatarInput onClick={() => profileAvatarRef.current?.click()}>
             <p className='text-text-sm text-neutral-grey'>
@@ -433,7 +435,7 @@ const FormInput = styled.input<{
   `}
 `
 const FormError = tw.p`text-red-600 text-sm`
-const ProfileImage = tw.img` rounded-full object-cover min-w-[100px] min-h-[100px]`
+const ProfileImage = tw.img` rounded-full object-cover w-full h-full`
 const AvatarInput = tw.div`w-full h-12 px-5 py-4 border outline-none border-neutral-grey flex items-center justify-between`
 const SubmitButton = styled.button`
   ${tw`w-full font-bold text-white h-14 bg-primary-black flex items-center justify-center`}
