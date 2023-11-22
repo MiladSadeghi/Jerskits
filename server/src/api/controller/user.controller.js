@@ -105,13 +105,7 @@ export const removeProductFromFavorites = async (req, res, next) => {
       { new: true }
     );
 
-    console.log(userFavorites);
-
-    if (
-      !userFavorites ||
-      !userFavorites.favorites ||
-      userFavorites.favorites.indexOf(productId) === -1
-    ) {
+    if (!userFavorites || !userFavorites.favorites) {
       return res.status(404).json({
         message: "Product not found in favorites",
       });
