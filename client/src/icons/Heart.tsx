@@ -1,7 +1,7 @@
 type Props = {
   width?: number
   height?: number
-  fill?: string
+  fill?: boolean
 }
 
 const Heart = ({ width = 20, height = 20, fill }: Props) => {

@@ -16,9 +16,9 @@ const userSlice = createSlice({
     addToFavorites: (state, { payload }: PayloadAction<IProduct>) => {
       state.favorites.push(payload)
     },
-    removeFromFavorites: (state, { payload }: PayloadAction<IProduct>) => {
+    removeFromFavorites: (state, { payload }: PayloadAction<string>) => {
       state.favorites = state.favorites.filter(
-        (product) => product._id !== payload._id
+        (product) => product._id !== payload
       )
     }
   }

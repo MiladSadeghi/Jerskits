@@ -8,7 +8,7 @@ import { baseQueryWithReauth } from './api'
 import { setProfile } from '../App/feature/profile/profileSlice'
 import toast from 'react-hot-toast'
 import { setAuthStatus } from '../App/feature/auth/authSlice'
-import { setFavorites } from '../App/feature/userSlice'
+import { removeFromFavorites, setFavorites } from '../App/feature/userSlice'
 
 const userApi = createApi({
   reducerPath: 'userApi',
@@ -75,6 +75,16 @@ const userApi = createApi({
         return {
           url: `user/favorites/${productId}`,
           method: 'DELETE'
+        }
+      },
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          dispatch(removeFromFavorites(arg))
+          toast.success(data.message)
+        } catch (error) {
+          const err = error as Error
+          toast.error(err.message)
         }
       }
     })

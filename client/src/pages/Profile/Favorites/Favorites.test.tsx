@@ -5,6 +5,8 @@ import { waitFor, screen } from '@testing-library/react'
 import user from '@testing-library/user-event'
 import toast from 'react-hot-toast'
 import { vi } from 'vitest'
+import { server } from '../../../test/setup'
+import { rest } from 'msw'
 
 describe('Favorites', () => {
   user.setup()
@@ -28,10 +30,10 @@ describe('Favorites', () => {
       const products = screen.getAllByTestId('favorite-product')
       expect(products.length).toBe(2)
 
-      const firstProductTeamName = screen.getByRole('heading', {
+      const firstProductTeamName = screen.getByRole('link', {
         name: /liverpool/i
       })
-      const secondProductTeamName = screen.getByRole('heading', {
+      const secondProductTeamName = screen.getByRole('link', {
         name: /barcelona/i
       })
 
@@ -41,6 +43,20 @@ describe('Favorites', () => {
   })
 
   test('render empty favorites products', async () => {
+    server.use(
+      rest.get(
+        `${import.meta.env.VITE_SERVER_URL}/user/favorites`,
+        (_req, res, ctx) => {
+          return res(
+            ctx.status(200),
+            ctx.json({
+              error: false,
+              favorites: []
+            })
+          )
+        }
+      )
+    )
     renderWithProviders(
       <BrowserRouter>
         <Favorites />
@@ -48,9 +64,6 @@ describe('Favorites', () => {
     )
 
     await waitFor(() => {
-      const products = screen.getAllByTestId('favorite-product')
-      expect(products.length).toBe(0)
-
       const message = screen.getByText(/No favorites yet/i)
       expect(message).toBeInTheDocument()
     })
@@ -64,9 +77,6 @@ describe('Favorites', () => {
     )
 
     await waitFor(async () => {
-      const product = screen.getByRole('heading', { name: /liverpool/i })
-      await user.hover(product)
-
       const likeButton = screen.getByRole('button', { name: /like-liverpool/i })
       await user.click(likeButton)
     })
@@ -74,9 +84,7 @@ describe('Favorites', () => {
     await waitFor(async () => {
       const isProductInFavorites = store
         .getState()
-        .user.favorites.some((favorite) => {
-          return favorite._id === '1'
-        })
+        .user.favorites.some((product) => product._id === '1')
 
       expect(isProductInFavorites).toBe(false)
     })

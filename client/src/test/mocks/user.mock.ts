@@ -15,7 +15,7 @@ export const getUserFavoritesProducts = rest.get(
 )
 
 export const removeUserFavorites = rest.delete(
-  `${import.meta.env.VITE_SERVER_URL}/user/favorites`,
+  `${import.meta.env.VITE_SERVER_URL}/user/favorites/:productId`,
   (_req, res, ctx) => {
     return res(
       ctx.status(200),
