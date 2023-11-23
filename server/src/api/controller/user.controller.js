@@ -82,9 +82,11 @@ export const addToFavorites = async (req, res, next) => {
       return next(err);
     }
 
-    return res
-      .status(200)
-      .json({ error: false, message: "Product added to favorites" });
+    return res.status(200).json({
+      error: false,
+      message: "Product added to favorites",
+      product,
+    });
   } catch (error) {
     console.log(error);
     const err = new Error("Server error");
