@@ -22,6 +22,8 @@ import ReviewRating from './Review/ReviewRating'
 import Review from './Review/Review'
 import ReviewForm from './Review/ReviewForm'
 
+import ProductCardContainer from './Products/ProductCardContainer'
+
 const Products = lazy(() => import('./Products/Products'))
 
 export {
@@ -43,5 +45,6 @@ export {
   ProductShopCardSizeBtn,
   ReviewRating,
   Review,
-  ReviewForm
+  ReviewForm,
+  ProductCardContainer
 }

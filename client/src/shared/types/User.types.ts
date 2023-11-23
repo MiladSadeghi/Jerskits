@@ -18,4 +18,5 @@ export interface IGetUserFavoritesResponse {
 export interface IFavoriteOperationResponse {
   success: boolean
   message: string
+  product: IProduct
 }

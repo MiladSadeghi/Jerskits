@@ -8,13 +8,24 @@ import {
   ProductPrice
 } from './Product.styles'
 import { Link } from 'react-router-dom'
+import { Heart } from '../../icons'
 
 type Props = {
   product: IProduct
   key?: string
+  isLiked?: boolean
+  likeable?: boolean
+  favoriteHandler?: () => void
+  likeLoading?: boolean
 }
 
-const ProductCard = ({ product }: Props) => {
+const ProductCard = ({
+  product,
+  likeable,
+  likeLoading,
+  isLiked,
+  favoriteHandler
+}: Props) => {
   return (
     <Card className='h-full group'>
       <div className='h-[440px] w-full relative bg-neutral-light-grey flex items-end justify-center'>
@@ -23,6 +34,16 @@ const ProductCard = ({ product }: Props) => {
           src={provideBrandLogo(product.brand)}
           alt={`${product.brand} logo`}
         />
+        {likeable && (
+          <button
+            className='absolute z-50 flex items-center justify-center w-8 h-8 bg-white shadow-lg top-4 right-4 disabled:opacity-50'
+            aria-label={`like-${product.name}`}
+            disabled={likeLoading}
+            onClick={favoriteHandler}
+          >
+            <Heart width={24} height={24} fill={isLiked} />
+          </button>
+        )}
       </div>
       <CardContent>
         <ProductName

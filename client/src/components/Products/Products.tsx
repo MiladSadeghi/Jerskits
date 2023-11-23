@@ -1,6 +1,6 @@
 import tw from 'twin.macro'
 import FilterBar from '../FilterBar/FilterBar'
-import { ProductCard, ProductCardSkeleton } from '..'
+import { ProductCardContainer, ProductCardSkeleton } from '..'
 import {
   IProduct,
   Price,
@@ -103,13 +103,13 @@ const Products = ({ title, gender }: Props) => {
         applyHandler={applyFilter}
       />
       <ProductWrapper>
-        {isFetching || isError
-          ? productCardSkeletonArray.map((_, index) => (
-              <ProductCardSkeleton key={index} />
-            ))
-          : products?.map((product: IProduct) => (
-              <ProductCard product={product} key={product._id} />
-            ))}
+        {isFetching || isError ? (
+          productCardSkeletonArray.map((_, index) => (
+            <ProductCardSkeleton key={index} />
+          ))
+        ) : (
+          <ProductCardContainer products={products} />
+        )}
       </ProductWrapper>
       <LoadMore
         aria-label='Load more products'
