@@ -34,19 +34,30 @@ function Navbar() {
   }
 
   const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-    const isPopupsOpen =
-      profileRef.current?.contains(event.target as Node) ||
-      favoriteRef.current?.contains(event.target as Node)
-    const isPopupsButtonClicked =
-      profileBtnRef.current?.contains(event.target as Node) ||
-      favoriteBtnRef.current?.contains(event.target as Node)
-    if (!isPopupsOpen && !isPopupsButtonClicked) {
-      setPopups((prevPopups) => ({
-        ...prevPopups,
-        profile: false,
-        favorites: false
-      }))
+    const { target } = event
+    const isProfilePopupOpen = profileRef.current?.contains(target as Node)
+    const isFavoritePopupOpen = favoriteRef.current?.contains(target as Node)
+    const isProfileButtonClicked = profileBtnRef.current?.contains(
+      target as Node
+    )
+    const isFavoriteButtonClicked = favoriteBtnRef.current?.contains(
+      target as Node
+    )
+
+    const updatedPopups: Partial<TPopups> = {}
+
+    if (!isProfilePopupOpen && !isProfileButtonClicked) {
+      updatedPopups.profile = false
     }
+
+    if (!isFavoritePopupOpen && !isFavoriteButtonClicked) {
+      updatedPopups.favorites = false
+    }
+
+    setPopups((prevPopups) => ({
+      ...prevPopups,
+      ...updatedPopups
+    }))
   }
 
   useEffect(() => {
@@ -105,7 +116,7 @@ function Navbar() {
                 >
                   <Heart />
                 </button>
-                {popups.favorites && <FavoritesPopup />}
+                {popups.favorites && <FavoritesPopup ref={favoriteRef} />}
               </div>
               {authStatus ? (
                 <div className='relative'>

@@ -13,12 +13,29 @@ const ProfilePopup = forwardRef<HTMLDivElement, Props>((props, ref) => {
   const { isShow } = props
   const [signOut] = useSignOutMutation()
   const profile = useAppSelector((state) => state.profile)
+  const userAvatar = profile.avatar
 
   return (
     <Wrapper $isShow={isShow} ref={ref}>
       <header className='flex items-center'>
         <div className='flex items-center justify-center w-14 h-14 bg-[#e4e6e7] rounded-full'>
-          <img src='/images/blank-profile-picture.png' className='w-10 h-10 ' />
+          {userAvatar !== '' ? (
+            <img
+              className='object-cover w-full h-full rounded-full'
+              crossOrigin='anonymous'
+              src={`${import.meta.env.VITE_SERVER_URL.replace(
+                '/api',
+                ''
+              )}/images/${userAvatar}`}
+            />
+          ) : (
+            <div className='bg-[#e4e6e7] rounded-full w-[100px] h-[100px]'>
+              <img
+                src='/images/blank-profile-picture.png'
+                className='object-cover w-full h-full p-4 rounded-full'
+              />
+            </div>
+          )}
         </div>
         <h1 className='ml-5 font-bold capitalize text-primary-black text-text-xl'>
           Hi, {profile.firstName ? profile.firstName : profile.fullName}

@@ -2,18 +2,26 @@ import { Link } from 'react-router-dom'
 import { useAppSelector } from '../../App/hooks'
 import { RootState } from '../../App/store'
 import ProductMiniCard from '../Products/ProductMiniCard'
+import { forwardRef } from 'react'
 
-const FavoritesPopup = () => {
+const FavoritesPopup = forwardRef<HTMLDivElement>((props, ref) => {
   const favoritesProduct = useAppSelector(
     (state: RootState) => state.user.favorites
   )
   return (
-    <div className='absolute flex flex-col right-0 bg-white top-[75px] w-96 p-[30px] gap-y-7'>
+    <div
+      ref={ref}
+      className='absolute z-[99] flex flex-col right-0 bg-white top-[75px] w-96 p-[30px] gap-y-7'
+    >
       <h1 className='text-lg font-bold text-primary-black'>Favorites</h1>
       <div className='flex flex-col gap-y-5'>
-        {favoritesProduct.length ? (
+        {favoritesProduct.length !== 0 ? (
           favoritesProduct.map((product) => (
-            <ProductMiniCard key={product._id} product={product} />
+            <ProductMiniCard
+              key={product._id}
+              product={product}
+              removable={false}
+            />
           ))
         ) : (
           <p className='text-primary-black'>No favorites yet</p>
@@ -27,6 +35,6 @@ const FavoritesPopup = () => {
       </Link>
     </div>
   )
-}
+})
 
 export default FavoritesPopup

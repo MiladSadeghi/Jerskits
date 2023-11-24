@@ -15,7 +15,7 @@ const ProductCardContainer = ({ products }: Props) => {
   const userFavoriteProductsId = useAppSelector(
     (state: RootState) => state.user.favorites
   ).map((product) => product._id)
-  console.log(userFavoriteProductsId)
+
   const isUserAuthenticated = useAppSelector(
     (state: RootState) => state.auth.isAuthenticated
   )

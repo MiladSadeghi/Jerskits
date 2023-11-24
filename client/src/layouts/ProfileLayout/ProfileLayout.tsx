@@ -10,6 +10,7 @@ function ProfileLayout() {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
   const location = useLocation()
   const profile = useAppSelector((state) => state.profile)
+  const userAvatar = profile.avatar
   const [signOut] = useSignOutMutation()
 
   if (!isAuthenticated)
@@ -22,10 +23,27 @@ function ProfileLayout() {
           <div className='flex flex-col space-y-7'>
             <div className='flex items-center'>
               <div className='flex items-center justify-center w-14 h-14 bg-[#e4e6e7] rounded-full'>
-                <img
+                {userAvatar !== '' ? (
+                  <img
+                    crossOrigin='anonymous'
+                    className='object-cover w-full h-full rounded-full'
+                    src={`${import.meta.env.VITE_SERVER_URL.replace(
+                      '/api',
+                      ''
+                    )}/images/${userAvatar}`}
+                  />
+                ) : (
+                  <div className='bg-[#e4e6e7] rounded-full w-[100px] h-[100px]'>
+                    <img
+                      src='/images/blank-profile-picture.png'
+                      className='w-10 h-10'
+                    />
+                  </div>
+                )}
+                {/* <img
                   src='/images/blank-profile-picture.png'
                   className='w-10 h-10 '
-                />
+                /> */}
               </div>
               <h1 className='ml-5 font-bold capitalize text-primary-black text-text-xl'>
                 Hi, {profile.fullName}
