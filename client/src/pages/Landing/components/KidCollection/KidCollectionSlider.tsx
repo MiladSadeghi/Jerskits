@@ -1,6 +1,9 @@
 import { forwardRef } from 'react'
 import { IProduct } from '../../../../shared/types/Product.types'
-import { ProductCard, ProductCardSkeleton } from '../../../../components'
+import {
+  ProductCardContainer,
+  ProductCardSkeleton
+} from '../../../../components'
 import tw from 'twin.macro'
 
 type Props = {
@@ -24,9 +27,7 @@ const KidCollectionSlider = forwardRef<HTMLDivElement, Props>(
     }
     return (
       <Wrapper ref={ref}>
-        {products.map((product) => (
-          <ProductCard key={product._id} product={product} />
-        ))}
+        <ProductCardContainer products={products} />
       </Wrapper>
     )
   }
