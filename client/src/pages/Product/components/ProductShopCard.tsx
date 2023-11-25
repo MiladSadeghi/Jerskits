@@ -27,7 +27,7 @@ const ProductShopCard = ({ product }: TProductShopCardProps) => {
   const [selectedSize, setSelectedSize] = useState<string>()
   const isFavorite = useAppSelector(
     (state: RootState) => state.user.favorites
-  ).some((favorite) => favorite._id === product._id)
+  ).some((favorite) => favorite?._id === product?._id)
   const isAuthenticated = useAppSelector(
     (state: RootState) => state.auth.isAuthenticated
   )

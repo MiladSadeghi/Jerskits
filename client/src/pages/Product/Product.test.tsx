@@ -6,6 +6,8 @@ import toast from 'react-hot-toast'
 import { vi } from 'vitest'
 import user from '@testing-library/user-event'
 import { setAuthStatus } from '../../App/feature/auth/authSlice'
+import { addToFavorites } from '../../App/feature/userSlice'
+import { mockData } from '../../test/mocks/product.mock'
 
 describe('Product', () => {
   user.setup()
@@ -107,6 +109,58 @@ describe('Product', () => {
     await waitFor(async () => {
       expect(toastSuccess).toHaveBeenCalled()
       expect(toastSuccess).toHaveBeenCalledWith('Review submitted')
+    })
+  })
+
+  test('add product to favorite', async () => {
+    const slug = 'fc-barcelona-2023-24-match-home'
+    const { store } = renderWithProviders(
+      <MemoryRouter initialEntries={[`/${slug}`]}>
+        <Routes>
+          <Route path='/:slug' element={<Product />} />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    store.dispatch(setAuthStatus(true))
+    await waitFor(async () => {
+      const likeButton = screen.getByRole('button', { name: /FAVORITE/i })
+      await user.click(likeButton)
+      expect(toastSuccess).toHaveBeenCalled()
+      expect(toastSuccess).toHaveBeenCalledWith('Product added to favorites')
+      const isProductInFavorites = store
+        .getState()
+        .user.favorites?.some((product) => product?._id === '2')
+      expect(isProductInFavorites).toBe(true)
+    })
+  })
+
+  test('remove product from favorite', async () => {
+    const slug = 'fc-barcelona-2023-24-match-home'
+    const { store } = renderWithProviders(
+      <MemoryRouter initialEntries={[`/${slug}`]}>
+        <Routes>
+          <Route path='/:slug' element={<Product />} />
+        </Routes>
+      </MemoryRouter>
+    )
+    const product = mockData.find((product) => product.slug === slug)
+    store.dispatch(setAuthStatus(true))
+    if (product) {
+      store.dispatch(addToFavorites(product))
+    }
+
+    await waitFor(async () => {
+      const likeButton = screen.getByRole('button', { name: /FAVORITE/i })
+      await user.click(likeButton)
+      expect(toastSuccess).toHaveBeenCalled()
+      expect(toastSuccess).toHaveBeenCalledWith(
+        'Product removed from favorites'
+      )
+      const isProductInFavorites = store
+        .getState()
+        .user.favorites?.some((product) => product?._id === '2')
+      expect(isProductInFavorites).toBe(false)
     })
   })
 })

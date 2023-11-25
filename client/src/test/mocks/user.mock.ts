@@ -27,15 +27,21 @@ export const removeUserFavorites = rest.delete(
   }
 )
 
-export const addUserFavorites = rest.post(
+export const addUserFavorites = rest.post<{ productId: string }>(
   `${import.meta.env.VITE_SERVER_URL}/user/favorites`,
-  (_req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        error: false,
-        message: 'Product added to favorites'
-      })
-    )
+  async (req, res, ctx) => {
+    const { productId } = await req.json<{ productId: string }>()
+    const product = mockData.find((product) => product._id === productId)
+
+    if (product) {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          error: false,
+          message: 'Product added to favorites',
+          product
+        })
+      )
+    }
   }
 )
