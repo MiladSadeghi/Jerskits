@@ -30,13 +30,13 @@ const ProductImageSlider = ({
         />
       </div>
       <div className='w-full h-[80px] bg-neutral-light-grey flex justify-between items-center px-4'>
-        <div onClick={() => changeImageIdx(-1)}>
+        <div className='cursor-pointer' onClick={() => changeImageIdx(-1)}>
           <ArrowRight className='rotate-180' />
         </div>
         <p>
           {currentImageIdx}/{images.length}
         </p>
-        <div onClick={() => changeImageIdx(+1)}>
+        <div className='cursor-pointer' onClick={() => changeImageIdx(+1)}>
           <ArrowRight />
         </div>
       </div>

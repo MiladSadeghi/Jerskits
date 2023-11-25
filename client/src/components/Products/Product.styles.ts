@@ -16,4 +16,4 @@ export const ProductShopCardSizeBtn = styled.button<{ $activeSize: boolean }>`
   ${({ $activeSize }) => $activeSize && tw` border-primary-black`}}
 `
 
-export const ProductShopCardBtn = tw.button`h-14 flex items-center justify-center w-full font-bold`
+export const ProductShopCardBtn = tw.button`h-14 flex items-center justify-center w-full font-bold transition-all disabled:opacity-50`

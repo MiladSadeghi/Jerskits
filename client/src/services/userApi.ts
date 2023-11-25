@@ -76,8 +76,7 @@ const userApi = createApi({
           toast.success(data.message)
           dispatch(addToFavorites(data.product))
         } catch (error) {
-          const err = error as Error
-          toast.error(err.message)
+          console.log('error on add product in favorites')
         }
       }
     }),
@@ -97,8 +96,7 @@ const userApi = createApi({
           dispatch(removeFromFavorites(arg))
           toast.success(data.message)
         } catch (error) {
-          const err = error as Error
-          toast.error(err.message)
+          console.log('error on remove product from favorites')
         }
       }
     })

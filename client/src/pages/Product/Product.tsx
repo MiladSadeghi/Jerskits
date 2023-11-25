@@ -17,8 +17,15 @@ type TError = {
 
 const Product = () => {
   const { slug } = useParams<{ slug: string }>()
+  document.title = 'loading...'
 
-  const { data, isLoading, isError, error } = useGetProductQuery(slug as string)
+  const { data, isFetching, isError, error } = useGetProductQuery(
+    slug as string
+  )
+
+  if (data) {
+    document.title = data.product.name
+  }
 
   if (isError) {
     if ((error as TError).data.message) {
@@ -29,7 +36,7 @@ const Product = () => {
     return <Navigate to={'/404'} />
   }
 
-  if (isLoading || !data) {
+  if (isFetching || !data) {
     return <ProductSkeleton />
   }
 
