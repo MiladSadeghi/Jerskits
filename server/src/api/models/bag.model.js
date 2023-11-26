@@ -1,9 +1,10 @@
 import { mongoose } from "mongoose";
 
 const BagItemSchema = mongoose.Schema({
-  productId: {
+  product: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
+    required: true,
   },
   quantity: {
     type: Number,
@@ -12,6 +13,10 @@ const BagItemSchema = mongoose.Schema({
   },
   price: {
     type: Number,
+    required: true,
+  },
+  size: {
+    type: String,
     required: true,
   },
   total: {

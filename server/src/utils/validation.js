@@ -121,3 +121,44 @@ export const validateProductId = (path) => {
     ];
   }
 };
+
+export const validateAddToBagBody = [
+  body("productId")
+    .isString()
+    .withMessage("Invalid product ID format")
+    .isMongoId()
+    .withMessage("Invalid product ID")
+    .notEmpty()
+    .withMessage("Product ID is required"),
+  body("size").isString().withMessage("Size is required"),
+];
+
+export const validateUpdateQuantity = [
+  body("productId")
+    .isString()
+    .withMessage("Invalid product ID format")
+    .isMongoId()
+    .withMessage("Invalid product ID")
+    .notEmpty()
+    .withMessage("Product ID is required"),
+  body("quantity")
+    .notEmpty()
+    .withMessage("Quantity is required")
+    .isInt({ min: 1 })
+    .withMessage("Quantity must be a number"),
+];
+
+export const validateUpdateSize = [
+  body("productId")
+    .isString()
+    .withMessage("Invalid product ID format")
+    .isMongoId()
+    .withMessage("Invalid product ID")
+    .notEmpty()
+    .withMessage("Product ID is required"),
+  body("newSize")
+    .isString()
+    .withMessage("Invalid new size format")
+    .notEmpty()
+    .withMessage("New size is required"),
+];
