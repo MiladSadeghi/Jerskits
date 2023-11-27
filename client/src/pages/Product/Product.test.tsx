@@ -163,4 +163,28 @@ describe('Product', () => {
       expect(isProductInFavorites).toBe(false)
     })
   })
+
+  test('add product to bag', async () => {
+    const slug = 'fc-barcelona-2023-24-match-home'
+    const { store } = renderWithProviders(
+      <MemoryRouter initialEntries={[`/${slug}`]}>
+        <Routes>
+          <Route path='/:slug' element={<Product />} />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    store.dispatch(setAuthStatus(true))
+
+    await waitFor(async () => {
+      const addToBagButton = screen.getByRole('button', { name: /ADD TO BAG/i })
+      await user.click(addToBagButton)
+      expect(toastSuccess).toHaveBeenCalled()
+      expect(toastSuccess).toHaveBeenCalledWith('Product added to bag')
+      const isProductInBag = store
+        .getState()
+        .user.bag?.items.some((product) => product.product._id === '2')
+      expect(isProductInBag).toBe(true)
+    })
+  })
 })

@@ -11,7 +11,12 @@ import { submitReviewMock } from './review.mock.ts'
 import {
   getUserFavoritesProducts,
   removeUserFavorites,
-  addUserFavorites
+  addUserFavorites,
+  getBag,
+  AddToBag,
+  removeFromBag,
+  updateBagItemQuantity,
+  updateBagItemSize
 } from './user.mock.ts'
 
 const handler = [
@@ -28,7 +33,12 @@ const handler = [
   submitReviewMock,
   getUserFavoritesProducts,
   removeUserFavorites,
-  addUserFavorites
+  addUserFavorites,
+  getBag,
+  AddToBag,
+  removeFromBag,
+  updateBagItemQuantity,
+  updateBagItemSize
 ]
 
 export default handler

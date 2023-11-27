@@ -1,8 +1,17 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import {
+  IAddToBagRequest,
+  IAddToBagResponse,
   IFavoriteOperationResponse,
+  IGetBag,
   IGetUserFavoritesResponse,
-  IGetUserResponse
+  IGetUserResponse,
+  IRemoveFromBagRequest,
+  IRemoveFromBagResponse,
+  IUpdateBagItemQuantityRequest,
+  IUpdateBagItemQuantityResponse,
+  IUpdateBagItemSizeRequest,
+  IUpdateBagItemSizeResponse
 } from '../shared/types/User.types'
 import { baseQueryWithReauth } from './api'
 import { setProfile } from '../App/feature/profile/profileSlice'
@@ -11,6 +20,7 @@ import { setAuthStatus } from '../App/feature/auth/authSlice'
 import {
   addToFavorites,
   removeFromFavorites,
+  setBag,
   setFavorites
 } from '../App/feature/userSlice'
 
@@ -30,6 +40,7 @@ const userApi = createApi({
           dispatch(setProfile(data.profile))
           dispatch(setAuthStatus(true))
           dispatch(setFavorites(data.favorites))
+          if (data.bag) dispatch(setBag(data.bag))
         } catch (error: unknown) {
           if (typeof error === 'object' && error !== null) {
             const err = error as Record<string, unknown>
@@ -99,6 +110,113 @@ const userApi = createApi({
           console.log('error on remove product from favorites')
         }
       }
+    }),
+    getBag: build.query<IGetBag, undefined>({
+      query() {
+        return {
+          url: 'user/bag',
+          method: 'GET'
+        }
+      },
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          if (data?.bag) dispatch(setBag(data?.bag))
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    }),
+    addToBag: build.mutation<IAddToBagResponse, IAddToBagRequest>({
+      query() {
+        {
+          return {
+            url: 'user/bag',
+            method: 'POST'
+          }
+        }
+      },
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          toast.success(data.message)
+          dispatch(setBag(data.bag))
+        } catch (error) {
+          const err = error as Error
+          toast.error(err.message)
+        }
+      }
+    }),
+    removeFromBag: build.mutation<
+      IRemoveFromBagResponse,
+      IRemoveFromBagRequest
+    >({
+      query() {
+        {
+          return {
+            url: 'user/bag',
+            method: 'DELETE'
+          }
+        }
+      },
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          toast.success(data.message)
+          dispatch(setBag(data.bag))
+        } catch (error) {
+          const err = error as Error
+          toast.error(err.message)
+        }
+      }
+    }),
+    updateBagItemQuantity: build.mutation<
+      IUpdateBagItemQuantityResponse,
+      IUpdateBagItemQuantityRequest
+    >({
+      query({ productId, quantity }) {
+        return {
+          url: `user/bag/quantity`,
+          method: 'PATCH',
+          body: {
+            productId,
+            quantity
+          }
+        }
+      },
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          dispatch(setBag(data.bag))
+        } catch (error) {
+          const err = error as Error
+          toast.error(err.message)
+        }
+      }
+    }),
+    updateBagItemSize: build.mutation<
+      IUpdateBagItemSizeResponse,
+      IUpdateBagItemSizeRequest
+    >({
+      query({ newSize, productId }) {
+        return {
+          url: 'user/bag/size',
+          method: 'PATCH',
+          body: {
+            newSize,
+            productId
+          }
+        }
+      },
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          dispatch(setBag(data.bag))
+        } catch (error) {
+          const err = error as Error
+          toast.error(err.message)
+        }
+      }
     })
   })
 })
@@ -107,7 +225,12 @@ export const {
   useGetUserQuery,
   useGetUserFavoritesQuery,
   useAddProductToFavoritesMutation,
-  useRemoveProductFromFavoritesMutation
+  useRemoveProductFromFavoritesMutation,
+  useGetBagQuery,
+  useAddToBagMutation,
+  useRemoveFromBagMutation,
+  useUpdateBagItemQuantityMutation,
+  useUpdateBagItemSizeMutation
 } = userApi
 
 export default userApi

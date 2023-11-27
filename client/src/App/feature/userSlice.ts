@@ -1,5 +1,5 @@
 import { IProduct } from '../../shared/types/Product.types'
-import { IUserState } from '../../shared/types/User.types'
+import { IUserState, TBag } from '../../shared/types/User.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 const initialState: IUserState = {
@@ -20,10 +20,16 @@ const userSlice = createSlice({
       state.favorites = state.favorites.filter(
         (product) => product._id !== payload
       )
+    },
+    setBag: (state, { payload }: PayloadAction<TBag>) => {
+      state.bag = payload
+    },
+    clearBag: (state) => {
+      state.bag = undefined
     }
   }
 })
 
-export const { setFavorites, addToFavorites, removeFromFavorites } =
+export const { setFavorites, addToFavorites, removeFromFavorites, setBag } =
   userSlice.actions
 export default userSlice.reducer
