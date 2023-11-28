@@ -4,14 +4,21 @@ import { RootState } from '../../App/store'
 import ProductMiniCard from '../Products/ProductMiniCard'
 import { forwardRef } from 'react'
 
-const FavoritesPopup = forwardRef<HTMLDivElement>((props, ref) => {
+type Props = {
+  open: boolean
+}
+
+const FavoritesPopup = forwardRef<HTMLDialogElement, Props>((props, ref) => {
+  const { open } = props
   const favoritesProduct = useAppSelector(
     (state: RootState) => state.user.favorites
   )
   return (
-    <div
+    <dialog
       ref={ref}
-      className='absolute z-[99] flex flex-col right-0 bg-white top-[75px] w-96 p-[30px] gap-y-7'
+      open={open}
+      className='absolute z-[99] right-0 bg-white top-[75px] w-96 p-[30px] space-y-7'
+      css='inset-inline-start: unset;'
     >
       <h1 className='text-lg font-bold text-primary-black'>Favorites</h1>
       <div className='flex flex-col gap-y-5'>
@@ -29,11 +36,11 @@ const FavoritesPopup = forwardRef<HTMLDivElement>((props, ref) => {
       </div>
       <Link
         to={'/profile/favorites'}
-        className='py-4 font-bold text-center border border-primary-black text-primary-black'
+        className='flex justify-center py-4 font-bold border border-primary-black text-primary-black'
       >
         VIEW FAVORITES ({favoritesProduct.length})
       </Link>
-    </div>
+    </dialog>
   )
 })
 

@@ -1,22 +1,26 @@
-import tw, { styled } from 'twin.macro'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { forwardRef } from 'react'
 import ProfileLinks from '../../utils/profile-links'
 import { useSignOutMutation } from '../../services'
 import { useAppSelector } from '../../App/hooks'
 
 type Props = {
-  isShow: boolean
+  open: boolean
 }
 
-const ProfilePopup = forwardRef<HTMLDivElement, Props>((props, ref) => {
-  const { isShow } = props
+const ProfilePopup = forwardRef<HTMLDialogElement, Props>((props, ref) => {
+  const { open } = props
   const [signOut] = useSignOutMutation()
   const profile = useAppSelector((state) => state.profile)
   const userAvatar = profile.avatar
 
   return (
-    <Wrapper $isShow={isShow} ref={ref}>
+    <dialog
+      className='absolute z-20 right-0 top-[82px] bg-white shadow-md w-80 p-7 space-y-7 border border-neutral-soft-grey'
+      css='inset-inline-start: unset;'
+      ref={ref}
+      open={open}
+    >
       <header className='flex items-center'>
         <div className='flex items-center justify-center w-14 h-14 bg-[#e4e6e7] rounded-full'>
           {userAvatar !== '' ? (
@@ -43,7 +47,11 @@ const ProfilePopup = forwardRef<HTMLDivElement, Props>((props, ref) => {
       </header>
       <main className='flex flex-col space-y-7'>
         {ProfileLinks.map((link, index) => (
-          <Link to={link.link} key={index}>
+          <Link
+            className='font-bold text-lg leading-[150%] text-primary-black'
+            to={link.link}
+            key={index}
+          >
             {link.title}
           </Link>
         ))}
@@ -54,16 +62,8 @@ const ProfilePopup = forwardRef<HTMLDivElement, Props>((props, ref) => {
           Logout
         </button>
       </main>
-    </Wrapper>
+    </dialog>
   )
 })
-
-const Wrapper = styled.div<{ $isShow?: boolean }>`
-  ${tw`absolute z-20 right-0 top-[82px] bg-white shadow-md w-80 p-7 space-y-7 border border-neutral-soft-grey`}
-  ${({ $isShow }) => ($isShow ? tw`block` : tw`hidden`)}
-`
-const Link = tw(RouterLink)`
-	font-bold text-lg leading-[150%] text-primary-black
-`
 
 export default ProfilePopup

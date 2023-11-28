@@ -20,11 +20,11 @@ function Navbar() {
     favorites: false,
     bag: false
   })
-  const profileRef = useRef<HTMLDivElement | null>(null)
-  const favoriteRef = useRef<HTMLDivElement | null>(null)
+  const profileRef = useRef<HTMLDialogElement | null>(null)
+  const favoriteRef = useRef<HTMLDialogElement | null>(null)
+  const bagRef = useRef<HTMLDialogElement | null>(null)
   const profileBtnRef = useRef<HTMLButtonElement | null>(null)
   const favoriteBtnRef = useRef<HTMLButtonElement | null>(null)
-  const bagRef = useRef<HTMLDialogElement | null>(null)
   const bagBtnRef = useRef<HTMLButtonElement | null>(null)
   const location = useLocation()
   const authStatus = useAppSelector((state) => state.auth.isAuthenticated)
@@ -61,10 +61,8 @@ function Navbar() {
       updatedPopups.favorites = false
     }
 
-    console.log(isBagPopupOpen, isBagButtonClicked)
     if (!isBagPopupOpen && !isBagButtonClicked) {
       updatedPopups.bag = false
-      bagRef.current?.close()
     }
 
     setPopups((prevPopups) => ({
@@ -136,7 +134,7 @@ function Navbar() {
                 >
                   <Heart />
                 </button>
-                {popups.favorites && <FavoritesPopup ref={favoriteRef} />}
+                <FavoritesPopup ref={favoriteRef} open={popups.favorites} />
               </div>
               {authStatus ? (
                 <div className='relative flex'>
@@ -158,7 +156,7 @@ function Navbar() {
                       className='object-contain rounded-full w-7 h-7'
                     />
                   </button>
-                  <ProfilePopup ref={profileRef} isShow={popups.profile} />
+                  <ProfilePopup ref={profileRef} open={popups.profile} />
                 </div>
               ) : (
                 <NavLink to='/sign-in'>Sign In</NavLink>
