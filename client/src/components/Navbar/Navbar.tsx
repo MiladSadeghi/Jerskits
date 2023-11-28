@@ -6,21 +6,26 @@ import { ProfilePopup } from '..'
 import { useAppSelector } from '../../App/hooks'
 import { Bag, Heart, MagnifySearch } from '../../icons'
 import FavoritesPopup from '../Popups/FavoritesPopup'
+import BagPopup from '../Popups/BagPopup'
 
 type TPopups = {
   profile: boolean
   favorites: boolean
+  bag: boolean
 }
 
 function Navbar() {
   const [popups, setPopups] = useState<TPopups>({
     profile: false,
-    favorites: false
+    favorites: false,
+    bag: false
   })
   const profileRef = useRef<HTMLDivElement | null>(null)
   const favoriteRef = useRef<HTMLDivElement | null>(null)
   const profileBtnRef = useRef<HTMLButtonElement | null>(null)
   const favoriteBtnRef = useRef<HTMLButtonElement | null>(null)
+  const bagRef = useRef<HTMLDialogElement | null>(null)
+  const bagBtnRef = useRef<HTMLButtonElement | null>(null)
   const location = useLocation()
   const authStatus = useAppSelector((state) => state.auth.isAuthenticated)
   const profile = useAppSelector((state) => state.profile)
@@ -43,6 +48,8 @@ function Navbar() {
     const isFavoriteButtonClicked = favoriteBtnRef.current?.contains(
       target as Node
     )
+    const isBagPopupOpen = bagRef.current?.contains(target as Node)
+    const isBagButtonClicked = bagBtnRef.current?.contains(target as Node)
 
     const updatedPopups: Partial<TPopups> = {}
 
@@ -52,6 +59,12 @@ function Navbar() {
 
     if (!isFavoritePopupOpen && !isFavoriteButtonClicked) {
       updatedPopups.favorites = false
+    }
+
+    console.log(isBagPopupOpen, isBagButtonClicked)
+    if (!isBagPopupOpen && !isBagButtonClicked) {
+      updatedPopups.bag = false
+      bagRef.current?.close()
     }
 
     setPopups((prevPopups) => ({
@@ -74,7 +87,8 @@ function Navbar() {
   useEffect(() => {
     setPopups({
       profile: false,
-      favorites: false
+      favorites: false,
+      bag: false
     })
   }, [location])
 
@@ -104,22 +118,28 @@ function Navbar() {
                   <MagnifySearch />
                 </button>
               </div>
-              <div className='w-5 h-5'>
-                <button aria-label='bag'>
+              <div className='relative w-5 h-5 leading-none'>
+                <button
+                  aria-label='bag'
+                  ref={bagBtnRef}
+                  onClick={() => handlePopupOpen('bag')}
+                >
                   <Bag />
                 </button>
+                <BagPopup ref={bagRef} open={popups.bag} />
               </div>
               <div className='relative w-5 h-5 leading-none'>
                 <button
                   aria-label='favorite'
                   onClick={() => handlePopupOpen('favorites')}
+                  ref={favoriteBtnRef}
                 >
                   <Heart />
                 </button>
                 {popups.favorites && <FavoritesPopup ref={favoriteRef} />}
               </div>
               {authStatus ? (
-                <div className='relative'>
+                <div className='relative flex'>
                   <button
                     ref={profileBtnRef}
                     onClick={() => handlePopupOpen('profile')}

@@ -4,16 +4,16 @@ import { calculateDiscount } from '../../utils/utils'
 import { Link } from 'react-router-dom'
 import { Heart } from '../../icons'
 import { useRemoveProductFromFavoritesMutation } from '../../services'
-import { HTMLAttributes } from 'react'
 
-type Props = HTMLAttributes<HTMLDivElement> & {
+type Props = {
   product: IProduct
   removable: boolean
   key: string | number
   testId?: string
+  size?: string
 }
 
-const ProductMiniCard = ({ product, removable, testId }: Props) => {
+const ProductMiniCard = ({ product, removable, testId, size }: Props) => {
   const [remove, { isLoading }] = useRemoveProductFromFavoritesMutation()
   return (
     <div
@@ -37,17 +37,19 @@ const ProductMiniCard = ({ product, removable, testId }: Props) => {
           </button>
         )}
       </div>
-      <div className='flex flex-col justify-between gap-y-2.5'>
+      <div className='flex items-start flex-col justify-between gap-y-2.5'>
         <Link
           to={`/${product.slug}`}
-          className='text-lg font-bold leading-6 text-primary-black line-clamp-2'
+          className='font-bold leading-6 text-left text-primary-black line-clamp-2'
         >
           {product.name}
         </Link>
-        <p className='text-base leading-6 capitalize text-neutral-dark-grey'>
-          {product.type}
-        </p>
-        <div className='flex items-center'>
+        <div className='flex'>
+          <p className='text-base leading-6 capitalize text-neutral-dark-grey'>
+            {product.type} {!!size && `. ${size}`}
+          </p>
+        </div>
+        <div className='flex justify-between w-full'>
           <ProductPrice
             className='!text-lg'
             $isDiscount={product.offPrice !== 0}
