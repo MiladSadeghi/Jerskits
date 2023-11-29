@@ -48,6 +48,7 @@ export interface IGetBag {
 
 export interface IAddToBagRequest {
   productId: string
+  size: string
 }
 
 export interface IAddToBagResponse {
@@ -57,7 +58,7 @@ export interface IAddToBagResponse {
 }
 
 export interface IRemoveFromBagRequest {
-  productId: string
+  string
 }
 
 export interface IRemoveFromBagResponse {

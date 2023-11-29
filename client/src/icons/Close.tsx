@@ -6,7 +6,7 @@ const Close = ({ width = 30, height = 30 }: Props) => {
       xmlns='http://www.w3.org/2000/svg'
       width={width}
       height={height}
-      viewBox={`0 0 ${width} ${height}`}
+      viewBox={`0 0 30 30`}
       fill='none'
     >
       <path

@@ -14,6 +14,7 @@ import toast from 'react-hot-toast'
 import { RootState } from '../../../App/store'
 import {
   useAddProductToFavoritesMutation,
+  useAddToBagMutation,
   useRemoveProductFromFavoritesMutation
 } from '../../../services'
 import { SpinnerCircular } from 'spinners-react'
@@ -28,6 +29,9 @@ const ProductShopCard = ({ product }: TProductShopCardProps) => {
   const isFavorite = useAppSelector(
     (state: RootState) => state.user.favorites
   ).some((favorite) => favorite?._id === product?._id)
+  const isOnBag = useAppSelector(
+    (state: RootState) => state.user.bag?.items
+  )?.some((item) => item.product._id === product._id)
   const isAuthenticated = useAppSelector(
     (state: RootState) => state.auth.isAuthenticated
   )
@@ -37,9 +41,11 @@ const ProductShopCard = ({ product }: TProductShopCardProps) => {
   const [removeProductFromFavorites, { isLoading: isRemoving }] =
     useRemoveProductFromFavoritesMutation()
 
+  const [addToBag, { isLoading: isAddingToBag }] = useAddToBagMutation()
+
   const handleFavorites = () => {
     if (!isAuthenticated) {
-      toast.error('You should sign in first')
+      toast('You should sign in first', { icon: '⚠️' })
     }
 
     if (isFavorite) {
@@ -48,6 +54,19 @@ const ProductShopCard = ({ product }: TProductShopCardProps) => {
       addProductToFavorites(product._id)
     }
   }
+
+  const handleAddToBag = () => {
+    if (!isAuthenticated) {
+      toast('You should sign in first', { icon: '⚠️' })
+    }
+
+    if (!selectedSize) {
+      toast.error('Please select a size')
+      return
+    }
+    addToBag({ productId: product._id, size: selectedSize })
+  }
+
   return (
     <div className='w-full row-span-2 mt-12 xl:w-96 lg:mt-0 xl:justify-self-end'>
       <div className='sticky top-0'>
@@ -94,8 +113,21 @@ const ProductShopCard = ({ product }: TProductShopCardProps) => {
         <ProductShopCardBtn
           className='mb-4 text-white bg-primary-black'
           aria-label='add product to bag'
+          onClick={handleAddToBag}
+          disabled={isAddingToBag || isOnBag}
+          title={isOnBag ? 'Product already in bag' : 'Add to bag'}
         >
-          ADD TO BAG
+          {!isOnBag && isAddingToBag ? (
+            <SpinnerCircular
+              size={35}
+              thickness={100}
+              speed={100}
+              color={'#262D33'}
+              secondaryColor='rgba(0, 0, 0, 0.6)'
+            />
+          ) : (
+            'ADD TO BAG'
+          )}
         </ProductShopCardBtn>
         <ProductShopCardBtn
           className={`border border-neutral-soft-grey ${

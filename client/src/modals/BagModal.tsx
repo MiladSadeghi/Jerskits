@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, forwardRef } from 'react'
+import { Dispatch, SetStateAction, forwardRef, useEffect } from 'react'
 import { useAppSelector } from '../App/hooks'
 import { RootState } from '../App/store'
 import { Close } from '../icons'
@@ -6,11 +6,13 @@ import ProductMiniCard from '../components/Products/ProductMiniCard'
 import { BagDropdown } from '../components'
 import { SingleValue } from 'react-select'
 import {
+  useRemoveFromBagMutation,
   useUpdateBagItemQuantityMutation,
   useUpdateBagItemSizeMutation
 } from '../services'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
+import { SpinnerCircular } from 'spinners-react'
 
 type Props = {
   isBagModal: [boolean, Dispatch<SetStateAction<boolean>>]
@@ -23,11 +25,12 @@ const BagModal = forwardRef<HTMLDialogElement, Props>((props, ref) => {
     useUpdateBagItemQuantityMutation()
   const [updateSize, { isLoading: isSizeUpdating, originalArgs: sizeArg }] =
     useUpdateBagItemSizeMutation()
+  const [removeFromBag, { isLoading: isRemoving, originalArgs: removeArg }] =
+    useRemoveFromBagMutation()
 
   const toastStyle = {
     style: {
-      minWidth: '150px',
-      marginTop: '100px'
+      minWidth: '150px'
     }
   }
 
@@ -63,6 +66,12 @@ const BagModal = forwardRef<HTMLDialogElement, Props>((props, ref) => {
     )
   }
 
+  useEffect(() => {
+    if (bag?.items.length === 0) {
+      setIsBagModal(false)
+    }
+  }, [bag])
+
   return (
     <dialog
       open={true}
@@ -92,39 +101,58 @@ const BagModal = forwardRef<HTMLDialogElement, Props>((props, ref) => {
                 removable={false}
                 size={item.size}
               />
-              <div className='flex w-full px-0.5 gap-x-6'>
-                <BagDropdown
-                  value={{ label: `Size : ${item.size}`, value: item.size }}
-                  optionValues={item.product.size}
-                  label='Size'
-                  handleChange={handleUpdateSize}
-                  disabled={isSizeUpdating}
-                  productId={item.product._id}
-                  updatingProductId={sizeArg?.productId}
-                />
-                <BagDropdown
-                  value={{
-                    label: `Qty : ${item.quantity}`,
-                    value: String(item.quantity)
-                  }}
-                  optionValues={[
-                    '1',
-                    '2',
-                    '3',
-                    '4',
-                    '5',
-                    '6',
-                    '7',
-                    '8',
-                    '9',
-                    '10'
-                  ]}
-                  label='Qty'
-                  handleChange={handleUpdateQuantity}
-                  disabled={isQtyUpdating}
-                  productId={item.product._id}
-                  updatingProductId={qtyArg?.productId}
-                />
+              <div className='flex flex-col gap-y-4'>
+                <div className='flex w-full px-0.5 gap-x-4'>
+                  <BagDropdown
+                    value={{ label: `Size : ${item.size}`, value: item.size }}
+                    optionValues={item.product.size}
+                    label='Size'
+                    handleChange={handleUpdateSize}
+                    disabled={isSizeUpdating}
+                    productId={item.product._id}
+                    updatingProductId={sizeArg?.productId}
+                  />
+                  <BagDropdown
+                    value={{
+                      label: `Qty : ${item.quantity}`,
+                      value: String(item.quantity)
+                    }}
+                    optionValues={[
+                      '1',
+                      '2',
+                      '3',
+                      '4',
+                      '5',
+                      '6',
+                      '7',
+                      '8',
+                      '9',
+                      '10'
+                    ]}
+                    label='Qty'
+                    handleChange={handleUpdateQuantity}
+                    disabled={isQtyUpdating}
+                    productId={item.product._id}
+                    updatingProductId={qtyArg?.productId}
+                  />
+                </div>
+                <button
+                  className='flex items-center justify-center w-full font-bold text-white transition-all bg-red-500 h-14 disabled:opacity-50'
+                  onClick={() => removeFromBag(item.product._id)}
+                  disabled={removeArg === item.product._id && isRemoving}
+                >
+                  {removeArg === item.product._id && isRemoving ? (
+                    <SpinnerCircular
+                      size={35}
+                      thickness={100}
+                      speed={100}
+                      color={'rgba(239, 68, 68, 1)'}
+                      secondaryColor='rgba(0, 0, 0, 0.6)'
+                    />
+                  ) : (
+                    'REMOVE'
+                  )}
+                </button>
               </div>
               <div className='border-bottom w-full h-0.5 bg-neutral-soft-grey' />
             </div>

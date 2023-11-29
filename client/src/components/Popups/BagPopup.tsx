@@ -37,7 +37,7 @@ const BagPopup = forwardRef<HTMLDialogElement, Props>((props, ref) => {
       <div className='flex items-center justify-between gap-x-5'>
         <button
           type='button'
-          className='w-full py-[18px] font-bold text-center border border-primary-black text-primary-black'
+          className='w-full py-[18px] font-bold text-center border border-primary-black text-primary-black disabled:opacity-50'
           onClick={() => handleBagModal(true)}
           disabled={bag?.items.length === 0}
         >

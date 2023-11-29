@@ -128,11 +128,15 @@ const userApi = createApi({
       }
     }),
     addToBag: build.mutation<IAddToBagResponse, IAddToBagRequest>({
-      query() {
+      query({ productId, size }) {
         {
           return {
             url: 'user/bag',
-            method: 'POST'
+            method: 'POST',
+            body: {
+              productId,
+              size
+            }
           }
         }
       },
@@ -142,7 +146,7 @@ const userApi = createApi({
           toast.success(data.message)
           dispatch(setBag(data.bag))
         } catch (error) {
-          const err = error as Error
+          const err = error.error.data
           toast.error(err.message)
         }
       }
@@ -151,10 +155,10 @@ const userApi = createApi({
       IRemoveFromBagResponse,
       IRemoveFromBagRequest
     >({
-      query() {
+      query(productId) {
         {
           return {
-            url: 'user/bag',
+            url: `user/bag/${productId}`,
             method: 'DELETE'
           }
         }
