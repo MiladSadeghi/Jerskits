@@ -22,7 +22,12 @@ import {
   useGetUserQuery,
   useGetUserFavoritesQuery,
   useAddProductToFavoritesMutation,
-  useRemoveProductFromFavoritesMutation
+  useRemoveProductFromFavoritesMutation,
+  useGetBagQuery,
+  useAddToBagMutation,
+  useRemoveFromBagMutation,
+  useUpdateBagItemQuantityMutation,
+  useUpdateBagItemSizeMutation
 } from './userApi'
 
 export {
@@ -40,5 +45,10 @@ export {
   useGetUserQuery,
   useGetUserFavoritesQuery,
   useAddProductToFavoritesMutation,
-  useRemoveProductFromFavoritesMutation
+  useRemoveProductFromFavoritesMutation,
+  useGetBagQuery,
+  useAddToBagMutation,
+  useRemoveFromBagMutation,
+  useUpdateBagItemQuantityMutation,
+  useUpdateBagItemSizeMutation
 }

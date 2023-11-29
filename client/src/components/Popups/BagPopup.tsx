@@ -6,10 +6,11 @@ import { Link } from 'react-router-dom'
 
 type Props = {
   open: boolean
+  handleBagModal: (arg: boolean) => void
 }
 
 const BagPopup = forwardRef<HTMLDialogElement, Props>((props, ref) => {
-  const { open } = props
+  const { open, handleBagModal } = props
   const bag = useAppSelector((state: RootState) => state.user.bag)
   return (
     <dialog
@@ -37,6 +38,8 @@ const BagPopup = forwardRef<HTMLDialogElement, Props>((props, ref) => {
         <button
           type='button'
           className='w-full py-[18px] font-bold text-center border border-primary-black text-primary-black'
+          onClick={() => handleBagModal(true)}
+          disabled={bag?.items.length === 0}
         >
           VIEW BAG ({bag?.items.length})
         </button>

@@ -10,6 +10,7 @@ import FreeShipping from './FreeShipping'
 import SecurePayments from './SecurePayments'
 import BestQualityMaterial from './BestQualityMaterial'
 import Star from './Star'
+import Close from './Close'
 
 export {
   ArrowDown,
@@ -23,5 +24,6 @@ export {
   FreeShipping,
   SecurePayments,
   BestQualityMaterial,
-  Star
+  Star,
+  Close
 }

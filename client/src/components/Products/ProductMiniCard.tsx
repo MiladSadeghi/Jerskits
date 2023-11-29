@@ -8,7 +8,7 @@ import { useRemoveProductFromFavoritesMutation } from '../../services'
 type Props = {
   product: IProduct
   removable: boolean
-  key: string | number
+  key?: string | number
   testId?: string
   size?: string
 }
@@ -16,10 +16,7 @@ type Props = {
 const ProductMiniCard = ({ product, removable, testId, size }: Props) => {
   const [remove, { isLoading }] = useRemoveProductFromFavoritesMutation()
   return (
-    <div
-      data-testid={testId}
-      className='relative z-40 flex items-start gap-x-5'
-    >
+    <div data-testid={testId} className='relative flex items-start gap-x-5'>
       <div className='flex items-start max-w-[6rem] max-h-[8rem] bg-neutral-light-grey relative'>
         <img
           src={product.gallery[0]}

@@ -7,6 +7,7 @@ import { useAppSelector } from '../../App/hooks'
 import { Bag, Heart, MagnifySearch } from '../../icons'
 import FavoritesPopup from '../Popups/FavoritesPopup'
 import BagPopup from '../Popups/BagPopup'
+import BagModal from '../../modals/BagModal'
 
 type TPopups = {
   profile: boolean
@@ -23,6 +24,7 @@ function Navbar() {
   const profileRef = useRef<HTMLDialogElement | null>(null)
   const favoriteRef = useRef<HTMLDialogElement | null>(null)
   const bagRef = useRef<HTMLDialogElement | null>(null)
+  const bagModalRef = useRef<HTMLDialogElement | null>(null)
   const profileBtnRef = useRef<HTMLButtonElement | null>(null)
   const favoriteBtnRef = useRef<HTMLButtonElement | null>(null)
   const bagBtnRef = useRef<HTMLButtonElement | null>(null)
@@ -30,6 +32,8 @@ function Navbar() {
   const authStatus = useAppSelector((state) => state.auth.isAuthenticated)
   const profile = useAppSelector((state) => state.profile)
   const isPopupsOpen = Object.values(popups).some((popup) => popup)
+
+  const [bagModal, setBagModal] = useState<boolean>(false)
 
   const handlePopupOpen = (popup: keyof TPopups) => {
     setPopups((prevPopups) => ({
@@ -42,6 +46,8 @@ function Navbar() {
     const { target } = event
     const isProfilePopupOpen = profileRef.current?.contains(target as Node)
     const isFavoritePopupOpen = favoriteRef.current?.contains(target as Node)
+    const isBagModalOpen = bagModalRef.current?.contains(target as Node)
+
     const isProfileButtonClicked = profileBtnRef.current?.contains(
       target as Node
     )
@@ -49,6 +55,7 @@ function Navbar() {
       target as Node
     )
     const isBagPopupOpen = bagRef.current?.contains(target as Node)
+
     const isBagButtonClicked = bagBtnRef.current?.contains(target as Node)
 
     const updatedPopups: Partial<TPopups> = {}
@@ -63,6 +70,10 @@ function Navbar() {
 
     if (!isBagPopupOpen && !isBagButtonClicked) {
       updatedPopups.bag = false
+    }
+
+    if (!isBagModalOpen) {
+      setBagModal(false)
     }
 
     setPopups((prevPopups) => ({
@@ -88,16 +99,26 @@ function Navbar() {
       favorites: false,
       bag: false
     })
-  }, [location])
+  }, [location, bagModal])
+
+  useEffect(() => {
+    if (bagModal) {
+      document.body.style.overflow = 'hidden'
+    }
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [bagModal])
 
   return (
     <>
       <div
-        className={`${
-          isPopupsOpen ? 'block' : 'hidden'
-        } fixed top-0 right-0 z-20 w-full h-full bg-transparent-30`}
+        className={`${isPopupsOpen || bagModal ? 'block' : 'hidden'}
+        ${bagModal ? 'z-[102]' : 'z-[60]'}
+        fixed top-0 right-0  w-full h-full bg-transparent-30`}
       />
-      <nav className='relative z-30 bg-white'>
+      <BagModal isBagModal={[bagModal, setBagModal]} ref={bagModalRef} />
+      <nav className='relative z-[101] bg-white'>
         <Wrapper>
           <div className='flex items-center justify-between w-full h-full'>
             <div>
@@ -124,7 +145,11 @@ function Navbar() {
                 >
                   <Bag />
                 </button>
-                <BagPopup ref={bagRef} open={popups.bag} />
+                <BagPopup
+                  ref={bagRef}
+                  open={popups.bag}
+                  handleBagModal={setBagModal}
+                />
               </div>
               <div className='relative w-5 h-5 leading-none'>
                 <button
