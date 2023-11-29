@@ -241,7 +241,7 @@ export const removeFromBag = async (req, res, next) => {
     const removedProduct = userBag.items.splice(existingProductIndex, 1)[0];
 
     userBag.subTotal -= (
-      (removedProduct.offPrice !== 0
+      (removedProduct.product.offPrice !== 0
         ? removedProduct.product.offPrice
         : removedProduct.product.price) * removedProduct.quantity
     ).toFixed(2);
