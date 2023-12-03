@@ -16,7 +16,11 @@ import {
   useLazyGetKidBrandCollectionQuery
 } from './LandingPageApi'
 
-import { useLazyGetProductsQuery, useGetProductQuery } from './productApi'
+import {
+  useLazyGetProductsQuery,
+  useGetProductQuery,
+  useLazySearchProductsQuery
+} from './productApi'
 
 import {
   useGetUserQuery,
@@ -50,5 +54,6 @@ export {
   useAddToBagMutation,
   useRemoveFromBagMutation,
   useUpdateBagItemQuantityMutation,
-  useUpdateBagItemSizeMutation
+  useUpdateBagItemSizeMutation,
+  useLazySearchProductsQuery
 }

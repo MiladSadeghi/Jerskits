@@ -50,3 +50,10 @@ export type TProductResponse = {
   product: IProduct
   reviews: TReview[]
 }
+
+export type TSearchResponse = {
+  products: IProduct[]
+  suggestions: string[]
+}
+
+export type TSearchRequest = string

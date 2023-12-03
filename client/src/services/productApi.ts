@@ -1,6 +1,8 @@
 import {
   TProductRequest,
-  TProductResponse
+  TProductResponse,
+  TSearchRequest,
+  TSearchResponse
 } from './../shared/types/Product.types'
 import { createApi } from '@reduxjs/toolkit/dist/query/react'
 import { baseQueryWithAuth } from './api'
@@ -47,9 +49,22 @@ const productApi = createApi({
           method: 'GET'
         }
       }
+    }),
+    searchProducts: build.query<TSearchResponse, TSearchRequest>({
+      query(query) {
+        return {
+          url: `/products/search`,
+          method: 'GET',
+          params: { q: query }
+        }
+      }
     })
   })
 })
 
 export { productApi }
-export const { useLazyGetProductsQuery, useGetProductQuery } = productApi
+export const {
+  useLazyGetProductsQuery,
+  useGetProductQuery,
+  useLazySearchProductsQuery
+} = productApi

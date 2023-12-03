@@ -8,6 +8,7 @@ import { Bag, Heart, MagnifySearch } from '../../icons'
 import FavoritesPopup from '../Popups/FavoritesPopup'
 import BagPopup from '../Popups/BagPopup'
 import BagModal from '../../modals/BagModal'
+import { SearchModal } from '../../modals'
 
 type TPopups = {
   profile: boolean
@@ -25,6 +26,7 @@ function Navbar() {
   const favoriteRef = useRef<HTMLDialogElement | null>(null)
   const bagRef = useRef<HTMLDialogElement | null>(null)
   const bagModalRef = useRef<HTMLDialogElement | null>(null)
+  const searchModalRef = useRef<HTMLDialogElement | null>(null)
   const profileBtnRef = useRef<HTMLButtonElement | null>(null)
   const favoriteBtnRef = useRef<HTMLButtonElement | null>(null)
   const bagBtnRef = useRef<HTMLButtonElement | null>(null)
@@ -34,6 +36,7 @@ function Navbar() {
   const isPopupsOpen = Object.values(popups).some((popup) => popup)
 
   const [bagModal, setBagModal] = useState<boolean>(false)
+  const [searchModal, setSearchModal] = useState<boolean>(false)
 
   const handlePopupOpen = (popup: keyof TPopups) => {
     setPopups((prevPopups) => ({
@@ -47,6 +50,7 @@ function Navbar() {
     const isProfilePopupOpen = profileRef.current?.contains(target as Node)
     const isFavoritePopupOpen = favoriteRef.current?.contains(target as Node)
     const isBagModalOpen = bagModalRef.current?.contains(target as Node)
+    const isSearchModalOpen = searchModalRef.current?.contains(target as Node)
 
     const isProfileButtonClicked = profileBtnRef.current?.contains(
       target as Node
@@ -75,6 +79,9 @@ function Navbar() {
     if (!isBagModalOpen) {
       setBagModal(false)
     }
+    if (!isSearchModalOpen) {
+      setSearchModal(false)
+    }
 
     setPopups((prevPopups) => ({
       ...prevPopups,
@@ -99,25 +106,27 @@ function Navbar() {
       favorites: false,
       bag: false
     })
-  }, [location, bagModal])
+  }, [location, bagModal, searchModal])
 
   useEffect(() => {
-    if (bagModal) {
-      document.body.style.overflow = 'hidden'
-    }
-    return () => {
-      document.body.style.overflow = 'unset'
-    }
-  }, [bagModal])
+    setSearchModal(false)
+  }, [location])
 
   return (
     <>
-      <div
-        className={`${isPopupsOpen || bagModal ? 'block' : 'hidden'}
-        ${bagModal ? 'z-[102]' : 'z-[60]'}
+      {(isPopupsOpen || bagModal || searchModal) && (
+        <div
+          className={`
+        ${bagModal || searchModal ? 'z-[102]' : 'z-[60]'}
         fixed top-0 right-0  w-full h-full bg-transparent-30`}
-      />
+        />
+      )}
+
       <BagModal isBagModal={[bagModal, setBagModal]} ref={bagModalRef} />
+      <SearchModal
+        isSearchModal={[searchModal, setSearchModal]}
+        ref={searchModalRef}
+      />
       <nav className='relative z-[101] bg-white'>
         <Wrapper>
           <div className='flex items-center justify-between w-full h-full'>
@@ -133,7 +142,10 @@ function Navbar() {
             </div>
             <div className='flex items-center gap-10'>
               <div className='w-5 h-5'>
-                <button aria-label='search'>
+                <button
+                  aria-label='search'
+                  onClick={() => setSearchModal(true)}
+                >
                   <MagnifySearch />
                 </button>
               </div>
