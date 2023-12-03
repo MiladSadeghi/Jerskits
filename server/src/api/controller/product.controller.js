@@ -151,3 +151,56 @@ export const getProduct = async (req, res, next) => {
     return next(err);
   }
 };
+
+export const productSearch = async (req, res, next) => {
+  try {
+    const { q: searchQuery } = req.query;
+
+    const keywords = searchQuery.split(" ").filter(Boolean);
+    const searchQueryLower = searchQuery.toLowerCase();
+
+    const suggestionPipeline = [
+      {
+        $match: {
+          $or: [{ name: { $regex: new RegExp(searchQueryLower, "i") } }],
+        },
+      },
+      {
+        $limit: 5,
+      },
+      {
+        $group: {
+          _id: null,
+          suggestions: { $addToSet: "$name" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          suggestions: 1,
+        },
+      },
+    ];
+    const suggestions = await ProductModel.aggregate(suggestionPipeline);
+
+    const productQuery = {
+      $or: [
+        { name: { $regex: searchQueryLower, $options: "i" } },
+        { brand: { $regex: searchQueryLower, $options: "i" } },
+        { type: { $regex: searchQueryLower, $options: "i" } },
+        { gender: { $regex: searchQueryLower, $options: "i" } },
+        { color: { $regex: searchQueryLower, $options: "i" } },
+      ],
+    };
+
+    const products = await ProductModel.find(productQuery).limit(3);
+
+    return res.json({
+      products,
+      suggestions: suggestions[0]?.suggestions ?? [],
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+};

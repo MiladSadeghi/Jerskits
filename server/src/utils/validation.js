@@ -1,4 +1,4 @@
-import { check, body, param } from "express-validator";
+import { check, body, param, query } from "express-validator";
 import { City, State } from "country-state-city";
 
 export const validateSignUpBody = [
@@ -161,4 +161,8 @@ export const validateUpdateSize = [
     .withMessage("Invalid new size format")
     .notEmpty()
     .withMessage("New size is required"),
+];
+
+export const validateSearchQuery = [
+  query("q").notEmpty().withMessage("Search query is required"),
 ];
