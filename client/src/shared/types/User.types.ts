@@ -58,7 +58,7 @@ export interface IAddToBagResponse {
 }
 
 export interface IRemoveFromBagRequest {
-  string
+  productId: string
 }
 
 export interface IRemoveFromBagResponse {

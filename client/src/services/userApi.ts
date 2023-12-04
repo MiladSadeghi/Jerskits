@@ -146,7 +146,7 @@ const userApi = createApi({
           toast.success(data.message)
           dispatch(setBag(data.bag))
         } catch (error) {
-          const err = error.error.data
+          const err = error as Error
           toast.error(err.message)
         }
       }
@@ -155,7 +155,7 @@ const userApi = createApi({
       IRemoveFromBagResponse,
       IRemoveFromBagRequest
     >({
-      query(productId) {
+      query({ productId }) {
         {
           return {
             url: `user/bag/${productId}`,

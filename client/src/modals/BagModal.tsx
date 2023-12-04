@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, forwardRef, useEffect } from 'react'
+import { forwardRef, useEffect } from 'react'
 import { useAppSelector } from '../App/hooks'
 import { RootState } from '../App/store'
 import { Close } from '../icons'
@@ -15,7 +15,7 @@ import toast from 'react-hot-toast'
 import { SpinnerCircular } from 'spinners-react'
 
 type Props = {
-  isBagModal: [boolean, Dispatch<SetStateAction<boolean>>]
+  isBagModal: [boolean, setState<boolean>]
 }
 
 const BagModal = forwardRef<HTMLDialogElement, Props>((props, ref) => {
@@ -138,10 +138,12 @@ const BagModal = forwardRef<HTMLDialogElement, Props>((props, ref) => {
                 </div>
                 <button
                   className='flex items-center justify-center w-full font-bold text-white transition-all bg-red-500 h-14 disabled:opacity-50'
-                  onClick={() => removeFromBag(item.product._id)}
-                  disabled={removeArg === item.product._id && isRemoving}
+                  onClick={() => removeFromBag({ productId: item.product._id })}
+                  disabled={
+                    removeArg?.productId === item.product._id && isRemoving
+                  }
                 >
-                  {removeArg === item.product._id && isRemoving ? (
+                  {removeArg?.productId === item.product._id && isRemoving ? (
                     <SpinnerCircular
                       size={35}
                       thickness={100}

@@ -8,7 +8,7 @@ import {
 import { IProduct } from '../../shared/types/Product.types'
 
 type Props = {
-  products: IProduct[]
+  products?: IProduct[]
 }
 
 const ProductCardContainer = ({ products }: Props) => {
@@ -26,7 +26,7 @@ const ProductCardContainer = ({ products }: Props) => {
     useRemoveProductFromFavoritesMutation()
 
   const likeLoading = isAdding || isRemoving
-  return products.map((product) => (
+  return products?.map((product) => (
     <ProductCard
       product={product}
       key={product._id}
