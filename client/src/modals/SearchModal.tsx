@@ -1,11 +1,16 @@
-import { Dispatch, SetStateAction, forwardRef, useState } from 'react'
+import { forwardRef } from 'react'
 import { Close, MagnifySearch } from '../icons'
-import { useLazySearchProductsQuery } from '../services'
 import { SpinnerDiamond } from 'spinners-react'
 import { ProductCardContainer } from '../components'
+import { TSearchResponse } from '../shared/types/Product.types'
 
 type Props = {
-  isSearchModal: [boolean, Dispatch<SetStateAction<boolean>>]
+  isSearchModal: [boolean, setState<boolean>]
+  searchInput: [string, setState<string>]
+  isLoading: boolean
+  data: TSearchResponse | undefined
+  isSuccess: boolean
+  handleSearch: () => void
 }
 
 const formatSuggest = (searchInput: string, suggest: string) => {
@@ -17,15 +22,12 @@ const formatSuggest = (searchInput: string, suggest: string) => {
 }
 
 const SearchModal = forwardRef<HTMLDialogElement, Props>(
-  ({ isSearchModal }, ref) => {
+  (
+    { isSearchModal, searchInput, isLoading, data, isSuccess, handleSearch },
+    ref
+  ) => {
     const [searchModal, setSearchModal] = isSearchModal
-    const [searchInputValue, setSearchInputValue] = useState<string>('')
-    const [search, { isFetching, data, isSuccess }] =
-      useLazySearchProductsQuery()
-
-    const handleSearch = () => {
-      search(searchInputValue)
-    }
+    const [searchInputValue, setSearchInputValue] = searchInput
 
     return (
       <dialog
@@ -69,8 +71,8 @@ const SearchModal = forwardRef<HTMLDialogElement, Props>(
             </div>
           </div>
         </nav>
-        <div className='py-8 '>
-          {isFetching ? (
+        <div className='pb-8 md:py-8'>
+          {isLoading ? (
             <div className='flex justify-center'>
               <SpinnerDiamond
                 size={50}

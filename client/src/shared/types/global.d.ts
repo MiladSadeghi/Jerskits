@@ -11,3 +11,9 @@ interface IFeature {
   title: string
   description: string
 }
+
+type TPopups = {
+  profile: boolean
+  favorites: boolean
+  bag: boolean
+}

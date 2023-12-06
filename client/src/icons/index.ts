@@ -11,6 +11,7 @@ import SecurePayments from './SecurePayments'
 import BestQualityMaterial from './BestQualityMaterial'
 import Star from './Star'
 import Close from './Close'
+import Hamburger from './Hamburger'
 
 export {
   ArrowDown,
@@ -25,5 +26,6 @@ export {
   SecurePayments,
   BestQualityMaterial,
   Star,
-  Close
+  Close,
+  Hamburger
 }

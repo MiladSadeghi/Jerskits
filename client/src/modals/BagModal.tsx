@@ -18,8 +18,8 @@ type Props = {
   isBagModal: [boolean, setState<boolean>]
 }
 
-const BagModal = forwardRef<HTMLDialogElement, Props>((props, ref) => {
-  const [bagModal, setIsBagModal] = props.isBagModal
+const BagModal = forwardRef<HTMLDialogElement, Props>(({ isBagModal }, ref) => {
+  const [bagModal, setIsBagModal] = isBagModal
   const bag = useAppSelector((state: RootState) => state.user.bag)
   const [updateQty, { isLoading: isQtyUpdating, originalArgs: qtyArg }] =
     useUpdateBagItemQuantityMutation()
@@ -75,8 +75,8 @@ const BagModal = forwardRef<HTMLDialogElement, Props>((props, ref) => {
   return (
     <dialog
       open={true}
-      className={`w-[460px] h-screen fixed top-0 bg-white z-[800] p-[30px] transition-all space-y-7 ${
-        bagModal ? 'right-0 duration-500' : '-right-full duration-1000'
+      className={`w-full md:w-[460px] h-screen fixed top-0 bg-white z-[800] p-[30px] transition-all space-y-7 ${
+        bagModal ? 'right-0 duration-500' : '-right-[200%] duration-1000'
       }`}
       ref={ref}
       css='inset-inline-start: unset;'
@@ -160,7 +160,7 @@ const BagModal = forwardRef<HTMLDialogElement, Props>((props, ref) => {
             </div>
           ))}
         </div>
-        <div className='h-[25%] space-y-5'>
+        <div className='h-[30%] space-y-5'>
           <div className='flex justify-between'>
             <p className='leading-6 text-neutral-dark-grey'>Subtotal</p>
             <span className='font-bold text-primary-black'>

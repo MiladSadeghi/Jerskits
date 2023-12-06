@@ -4,17 +4,13 @@ import styled from 'twin.macro'
 import { useState, useRef, useEffect } from 'react'
 import { ProfilePopup } from '..'
 import { useAppSelector } from '../../App/hooks'
-import { Bag, Heart, MagnifySearch } from '../../icons'
+import { Bag, Hamburger, Heart, MagnifySearch } from '../../icons'
 import FavoritesPopup from '../Popups/FavoritesPopup'
 import BagPopup from '../Popups/BagPopup'
 import BagModal from '../../modals/BagModal'
 import { SearchModal } from '../../modals'
-
-type TPopups = {
-  profile: boolean
-  favorites: boolean
-  bag: boolean
-}
+import NavbarMenu from './NavbarMenu'
+import { useLazySearchProductsQuery } from '../../services'
 
 function Navbar() {
   const [popups, setPopups] = useState<TPopups>({
@@ -27,6 +23,7 @@ function Navbar() {
   const bagRef = useRef<HTMLDialogElement | null>(null)
   const bagModalRef = useRef<HTMLDialogElement | null>(null)
   const searchModalRef = useRef<HTMLDialogElement | null>(null)
+  const navBarMenuRef = useRef<HTMLDialogElement | null>(null)
   const profileBtnRef = useRef<HTMLButtonElement | null>(null)
   const favoriteBtnRef = useRef<HTMLButtonElement | null>(null)
   const bagBtnRef = useRef<HTMLButtonElement | null>(null)
@@ -37,6 +34,10 @@ function Navbar() {
 
   const [bagModal, setBagModal] = useState<boolean>(false)
   const [searchModal, setSearchModal] = useState<boolean>(false)
+  const [isNavBarMenuOpen, setIsNavBarMenuOpen] = useState<boolean>(false)
+  const [searchInputValue, setSearchInputValue] = useState<string>('')
+
+  const [search, { isFetching, data, isSuccess }] = useLazySearchProductsQuery()
 
   const handlePopupOpen = (popup: keyof TPopups) => {
     setPopups((prevPopups) => ({
@@ -51,6 +52,7 @@ function Navbar() {
     const isFavoritePopupOpen = favoriteRef.current?.contains(target as Node)
     const isBagModalOpen = bagModalRef.current?.contains(target as Node)
     const isSearchModalOpen = searchModalRef.current?.contains(target as Node)
+    const isNavbarMenuOpen = navBarMenuRef.current?.contains(target as Node)
 
     const isProfileButtonClicked = profileBtnRef.current?.contains(
       target as Node
@@ -83,10 +85,18 @@ function Navbar() {
       setSearchModal(false)
     }
 
+    if (!isNavbarMenuOpen) {
+      setIsNavBarMenuOpen(false)
+    }
+
     setPopups((prevPopups) => ({
       ...prevPopups,
       ...updatedPopups
     }))
+  }
+
+  const handleSearch = () => {
+    search(searchInputValue)
   }
 
   useEffect(() => {
@@ -106,98 +116,136 @@ function Navbar() {
       favorites: false,
       bag: false
     })
+    setIsNavBarMenuOpen(false)
   }, [location, bagModal, searchModal])
 
   useEffect(() => {
     setSearchModal(false)
   }, [location])
 
+  useEffect(() => {
+    setIsNavBarMenuOpen(false)
+  }, [popups.profile, popups.favorites, popups.bag])
+
   return (
     <>
-      {(isPopupsOpen || bagModal || searchModal) && (
+      {(isPopupsOpen || bagModal || searchModal || isNavBarMenuOpen) && (
         <div
           className={`
-        ${bagModal || searchModal ? 'z-[102]' : 'z-[60]'}
+        ${bagModal || searchModal || isNavBarMenuOpen ? 'z-[102]' : 'z-[60]'}
         fixed top-0 right-0  w-full h-full bg-transparent-30`}
         />
       )}
 
       <BagModal isBagModal={[bagModal, setBagModal]} ref={bagModalRef} />
       <SearchModal
+        searchInput={[searchInputValue, setSearchInputValue]}
         isSearchModal={[searchModal, setSearchModal]}
         ref={searchModalRef}
+        data={data}
+        isLoading={isFetching}
+        isSuccess={isSuccess}
+        handleSearch={handleSearch}
       />
-      <nav className='relative z-[101] bg-white'>
+      <NavbarMenu
+        searchInput={[searchInputValue, setSearchInputValue]}
+        isOpenState={[isNavBarMenuOpen, setIsNavBarMenuOpen]}
+        handlePopups={handlePopupOpen}
+        handleSearch={handleSearch}
+        handleSearchModal={setSearchModal}
+        ref={navBarMenuRef}
+      />
+      <nav className='md:relative z-[101] bg-white'>
         <Wrapper>
           <div className='flex items-center justify-between w-full h-full'>
-            <div>
-              <Link to='/'>
-                <img src={'/images/jerskits-black.jpg'} alt='Home' />
-              </Link>
+            <div
+              className='block cursor-pointer md:hidden'
+              onClick={() => setIsNavBarMenuOpen(true)}
+            >
+              <Hamburger />
             </div>
-            <div className='flex gap-10'>
+
+            <Link to='/'>
+              <img src={'/images/jerskits-black.jpg'} alt='Home' />
+            </Link>
+
+            <div className='hidden gap-10 md:flex'>
               <NavLink to='/men'>Men</NavLink>
               <NavLink to='/women'>Women</NavLink>
               <NavLink to='/kid'>Kids</NavLink>
             </div>
             <div className='flex items-center gap-10'>
-              <div className='w-5 h-5'>
-                <button
-                  aria-label='search'
-                  onClick={() => setSearchModal(true)}
-                >
-                  <MagnifySearch />
-                </button>
-              </div>
-              <div className='relative w-5 h-5 leading-none'>
-                <button
-                  aria-label='bag'
-                  ref={bagBtnRef}
-                  onClick={() => handlePopupOpen('bag')}
-                >
-                  <Bag />
-                </button>
+              <div className='flex items-center gap-10 md:relative'>
+                <div className='w-5 h-5'>
+                  <button
+                    aria-label='search'
+                    onClick={() => setSearchModal(true)}
+                  >
+                    <MagnifySearch />
+                  </button>
+                </div>
+                <div className='relative hidden w-5 h-5 leading-none md:block'>
+                  <button
+                    aria-label='bag'
+                    ref={bagBtnRef}
+                    onClick={() => handlePopupOpen('bag')}
+                  >
+                    <Bag />
+                  </button>
+                </div>
+                <div className='relative hidden w-5 h-5 leading-none md:block'>
+                  <button
+                    aria-label='favorite'
+                    onClick={() => handlePopupOpen('favorites')}
+                    ref={favoriteBtnRef}
+                  >
+                    <Heart />
+                  </button>
+                </div>
                 <BagPopup
                   ref={bagRef}
-                  open={popups.bag}
+                  isOpen={popups.bag}
                   handleBagModal={setBagModal}
+                  handlePopup={handlePopupOpen}
+                />
+                <FavoritesPopup
+                  ref={favoriteRef}
+                  handlePopup={handlePopupOpen}
+                  isOpen={popups.favorites}
                 />
               </div>
-              <div className='relative w-5 h-5 leading-none'>
-                <button
-                  aria-label='favorite'
-                  onClick={() => handlePopupOpen('favorites')}
-                  ref={favoriteBtnRef}
-                >
-                  <Heart />
-                </button>
-                <FavoritesPopup ref={favoriteRef} open={popups.favorites} />
-              </div>
-              {authStatus ? (
-                <div className='relative flex'>
-                  <button
-                    ref={profileBtnRef}
-                    onClick={() => handlePopupOpen('profile')}
-                  >
-                    <img
-                      crossOrigin='anonymous'
-                      src={
-                        profile.avatar
-                          ? `${import.meta.env.VITE_SERVER_URL.replace(
-                              '/api',
-                              ''
-                            )}/images/${profile.avatar}`
-                          : '/images/blank-profile-picture.png'
-                      }
-                      alt={profile.firstName || profile.fullName}
-                      className='object-contain rounded-full w-7 h-7'
+              <div className=''>
+                {authStatus ? (
+                  <div className='flex md:relative'>
+                    <button
+                      ref={profileBtnRef}
+                      className='hidden md:block'
+                      onClick={() => handlePopupOpen('profile')}
+                    >
+                      <img
+                        crossOrigin='anonymous'
+                        src={
+                          profile.avatar
+                            ? `${import.meta.env.VITE_SERVER_URL.replace(
+                                '/api',
+                                ''
+                              )}/images/${profile.avatar}`
+                            : '/images/blank-profile-picture.png'
+                        }
+                        alt={profile.firstName || profile.fullName}
+                        className='object-contain rounded-full w-7 h-7'
+                      />
+                    </button>
+                    <ProfilePopup
+                      ref={profileRef}
+                      isOpen={popups.profile}
+                      handlePopup={handlePopupOpen}
                     />
-                  </button>
-                  <ProfilePopup ref={profileRef} open={popups.profile} />
-                </div>
-              ) : (
-                <NavLink to='/sign-in'>Sign In</NavLink>
-              )}
+                  </div>
+                ) : (
+                  <NavLink to='/sign-in'>Sign In</NavLink>
+                )}
+              </div>
             </div>
           </div>
         </Wrapper>
