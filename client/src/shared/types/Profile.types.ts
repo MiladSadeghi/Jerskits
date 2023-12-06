@@ -12,6 +12,8 @@ interface IProfile {
   contactEmail?: string
   phoneNumber?: string
   saveAddress?: boolean
+  createdAt?: Date
+  updatedAt?: Date
   shippingAddress?: {
     address?: string
     country?: string
