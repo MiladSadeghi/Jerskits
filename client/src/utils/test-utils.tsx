@@ -3,10 +3,10 @@ import { render } from '@testing-library/react'
 import type { RenderOptions } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { setupStore, type AppStore, type RootState } from '../App/store'
-import { PreloadedState } from '@reduxjs/toolkit'
+import { PreloadedStateShapeFromReducersMapObject } from '@reduxjs/toolkit'
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
-  preloadedState?: PreloadedState<RootState>
+  preloadedState?: PreloadedStateShapeFromReducersMapObject<RootState>
   store?: AppStore
 }
 

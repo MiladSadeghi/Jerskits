@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import type { PreloadedState } from '@reduxjs/toolkit'
+import { PreloadedStateShapeFromReducersMapObject } from '@reduxjs/toolkit'
 import authSlice from './feature/auth/authSlice'
 import profileSlice from './feature/profile/profileSlice'
 import { profileApi } from '../services/profileApi'
@@ -24,7 +24,9 @@ const rootReducer = combineReducers({
   [reviewApi.reducerPath]: reviewApi.reducer
 })
 
-export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
+export const setupStore = (
+  preloadedState?: PreloadedStateShapeFromReducersMapObject<RootState>
+) => {
   return configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>

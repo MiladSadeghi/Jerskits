@@ -4,7 +4,7 @@ import {
   TSearchRequest,
   TSearchResponse
 } from './../shared/types/Product.types'
-import { createApi } from '@reduxjs/toolkit/dist/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithAuth } from './api'
 import {
   TBrand,
