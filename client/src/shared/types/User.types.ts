@@ -9,7 +9,7 @@ export interface IGetUserResponse {
 
 export interface IUserState {
   favorites: IProduct[]
-  bag?: TBag
+  bag: TBag
 }
 
 export interface IGetUserFavoritesResponse {
@@ -36,8 +36,8 @@ export type TBag = {
   _id: string
   items: TBagItem[]
   user: string
-  createdAt: Date
-  updatedAt: Date
+  createdAt: string
+  updatedAt: string
   subTotal: number
 }
 

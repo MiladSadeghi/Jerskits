@@ -27,14 +27,12 @@ describe('Navbar', () => {
     const womenElement = screen.getByRole('link', { name: 'Women' })
     const kidsElement = screen.getByRole('link', { name: 'Kids' })
     const searchElement = screen.getByRole('button', {
-      name: 'search'
+      name: 'open search modal'
     })
-    const bagListElement = screen.getByRole('button', {
-      name: 'bag'
-    })
-    const favoriteListElement = screen.getByRole('button', {
-      name: 'favorite'
-    })
+    const bagListElement = await screen.findByLabelText('open bag popup')
+    const favoriteListElement = await screen.findByLabelText(
+      'open favorites popup'
+    )
 
     await waitFor(() => {
       expect(homeElement).toBeInTheDocument()
@@ -85,17 +83,17 @@ describe('Navbar', () => {
       </Router>
     )
 
-    await waitFor(() => {
+    await waitFor(async () => {
       store.dispatch(setAuthStatus(true))
       store.dispatch(setProfile({ firstName: 'milad' }))
-      const signInLink = screen.queryByText(/sign in/i)
-      if (store.getState().auth) {
-        expect(signInLink).not.toBeInTheDocument()
-        expect(screen.getByText(/hi, milad/i)).toBeInTheDocument()
-      } else {
-        expect(signInLink).toBeInTheDocument()
-        expect(screen.getByText(/hi, milad/i)).toBeInTheDocument()
-      }
+
+      const signInLink = await screen.findByRole('link', { name: /Sign In/i })
+
+      // "milad" return by mocked endpoint and showed in profile popup and navbar menu in mobile devices
+      const userName = await screen.findAllByText(/hi, milad/i)
+
+      expect(signInLink).not.toBeInTheDocument()
+      expect(userName.length).toBe(2)
     })
   })
 })

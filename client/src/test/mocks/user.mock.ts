@@ -49,8 +49,8 @@ export const addUserFavorites = rest.post<{ productId: string }>(
 
 const mockedBag: TBag = {
   _id: '24',
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  createdAt: new Date().toString(),
+  updatedAt: new Date().toString(),
   user: '747',
   subTotal: 79.95,
   items: [
@@ -83,7 +83,7 @@ export const AddToBag = rest.post(
   async (req, res, ctx) => {
     mockedBag.items.push({
       product: mockData[1],
-      _id: '34',
+      _id: '2',
       price: 124.95,
       quantity: 1,
       size: 'SM',

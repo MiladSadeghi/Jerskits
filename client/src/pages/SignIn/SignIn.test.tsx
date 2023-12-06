@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { renderWithProviders } from '../../utils/test-utils'
 
 describe('Sign In', () => {
+  user.setup()
   test('render correctly', async () => {
     renderWithProviders(
       <MemoryRouter>
@@ -21,7 +22,6 @@ describe('Sign In', () => {
   })
 
   test('the form is working correctly', async () => {
-    user.setup()
     renderWithProviders(
       <MemoryRouter>
         <SignIn />
@@ -39,7 +39,6 @@ describe('Sign In', () => {
   })
 
   test('fetch access token after sign in', async () => {
-    user.setup()
     renderWithProviders(
       <MemoryRouter>
         <SignIn />

@@ -105,6 +105,7 @@ const ProductShopCard = ({ product }: TProductShopCardProps) => {
               $activeSize={size === selectedSize}
               onClick={() => setSelectedSize(size)}
               key={size}
+              aria-label={`size-${size}`}
             >
               {size}
             </ProductShopCardSizeBtn>

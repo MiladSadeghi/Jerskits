@@ -3,7 +3,15 @@ import { IUserState, TBag } from '../../shared/types/User.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 const initialState: IUserState = {
-  favorites: []
+  favorites: [],
+  bag: {
+    _id: '',
+    items: [],
+    user: '',
+    createdAt: new Date().toString(),
+    updatedAt: new Date().toString(),
+    subTotal: 0
+  }
 }
 
 const userSlice = createSlice({
@@ -25,7 +33,7 @@ const userSlice = createSlice({
       state.bag = payload
     },
     clearBag: (state) => {
-      state.bag = undefined
+      state.bag = initialState.bag
     }
   }
 })

@@ -177,8 +177,15 @@ describe('Product', () => {
     store.dispatch(setAuthStatus(true))
 
     await waitFor(async () => {
-      const addToBagButton = screen.getByRole('button', { name: /ADD TO BAG/i })
+      const sizeButton = screen.getByRole('button', { name: 'size-M' })
+      await user.click(sizeButton)
+      const addToBagButton = screen.getByRole('button', {
+        name: /add product to bag/i
+      })
       await user.click(addToBagButton)
+    })
+
+    await waitFor(async () => {
       expect(toastSuccess).toHaveBeenCalled()
       expect(toastSuccess).toHaveBeenCalledWith('Product added to bag')
       const isProductInBag = store

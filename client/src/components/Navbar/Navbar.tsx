@@ -175,27 +175,30 @@ function Navbar() {
               <NavLink to='/kid'>Kids</NavLink>
             </div>
             <div className='flex items-center gap-10'>
-              <div className='flex items-center gap-10 md:relative'>
+              <div className='flex items-center gap-10'>
                 <div className='w-5 h-5'>
                   <button
-                    aria-label='search'
+                    aria-label='open search modal'
+                    name='openSearchModal'
                     onClick={() => setSearchModal(true)}
                   >
                     <MagnifySearch />
                   </button>
                 </div>
-                <div className='relative hidden w-5 h-5 leading-none md:block'>
+                <div className='hidden w-5 h-5 leading-none md:block'>
                   <button
-                    aria-label='bag'
+                    aria-label='open bag popup'
+                    name='openShoppingBag'
                     ref={bagBtnRef}
                     onClick={() => handlePopupOpen('bag')}
                   >
                     <Bag />
                   </button>
                 </div>
-                <div className='relative hidden w-5 h-5 leading-none md:block'>
+                <div className='hidden w-5 h-5 leading-none md:block'>
                   <button
-                    aria-label='favorite'
+                    aria-label='open favorites popup'
+                    name='openFavoritesPopup'
                     onClick={() => handlePopupOpen('favorites')}
                     ref={favoriteBtnRef}
                   >
