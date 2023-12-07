@@ -26,6 +26,7 @@ const ProfilePopup = forwardRef<HTMLDialogElement, Props>(
         }`}
         css='inset-inline-start: unset;'
         ref={ref}
+        data-testid='profile-popup'
       >
         <div className='flex items-center justify-between md:hidden'>
           <h1 className='text-lg font-bold text-primary-black'>Account</h1>
@@ -39,6 +40,7 @@ const ProfilePopup = forwardRef<HTMLDialogElement, Props>(
               <img
                 className='object-cover w-full h-full rounded-full'
                 crossOrigin='anonymous'
+                alt='user-avatar'
                 src={`${import.meta.env.VITE_SERVER_URL.replace(
                   '/api',
                   ''
@@ -49,6 +51,7 @@ const ProfilePopup = forwardRef<HTMLDialogElement, Props>(
                 <img
                   src='/images/blank-profile-picture.png'
                   className='object-cover w-full h-full p-4 rounded-full'
+                  alt='user-avatar'
                 />
               </div>
             )}
