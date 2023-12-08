@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:watch": "vitest --watch",
-    "coverage": "vitest --coverage"
+    "coverage": "vitest --coverage",
+    "test:ui": "vitest --ui --coverage.enabled=true"
   },
   "dependencies": {
     "@hookform/error-message": "^2.0.1",
@@ -43,6 +44,7 @@
     "@typescript-eslint/parser": "^6.7.5",
     "@vitejs/plugin-react": "^4.1.0",
     "@vitest/coverage-v8": "^0.34.6",
+    "@vitest/ui": "^1.0.2",
     "autoprefixer": "^10.4.16",
     "babel-plugin-macros": "^3.1.0",
     "babel-plugin-styled-components": "^2.1.4",
