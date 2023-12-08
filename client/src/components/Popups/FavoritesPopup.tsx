@@ -25,6 +25,7 @@ const FavoritesPopup = forwardRef<HTMLDialogElement, Props>(
             : '-bottom-full md:hidden duration-1000'
         }`}
         css='inset-inline-start: unset;'
+        data-testid='favorites-popup'
       >
         <div className='flex items-center justify-between'>
           <h1 className='text-lg font-bold text-primary-black'>Favorites</h1>
