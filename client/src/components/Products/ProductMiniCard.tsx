@@ -43,7 +43,7 @@ const ProductMiniCard = ({ product, removable, testId, size }: Props) => {
         </Link>
         <div className='flex'>
           <p className='text-base leading-6 capitalize text-neutral-dark-grey'>
-            {product.type} {!!size && `. ${size}`}
+            {product.type} {!!size && `. Size ${size}`}
           </p>
         </div>
         <div className='flex justify-between w-full'>
