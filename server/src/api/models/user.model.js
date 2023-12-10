@@ -11,12 +11,6 @@ const AddressSchema = new mongoose.Schema(
   { _id: false }
 );
 
-const PaymentMethodSchema = new mongoose.Schema({
-  provider: String,
-  cardLastFour: String,
-  expirationDate: String,
-});
-
 const UserSchema = mongoose.Schema(
   {
     fullName: {
@@ -37,7 +31,6 @@ const UserSchema = mongoose.Schema(
     shippingAddress: AddressSchema,
     avatar: String,
     phoneNumber: Number,
-    paymentMethod: PaymentMethodSchema,
     contactEmail: String,
   },
   { timestamps: true }

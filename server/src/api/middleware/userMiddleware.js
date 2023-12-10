@@ -1,6 +1,7 @@
 import { validationResult } from "express-validator";
 import {
   validateAddToBagBody,
+  validateOrderIdFromParam,
   validateProductId,
   validateUpdateQuantity,
   validateUpdateSize,
@@ -22,6 +23,20 @@ export const validateProductAddition = [
 
 export const validateProductRemoval = [
   validateProductId("param"),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const formattedErrors = errors.array({ onlyFirstError: true })[0];
+      return res
+        .status(400)
+        .json({ error: true, message: formattedErrors.msg });
+    }
+    return next();
+  },
+];
+
+export const validateOrderId = [
+  validateOrderIdFromParam,
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -75,3 +90,15 @@ export const validateUpdateSizeBody = [
     return next();
   },
 ];
+
+export const validateOrderStepBody = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const errorObj = {};
+    errors.array().forEach((error) => {
+      errorObj[error.path] = error.msg;
+    });
+    return res.status(400).json({ errors: errorObj });
+  }
+  return next();
+};

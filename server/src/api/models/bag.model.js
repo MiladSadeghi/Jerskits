@@ -1,6 +1,6 @@
 import { mongoose } from "mongoose";
 
-const BagItemSchema = mongoose.Schema({
+export const BagItemSchema = mongoose.Schema({
   product: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
