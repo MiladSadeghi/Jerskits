@@ -11,7 +11,7 @@ type Props = {
 }
 
 const Header = ({ products, isError, isLoading }: Props) => {
-  const containerRef = useRef<HTMLDivElement | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const [currentSlide, setCurrentSlide] = useState<number>(0)
 
   if (isLoading || isError || !products) {
@@ -22,6 +22,20 @@ const Header = ({ products, isError, isLoading }: Props) => {
         containerTestId='landingpage-header'
       />
     )
+  }
+
+  const changeSlide = (amount: number) => {
+    const newSlide = currentSlide + amount
+    const maxSlide = products.length - 1
+    const clampedSlide = Math.max(0, Math.min(newSlide, maxSlide))
+
+    setTimeout(() => {
+      containerRef?.current?.scrollTo({
+        left: containerRef.current.offsetWidth * clampedSlide,
+        behavior: 'smooth'
+      })
+    }, 550)
+    setCurrentSlide(clampedSlide)
   }
 
   return (
@@ -36,12 +50,7 @@ const Header = ({ products, isError, isLoading }: Props) => {
           />
         ))}
       </div>
-      <HeaderController
-        ref={containerRef}
-        slide={currentSlide}
-        setSlide={setCurrentSlide}
-        maxSlide={products.length - 1}
-      />
+      <HeaderController handleSlide={changeSlide} />
     </header>
   )
 }
