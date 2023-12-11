@@ -1,18 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom'
-import tw from 'twin.macro'
-import { styled } from 'twin.macro'
 import { ISignInForm } from './SignIn.types'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import SignInSchema from './SignIn.schema'
 import { toast } from 'react-hot-toast'
 import { SpinnerCircular } from 'spinners-react'
-import { css } from 'twin.macro'
 import { useSignInMutation } from '../../services'
 import { useEffect } from 'react'
 import { useAppDispatch } from '../../App/hooks'
 import { setAuthStatus } from '../../App/feature/auth/authSlice'
 import { setProfile } from '../../App/feature/profile/profileSlice'
+import { Button, FormError, FormInput, FormLabel } from '../../components'
+import { ErrorMessage } from '@hookform/error-message'
 
 function SignIn() {
   const navigate = useNavigate()
@@ -87,19 +86,27 @@ function SignIn() {
               autoComplete='off'
               {...register('email', { required: true })}
             />
-            <FormError>{errors.email && errors.email.message}</FormError>
+            <ErrorMessage
+              errors={errors}
+              name='email'
+              render={({ message }) => <FormError>{message}</FormError>}
+            />
           </div>
           <div className='space-y-[8px]'>
             <FormLabel htmlFor='password'>Password</FormLabel>
             <FormInput
               type='password'
               id='password'
-              autoComplete='new-password1'
+              autoComplete='password'
               {...register('password', { required: true })}
             />
-            <FormError>{errors.password && errors.password.message}</FormError>
+            <ErrorMessage
+              errors={errors}
+              name='password'
+              render={({ message }) => <FormError>{message}</FormError>}
+            />
           </div>
-          <SubmitButton type='submit' disabled={isLoading}>
+          <Button type='submit' disabled={isLoading}>
             {isLoading ? (
               <SpinnerCircular
                 size={45}
@@ -112,7 +119,7 @@ function SignIn() {
             ) : (
               'LOGIN'
             )}
-          </SubmitButton>
+          </Button>
         </form>
 
         <p className='text-neutral-dark-grey text-text-sm mt-7'>
@@ -128,25 +135,5 @@ function SignIn() {
     </div>
   )
 }
-
-const FormLabel = tw.label`text-primary-black font-normal`
-const FormInput = styled.input`
-  ${tw`w-full h-12 px-5 py-4 border border-neutral-grey `}
-  ${css`
-    &:focus {
-      border-color: #262d33;
-      box-shadow: none;
-    }
-  `}
-`
-const FormError = tw.p`text-text-sm text-red-500`
-const SubmitButton = styled.button`
-  ${tw`w-full font-bold text-white h-14 bg-primary-black disabled:opacity-50`}
-  ${css`
-    &:disabled {
-      opacity: 0.7;
-    }
-  `}
-`
 
 export default SignIn

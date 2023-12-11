@@ -1,5 +1,4 @@
 import { forwardRef } from 'react'
-import tw from 'twin.macro'
 
 type Props = {
   slide: number
@@ -34,7 +33,8 @@ const HeaderController = forwardRef<HTMLDivElement, Props>(
     return (
       <div className='relative'>
         <div className='absolute bottom-[45px] right-[10%] z-50 flex gap-x-7'>
-          <ArrowIcon
+          <button
+            className='p-3 border border-white rounded-full border-opacity-20'
             aria-label='Previous slide'
             data-test-id='prev-slide'
             onClick={() => changeSlide(-1)}
@@ -52,8 +52,9 @@ const HeaderController = forwardRef<HTMLDivElement, Props>(
                 strokeWidth='1.2'
               />
             </svg>
-          </ArrowIcon>
-          <ArrowIcon
+          </button>
+          <button
+            className='p-3 border border-white rounded-full border-opacity-20'
             aria-label='Next slide'
             data-testid='next-slide'
             onClick={() => changeSlide(+1)}
@@ -71,13 +72,11 @@ const HeaderController = forwardRef<HTMLDivElement, Props>(
                 strokeWidth='1.2'
               />
             </svg>
-          </ArrowIcon>
+          </button>
         </div>
       </div>
     )
   }
 )
-
-const ArrowIcon = tw.button`p-3 border border-white border-opacity-20 rounded-full`
 
 export default HeaderController

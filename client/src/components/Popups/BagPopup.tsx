@@ -4,6 +4,7 @@ import { RootState } from '../../App/store'
 import ProductMiniCard from '../Products/ProductMiniCard'
 import { Link } from 'react-router-dom'
 import { Close } from '../../icons'
+import { cn } from '../../utils/utils'
 
 type Props = {
   isOpen: boolean
@@ -18,12 +19,11 @@ const BagPopup = forwardRef<HTMLDialogElement, Props>(
       <dialog
         ref={ref}
         open={true}
-        className={`fixed md:absolute z-[800] md:z-[99] right-0 bg-white md:top-[75px] md:bottom-[unset] w-full md:w-[460px] p-[30px] space-y-7 ${
-          isOpen
-            ? 'bottom-0 md:block duration-500'
-            : '-bottom-full md:hidden duration-1000'
-        }`}
-        css='inset-inline-start: unset;'
+        className={cn(
+          'fixed md:absolute z-[800] md:z-[99] right-0 bg-white md:top-[75px] md:bottom-[unset] w-full md:w-[460px] p-[30px] space-y-7 -bottom-full md:hidden duration-1000',
+          { 'bottom-0 md:block duration-500': isOpen }
+        )}
+        style={{ insetInlineStart: 'unset' }}
       >
         <div className='flex items-center justify-between'>
           <h1 className='text-lg font-bold text-primary-black'>Bag</h1>

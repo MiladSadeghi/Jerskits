@@ -1,13 +1,12 @@
 import { TDetailProduct } from '../../shared/types/Product.types'
-import tw from 'twin.macro'
-import { useRef, ReactNode } from 'react'
+import { useRef } from 'react'
 import { ArrowDown } from '../../icons'
 
 type Props = {
   detailProduct?: TDetailProduct
   active: boolean
   handleActive: () => void
-  content?: ReactNode
+  content?: JSX.Element
   title?: string
   key?: string | number
 }
@@ -20,14 +19,17 @@ const Accordion = ({
   title
 }: Props) => {
   const contentEl = useRef<HTMLDivElement>(null)
+  const accordionTitle = title ?? detailProduct?.title
   return (
     <div>
-      <AccordionWrapper>
+      <div className='flex flex-col'>
         <div
           onClick={() => handleActive()}
           className='flex items-center justify-between py-5'
         >
-          <AccordionTitle>{title ?? detailProduct?.title}</AccordionTitle>
+          <h1 className='text-lg font-bold leading-7 select-none text-primary-black'>
+            {accordionTitle}
+          </h1>
           <ArrowDown
             className={`transition-all ${active ? 'rotate-180' : ''}`}
           />
@@ -35,7 +37,7 @@ const Accordion = ({
         <div
           ref={contentEl}
           className='flex flex-col overflow-hidden transition-all ease-in-out gap-y-5'
-          css={{
+          style={{
             ...(active
               ? {
                   height: contentEl.current?.scrollHeight,
@@ -49,9 +51,9 @@ const Accordion = ({
           ) : (
             <>
               {detailProduct?.description && (
-                <AccordionDescription>
+                <p className='text-base leading-6 text-primary-black'>
                   {detailProduct.description}
-                </AccordionDescription>
+                </p>
               )}{' '}
               {detailProduct?.specification && (
                 <ul className='list-disc list-inside'>
@@ -68,14 +70,10 @@ const Accordion = ({
             </>
           )}
         </div>
-      </AccordionWrapper>
+      </div>
       <div className='border-b border-neutral-grey-grey h-0.5' />
     </div>
   )
 }
-
-const AccordionWrapper = tw.div`flex flex-col`
-const AccordionTitle = tw.h1`text-lg font-bold leading-7 text-primary-black select-none`
-const AccordionDescription = tw.p`text-primary-black text-base leading-6`
 
 export default Accordion

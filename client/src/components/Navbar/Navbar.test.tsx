@@ -1,6 +1,6 @@
 import { screen, waitFor } from '@testing-library/react'
 import Navbar from './Navbar'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import { renderWithProviders } from '../../utils/test-utils'
 import { server } from '../../test/setup'
 import { rest } from 'msw'
@@ -18,14 +18,14 @@ describe('Navbar', () => {
       )
     )
     renderWithProviders(
-      <Router>
+      <BrowserRouter>
         <Navbar />
-      </Router>
+      </BrowserRouter>
     )
     const homeElement = screen.getByAltText('Home')
-    const menElement = screen.getByRole('link', { name: 'Men' })
-    const womenElement = screen.getByRole('link', { name: 'Women' })
-    const kidsElement = screen.getByRole('link', { name: 'Kids' })
+    const menElements = screen.getAllByRole('link', { name: 'Men' })
+    const womenElements = screen.getAllByRole('link', { name: 'Women' })
+    const kidsElements = screen.getAllByRole('link', { name: 'Kids' })
     const searchElement = screen.getByRole('button', {
       name: 'open search modal'
     })
@@ -36,9 +36,9 @@ describe('Navbar', () => {
 
     await waitFor(() => {
       expect(homeElement).toBeInTheDocument()
-      expect(menElement).toBeInTheDocument()
-      expect(womenElement).toBeInTheDocument()
-      expect(kidsElement).toBeInTheDocument()
+      expect(menElements.length).toBe(2)
+      expect(womenElements.length).toBe(2)
+      expect(kidsElements.length).toBe(2)
       expect(searchElement).toBeInTheDocument()
       expect(bagListElement).toBeInTheDocument()
       expect(favoriteListElement).toBeInTheDocument()
@@ -57,20 +57,20 @@ describe('Navbar', () => {
       )
     )
     renderWithProviders(
-      <Router>
+      <BrowserRouter>
         <Navbar />
-      </Router>
+      </BrowserRouter>
     )
-    const homeLink = screen.getByAltText(/home/i)
-    const menLink = screen.getByRole('link', { name: 'Men' })
-    const womenLink = screen.getByRole('link', { name: 'Women' })
-    const kidsLink = screen.getByRole('link', { name: 'Kids' })
+    const homeLinks = screen.getAllByAltText(/home/i)
+    const menLinks = screen.getAllByRole('link', { name: 'Men' })
+    const womenLinks = screen.getAllByRole('link', { name: 'Women' })
+    const kidsLinks = screen.getAllByRole('link', { name: 'Kids' })
 
     await waitFor(() => {
-      expect(homeLink.closest('a')).toHaveAttribute('href', '/')
-      expect(menLink.closest('a')).toHaveAttribute('href', '/men')
-      expect(womenLink.closest('a')).toHaveAttribute('href', '/women')
-      expect(kidsLink.closest('a')).toHaveAttribute('href', '/kid')
+      expect(homeLinks[0].closest('a')).toHaveAttribute('href', '/')
+      expect(menLinks[0].closest('a')).toHaveAttribute('href', '/men')
+      expect(womenLinks[0].closest('a')).toHaveAttribute('href', '/women')
+      expect(kidsLinks[0].closest('a')).toHaveAttribute('href', '/kid')
       const signInLink = screen.getByRole('link', { name: 'Sign In' })
       expect(signInLink.closest('a')).toHaveAttribute('href', '/sign-in')
     })
@@ -78,9 +78,9 @@ describe('Navbar', () => {
 
   test('navbar work correctly after login', async () => {
     const { store } = renderWithProviders(
-      <Router>
+      <BrowserRouter>
         <Navbar />
-      </Router>
+      </BrowserRouter>
     )
 
     await waitFor(async () => {

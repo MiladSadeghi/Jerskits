@@ -13,6 +13,7 @@ import {
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { SpinnerCircular } from 'spinners-react'
+import { cn } from '../utils/utils'
 
 type Props = {
   isBagModal: [boolean, setState<boolean>]
@@ -75,11 +76,12 @@ const BagModal = forwardRef<HTMLDialogElement, Props>(({ isBagModal }, ref) => {
   return (
     <dialog
       open={true}
-      className={`w-full md:w-[460px] h-screen fixed top-0 bg-white z-[800] p-[30px] transition-all space-y-7 ${
-        bagModal ? 'right-0 duration-500' : '-right-[200%] duration-1000'
-      }`}
+      className={cn(
+        'w-full md:w-[460px] h-screen fixed top-0 bg-white z-[800] p-[30px] transition-all space-y-7 -right-[200%] duration-1000',
+        { 'right-0 duration-500': bagModal }
+      )}
       ref={ref}
-      css='inset-inline-start: unset;'
+      style={{ insetInlineStart: 'unset' }}
     >
       <div className='flex items-center justify-between '>
         <h1 className='text-lg font-bold text-primary-black'>
@@ -117,18 +119,9 @@ const BagModal = forwardRef<HTMLDialogElement, Props>(({ isBagModal }, ref) => {
                       label: `Qty : ${item.quantity}`,
                       value: String(item.quantity)
                     }}
-                    optionValues={[
-                      '1',
-                      '2',
-                      '3',
-                      '4',
-                      '5',
-                      '6',
-                      '7',
-                      '8',
-                      '9',
-                      '10'
-                    ]}
+                    optionValues={Array(10)
+                      .fill(null)
+                      .map((_, index) => String(index + 1))}
                     label='Qty'
                     handleChange={handleUpdateQuantity}
                     disabled={isQtyUpdating}

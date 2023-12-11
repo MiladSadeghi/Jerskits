@@ -1,4 +1,4 @@
-import tw, { styled } from 'twin.macro'
+import { cn } from '../../../utils/utils'
 
 type Props = {
   color?: string
@@ -18,29 +18,23 @@ const ColorFilter = ({ color, setColor }: Props) => {
   return (
     <div className='grid w-full grid-cols-3 gap-5'>
       {colorFilterItems.map((item) => (
-        <ColorBtn
+        <button
+          className={cn(
+            'flex items-center justify-center w-full py-4 border border-neutral-soft-grey',
+            { 'border-primary-black': color === item }
+          )}
           key={item}
-          $isActive={color === item}
           onClick={() => setColor(item)}
         >
-          <ColorIndicator style={{ background: item }} />
-          <ColorName>{item}</ColorName>
-        </ColorBtn>
+          <span
+            className='w-5 h-5 border rounded-full border-neutral-soft-grey'
+            style={{ background: item }}
+          />
+          <p className='text-base italic font-semibold ml-2.5'>{item}</p>
+        </button>
       ))}
     </div>
   )
 }
-
-const ColorBtn = styled.button<{
-  $isActive: boolean
-}>`
-  ${tw`flex items-center justify-center w-full py-4 border `}
-  ${({ $isActive }) =>
-    $isActive ? tw`border-primary-black` : tw`border-neutral-soft-grey`}
-`
-const ColorIndicator = tw.span`w-5 h-5 rounded-full border border-neutral-soft-grey`
-const ColorName = tw.p`
-  text-base italic font-semibold ml-2.5
-`
 
 export default ColorFilter

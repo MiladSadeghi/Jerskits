@@ -1,10 +1,10 @@
 import { MouseEventHandler, useRef, useState } from 'react'
-import tw, { styled } from 'twin.macro'
 import { IProduct, TBrand } from '../../../../shared/types/Product.types'
 import { motion } from 'framer-motion'
 import { useLazyGetKidBrandCollectionQuery } from '../../../../services'
 import KidCollectionController from './KidCollectionSlideController'
 import KidCollectionSlider from './KidCollectionSlider'
+import { cn } from '../../../../utils/utils'
 
 type Props = {
   products: IProduct[] | undefined
@@ -77,13 +77,19 @@ const KidCollection = ({ products, isError, isLoading }: Props) => {
   return (
     <div className='mx-auto'>
       <div className='container relative flex mx-auto mb-24'>
-        <BrandIndicator animate={{ left: `${leftBrandIndicator}%` }} />
+        <motion.div
+          className={cn(
+            'absolute top-0 w-3/12 lg:w-2/12 h-full bg-primary-black z-[5] mix-blend-color-burn duration-500 bg-opacity-70 ease-linear'
+          )}
+          style={{ left: `${leftBrandIndicator}%` }}
+        />
         {icons.map((icon: TBrandsIcon, index: number) => (
           <div
             key={icon.name}
             className='flex justify-center w-full h-full py-24 bg-white mix-blend-screen'
           >
-            <Brand
+            <img
+              className='opacity-30 z-[6] relative w-fit h-fit cursor-pointer'
               onClick={changeBrand(icon.name, index * 25)}
               src={icon.icon}
               alt={icon.name}
@@ -105,10 +111,5 @@ const KidCollection = ({ products, isError, isLoading }: Props) => {
     </div>
   )
 }
-
-const Brand = tw.img`opacity-30 z-[6] relative w-fit h-fit cursor-pointer`
-const BrandIndicator = styled(motion.div)`
-  ${tw`absolute top-0 w-3/12 lg:w-2/12 h-full bg-primary-black z-[5] mix-blend-color-burn duration-200 bg-opacity-70 ease-linear`}
-`
 
 export default KidCollection

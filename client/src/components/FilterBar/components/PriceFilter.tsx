@@ -1,6 +1,5 @@
 import { Range, getTrackBackground } from 'react-range'
 import { Price } from '../../../shared/types/Product.types'
-import tw from 'twin.macro'
 
 type Props = {
   price?: Price
@@ -43,20 +42,22 @@ const PriceFilter = ({ price, setPrice, highestPrice }: Props) => {
               >
                 {children}
                 {(price?.minPrice ?? 0) >= 16 ? (
-                  <PriceRange className='left-0'>$0</PriceRange>
+                  <h5 className='left-0 absolute font-bold text-base leading-[18px] text-neutral-grey -bottom-[31.9px]'>
+                    $0
+                  </h5>
                 ) : (
-                  <PriceRange className='left-0 text-primary-black'>
+                  <h5 className='left-0 text-primary-black absolute font-bold text-base leading-[18px]  -bottom-[31.9px]'>
                     {`$${price?.minPrice ?? 0}`}
-                  </PriceRange>
+                  </h5>
                 )}
                 {price?.maxPrice && price.maxPrice <= highestPrice - 30 ? (
-                  <PriceRange className='right-0'>{`$${
+                  <h5 className='right-0 absolute font-bold text-base leading-[18px] text-neutral-grey -bottom-[31.9px]'>{`$${
                     highestPrice ?? 0
-                  }`}</PriceRange>
+                  }`}</h5>
                 ) : (
-                  <PriceRange className='right-0 text-primary-black'>
+                  <h5 className='right-0 text-primary-black absolute font-bold text-base leading-[18px] -bottom-[31.9px]'>
                     {`$${price?.maxPrice ?? highestPrice}`}
-                  </PriceRange>
+                  </h5>
                 )}
               </div>
             </div>
@@ -89,8 +90,14 @@ const PriceFilter = ({ price, setPrice, highestPrice }: Props) => {
       </div>
       <div className='flex gap-x-5'>
         <div>
-          <PriceLabel htmlFor='lowest_price_input'>Lowest</PriceLabel>
-          <PriceInput
+          <label
+            className='text-sm font-medium leading-5 text-primary-black'
+            htmlFor='lowest_price_input'
+          >
+            Lowest
+          </label>
+          <input
+            className='w-full px-5 py-4 border outline-none border-neutral-soft-grey focus:border-primary-black focus:ring-0'
             step={0.01}
             min={0}
             type='number'
@@ -105,8 +112,14 @@ const PriceFilter = ({ price, setPrice, highestPrice }: Props) => {
           />
         </div>
         <div>
-          <PriceLabel htmlFor='highest_price_input'>Highest</PriceLabel>
-          <PriceInput
+          <label
+            className='text-sm font-medium leading-5 text-primary-black'
+            htmlFor='highest_price_input'
+          >
+            Highest
+          </label>
+          <input
+            className='w-full px-5 py-4 border outline-none border-neutral-soft-grey focus:border-primary-black focus:ring-0'
             type='number'
             step={0.01}
             max={highestPrice}
@@ -124,9 +137,5 @@ const PriceFilter = ({ price, setPrice, highestPrice }: Props) => {
     </div>
   ) : null
 }
-
-const PriceRange = tw.h5`absolute font-bold text-base leading-[18px] text-neutral-grey -bottom-[31.9px]`
-const PriceLabel = tw.label`text-sm text-primary-black font-medium leading-5`
-const PriceInput = tw.input`px-5 py-4 w-full border border-neutral-soft-grey outline-none focus:border-primary-black focus:ring-0`
 
 export default PriceFilter

@@ -15,6 +15,7 @@ type Props = {
 
 const ProductMiniCard = ({ product, removable, testId, size }: Props) => {
   const [remove, { isLoading }] = useRemoveProductFromFavoritesMutation()
+  const isOffPrice = product.offPrice !== 0
   return (
     <div data-testid={testId} className='relative flex items-start gap-x-5'>
       <div className='flex items-center justify-center  max-w-[6rem] h-[8rem] bg-neutral-light-grey relative'>
@@ -47,13 +48,10 @@ const ProductMiniCard = ({ product, removable, testId, size }: Props) => {
           </p>
         </div>
         <div className='flex justify-between w-full'>
-          <ProductPrice
-            className='!text-lg'
-            $isDiscount={product.offPrice !== 0}
-          >
+          <ProductPrice className='text-lg' isDiscount={isOffPrice}>
             ${product.price}
           </ProductPrice>
-          {product.offPrice !== 0 && (
+          {isOffPrice && (
             <div className='flex items-center justify-between w-full'>
               <ProductDiscountPrice className='!text-lg'>
                 ${product.offPrice}

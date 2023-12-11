@@ -4,7 +4,6 @@ import {
   ProductCardContainer,
   ProductCardSkeleton
 } from '../../../../components'
-import tw from 'twin.macro'
 
 type Props = {
   products: IProduct[] | undefined
@@ -26,13 +25,14 @@ const KidCollectionSlider = forwardRef<HTMLDivElement, Props>(
       )
     }
     return (
-      <Wrapper ref={ref}>
+      <div
+        ref={ref}
+        className='flex px-4 mb-24 overflow-hidden gap-x-7 scroll-smooth'
+      >
         <ProductCardContainer products={products} />
-      </Wrapper>
+      </div>
     )
   }
 )
-
-const Wrapper = tw.div`overflow-hidden flex gap-x-7 mb-24 scroll-smooth px-4`
 
 export default KidCollectionSlider

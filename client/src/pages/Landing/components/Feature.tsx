@@ -1,31 +1,30 @@
-import tw from 'twin.macro'
 import FeatureContent from '../../../shared/FeatureContent'
 
 const Feature = () => {
   const featureContent = FeatureContent({ color: 'black' })
   return (
-    <Wrapper>
+    <div className='container flex flex-col items-center mx-auto my-24 lg:justify-between lg:flex-row gap-y-24'>
       {featureContent.map((content: IFeature, index: number) => (
         <div
           key={index}
           className='relative flex flex-col items-center w-full lg:flex-row'
         >
-          <Content>
+          <div className='relative flex flex-col items-center justify-center w-full text-center gap-y-5'>
             <div>{content.icon}</div>
-            <ContentTitle>{content.title}</ContentTitle>
-            <ContentDesc>{content.description}</ContentDesc>
-          </Content>
-          {index < featureContent.length - 1 && <Bar />}
+            <h1 className='text-2xl font-bold text-primary-black'>
+              {content.title}
+            </h1>
+            <p className='w-2/3 text-base text-neutral-dark-grey lg:w-full 2xl:w-2/3'>
+              {content.description}
+            </p>
+          </div>
+          {index < featureContent.length - 1 && (
+            <div className='absolute -bottom-[30%] h-0.5 w-24 lg:h-24 lg:w-0.5 lg:mt-0 lg:right-0 lg:top-1/2 lg:-translate-y-1/2 bg-neutral-soft-grey' />
+          )}
         </div>
       ))}
-    </Wrapper>
+    </div>
   )
 }
-
-const Wrapper = tw.div`container mx-auto flex flex-col items-center lg:justify-between my-24 lg:flex-row gap-y-24`
-const Content = tw.div`flex flex-col items-center justify-center text-center gap-y-5 relative w-full`
-const ContentTitle = tw.h1`text-2xl font-bold text-primary-black`
-const ContentDesc = tw.p`text-base text-neutral-dark-grey w-2/3 lg:w-full 2xl:w-2/3`
-const Bar = tw.div`absolute -bottom-[30%] h-0.5 w-24 lg:(h-24 w-0.5 mt-0 right-0 top-1/2 -translate-y-1/2) bg-neutral-soft-grey`
 
 export default Feature

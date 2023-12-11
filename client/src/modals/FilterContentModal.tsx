@@ -1,7 +1,7 @@
 import { ReactNode, RefObject, useEffect, useRef } from 'react'
-import tw, { styled } from 'twin.macro'
 import { Refresh } from '../icons'
 import { useMediaQuery } from '../hooks/useMediaQuery'
+import { cn } from '../utils/utils'
 
 type Props = {
   open: boolean
@@ -60,61 +60,60 @@ const FilterContentModal = ({
             open ? 'opacity-40 z-10' : 'opacity-0 -z-10'
           }`}
         />
-        <Modal open ref={ref} width={width ?? '100%'} $isOpen={open}>
+        <dialog
+          open
+          ref={ref}
+          className={cn(
+            'flex flex-col justify-between bg-white p-[30px] left-0 border border-neutral-soft-grey m-0 z-20 -bottom-full fixed h-[465px] transition-all duration-300 ease-linear lg:top-[calc(100%+45px)] lg:absolute lg:h-fit',
+            { 'bottom-0': open }
+          )}
+          style={{ width: width }}
+        >
           {isLarge ? (
-            <ModalTitle>{title}</ModalTitle>
+            <h1 className='font-bold text-lg text-primary-black leading-7 mb-[30px]'>
+              {title}
+            </h1>
           ) : (
             <div className='flex items-center pt-2 pb-4 overflow-x-hidden gap-x-7 mb-7'>
               {filterButtonLabel?.map((label, idx) => (
-                <Button
+                <button
+                  className={cn(
+                    'flex items-center w-fit font-bold text-lg leading-[27px] text-primary-black pb-5 relative whitespace-pre',
+                    {
+                      'after:absolute after:bottom-0 after:w-full after:h-0.5 after:bg-primary-black':
+                        activeFilter === idx
+                    }
+                  )}
                   key={idx}
-                  $isActive={activeFilter === idx}
                   onClick={() => setActiveFilter?.(idx)}
                 >
                   {label}
-                </Button>
+                </button>
               ))}
             </div>
           )}
 
           {children}
           <div className='grid grid-cols-3 gap-x-5 mt-[30px]'>
-            <ModalApplyBtn
+            <button
+              className='w-full text-white bg-primary-black text-base font-bold text-center col-span-2 py-[18px]'
               onClick={() => applyHandler()}
               aria-label='apply filter'
             >
               APPLY
-            </ModalApplyBtn>
-            <ModalResetBtn
+            </button>
+            <button
+              className='flex items-center justify-center w-full bg-primary-black'
               onClick={() => resetFilter()}
               aria-label='reset filter'
             >
               <Refresh />
-            </ModalResetBtn>
+            </button>
           </div>
-        </Modal>
+        </dialog>
       </>
     )
   )
 }
-
-const Modal = styled.dialog<{ width: string; $isOpen: boolean }>`
-  ${tw`flex flex-col justify-between bg-white p-[30px] left-0 border border-neutral-soft-grey m-0 z-20 bottom-0 fixed h-[465px] transition-all duration-300 ease-linear lg:(top-[calc(100%+45px)] absolute h-fit)`}
-  ${({ $isOpen }) => ($isOpen ? tw`bottom-0` : tw`-bottom-full`)}
-  width: ${({ width }) => width};
-`
-const ModalTitle = tw.h1`font-bold text-lg text-primary-black leading-7 mb-[30px]`
-const ModalApplyBtn = tw.button`w-full text-white bg-primary-black text-base font-bold text-center col-span-2 py-[18px]`
-const ModalResetBtn = tw.button`bg-primary-black w-full flex items-center justify-center`
-
-const Button = styled.button<{
-  $isActive: boolean
-}>`
-  ${tw`flex items-center w-fit font-bold text-lg leading-[27px] text-primary-black pb-5 relative whitespace-pre`}
-  ${({ $isActive }) =>
-    $isActive
-      ? tw`after:(absolute bottom-0 w-full h-0.5 bg-primary-black )`
-      : ''}
-`
 
 export default FilterContentModal

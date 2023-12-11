@@ -1,5 +1,5 @@
-import tw, { styled } from 'twin.macro'
 import { TType } from '../../../shared/types/Product.types'
+import { cn } from '../../../utils/utils'
 
 type Props = {
   type?: TType
@@ -12,27 +12,21 @@ const TypeFilter = ({ type, setType }: Props) => {
   return (
     <div className='grid w-full grid-cols-2 gap-5'>
       {typeFilterItems.map((item) => (
-        <TypeBtn
+        <button
+          className={cn(
+            'flex items-center justify-center w-full py-4 border border-neutral-soft-grey',
+            {
+              'border-primary-black': type === item
+            }
+          )}
           key={item}
-          $isActive={type === item}
           onClick={() => setType(item)}
         >
-          <TypeLabel>{item} Shirt</TypeLabel>
-        </TypeBtn>
+          <p className='text-base font-semibold'>{item} Shirt</p>
+        </button>
       ))}
     </div>
   )
 }
-
-const TypeBtn = styled.button<{
-  $isActive: boolean
-}>`
-  ${tw`flex items-center justify-center w-full py-4 border `}
-  ${({ $isActive }) =>
-    $isActive ? tw`border-primary-black` : tw`border-neutral-soft-grey`}
-`
-const TypeLabel = tw.p`
-  text-base font-semibold
-`
 
 export default TypeFilter

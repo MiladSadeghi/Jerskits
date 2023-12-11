@@ -1,4 +1,4 @@
-import tw, { styled } from 'twin.macro'
+import { cn } from '../../../utils/utils'
 
 type Props = {
   size?: string
@@ -11,27 +11,21 @@ const SizeFilter = ({ size, setSize }: Props) => {
   return (
     <div className='grid w-full grid-cols-3 gap-5'>
       {sizeFilterItems.map((item) => (
-        <SizeBtn
+        <button
+          className={cn(
+            'flex items-center justify-center w-full py-4 border border-neutral-soft-grey',
+            {
+              'border-primary-black': size === item
+            }
+          )}
           key={item}
-          $isActive={size === item}
           onClick={() => setSize(item)}
         >
-          <SizeLabel>{item}</SizeLabel>
-        </SizeBtn>
+          <p className='text-base font-semibold'>{item}</p>
+        </button>
       ))}
     </div>
   )
 }
-
-const SizeBtn = styled.button<{
-  $isActive: boolean
-}>`
-  ${tw`flex items-center justify-center w-full py-4 border `}
-  ${({ $isActive }) =>
-    $isActive ? tw`border-primary-black` : tw`border-neutral-soft-grey`}
-`
-const SizeLabel = tw.p`
-  text-base font-semibold
-`
 
 export default SizeFilter

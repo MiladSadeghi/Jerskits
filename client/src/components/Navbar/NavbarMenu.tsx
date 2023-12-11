@@ -3,6 +3,7 @@ import { useAppSelector } from '../../App/hooks'
 import { RootState } from '../../App/store'
 import { ArrowDown, Close, MagnifySearch } from '../../icons'
 import { NavLink } from 'react-router-dom'
+import { cn } from '../../utils/utils'
 
 type Props = {
   searchInput: [string, setState<string>]
@@ -39,10 +40,11 @@ const NavbarMenu = forwardRef<HTMLDialogElement, Props>(
       <dialog
         open={true}
         ref={ref}
-        className={`absolute top-0 h-screen w-[384px] bg-white z-[800] transition-all
-            ${isOpen ? 'left-0 duration-500' : '-left-[200%] duration-1000'}
-          `}
-        css='inset-inline-end: unset;'
+        className={cn(
+          'fixed top-0 h-screen w-[384px] bg-white z-[800] transition-all, -left-[200%] duration-1000',
+          { 'left-0 duration-500': isOpen }
+        )}
+        style={{ insetInlineEnd: 'unset' }}
       >
         <div className='flex flex-col flex-start gap-8 p-[30px]'>
           <div className='flex justify-between'>

@@ -1,4 +1,3 @@
-import tw from 'twin.macro'
 import FilterBar from '../FilterBar/FilterBar'
 import { ProductCardContainer, ProductCardSkeleton } from '..'
 import {
@@ -86,8 +85,12 @@ const Products = ({ title, gender }: Props) => {
   }
 
   return (
-    <Wrapper>
-      {title && <Title>{title}</Title>}
+    <div className='container flex flex-col py-24 mx-auto'>
+      {title && (
+        <h1 className='mb-12 text-center text-7xl font-bold leading-[93.6px] text-primary-black'>
+          {title}
+        </h1>
+      )}
       <FilterBar
         price={price}
         setPrice={setPrice}
@@ -102,7 +105,7 @@ const Products = ({ title, gender }: Props) => {
         highestPrice={highestPrice}
         applyHandler={applyFilter}
       />
-      <ProductWrapper>
+      <div className='grid grid-cols-1 gap-x-7 gap-y-12 lg:grid-cols-2 2xl:grid-cols-3'>
         {isFetching || isError ? (
           productCardSkeletonArray.map((_, index) => (
             <ProductCardSkeleton key={index} />
@@ -110,8 +113,9 @@ const Products = ({ title, gender }: Props) => {
         ) : (
           <ProductCardContainer products={products} />
         )}
-      </ProductWrapper>
-      <LoadMore
+      </div>
+      <button
+        className='self-center px-20 py-4 mt-24 text-base font-bold leading-6 transition-all border border-neutral-soft-grey text-primary-black w-80 disabled:opacity-70'
         aria-label='Load more products'
         onClick={loadNextPage}
         disabled={data?.currentPage === data?.totalPages || isFetching}
@@ -128,14 +132,9 @@ const Products = ({ title, gender }: Props) => {
         ) : (
           'SEE MORE PRODUCT'
         )}
-      </LoadMore>
-    </Wrapper>
+      </button>
+    </div>
   )
 }
-
-const Wrapper = tw.div`container mx-auto py-24 flex flex-col`
-const Title = tw.h1`mb-12 text-center text-7xl font-bold leading-[93.6px] text-primary-black`
-const ProductWrapper = tw.div`gap-x-7 gap-y-12 grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3`
-const LoadMore = tw.button`border border-neutral-soft-grey px-20 py-4 text-base font-bold leading-6 self-center mt-24 text-primary-black w-80 disabled:opacity-70 transition-all`
 
 export default Products

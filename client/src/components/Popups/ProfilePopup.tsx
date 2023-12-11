@@ -4,6 +4,7 @@ import ProfileLinks from '../../utils/profile-links'
 import { useSignOutMutation } from '../../services'
 import { useAppSelector } from '../../App/hooks'
 import { Close } from '../../icons'
+import { cn } from '../../utils/utils'
 
 type Props = {
   isOpen: boolean
@@ -19,12 +20,11 @@ const ProfilePopup = forwardRef<HTMLDialogElement, Props>(
     return (
       <dialog
         open={true}
-        className={`fixed md:absolute z-[800] md:z-20 right-0 md:top-[82px] md:bottom-[unset] bg-white shadow-md w-full md:w-80 p-7 space-y-7 border border-neutral-soft-grey ${
-          isOpen
-            ? 'bottom-0 md:block duration-500'
-            : '-bottom-full md:hidden duration-1000'
-        }`}
-        css='inset-inline-start: unset;'
+        className={cn(
+          'fixed md:absolute z-[800] md:z-20 right-0 md:top-[82px] md:bottom-[unset] bg-white shadow-md w-full md:w-80 p-7 space-y-7 border border-neutral-soft-grey -bottom-full md:hidden duration-1000',
+          { 'bottom-0 md:block duration-500': isOpen }
+        )}
+        style={{ insetInlineStart: 'unset' }}
         ref={ref}
         data-testid='profile-popup'
       >

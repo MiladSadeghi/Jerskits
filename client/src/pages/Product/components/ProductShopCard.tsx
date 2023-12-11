@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { IProduct } from '../../../shared/types/Product.types'
 import provideBrandLogo from '../../../utils/brand-logo'
-import { calculateDiscount } from '../../../utils/utils'
+import { calculateDiscount, cn } from '../../../utils/utils'
 import {
+  Button,
   ProductDiscountPercent,
   ProductDiscountPrice,
   ProductPrice,
-  ProductShopCardBtn,
-  ProductShopCardSizeBtn
+  ProductSize
 } from '../../../components'
 import { useAppSelector } from '../../../App/hooks'
 import toast from 'react-hot-toast'
@@ -29,12 +29,15 @@ const ProductShopCard = ({ product }: TProductShopCardProps) => {
   const isFavorite = useAppSelector(
     (state: RootState) => state.user.favorites
   ).some((favorite) => favorite?._id === product?._id)
+
   const isOnBag = useAppSelector(
     (state: RootState) => state.user.bag?.items
   )?.some((item) => item.product._id === product._id)
+
   const isAuthenticated = useAppSelector(
     (state: RootState) => state.auth.isAuthenticated
   )
+
   const [addProductToFavorites, { isLoading: isAdding }] =
     useAddProductToFavoritesMutation()
 
@@ -42,6 +45,8 @@ const ProductShopCard = ({ product }: TProductShopCardProps) => {
     useRemoveProductFromFavoritesMutation()
 
   const [addToBag, { isLoading: isAddingToBag }] = useAddToBagMutation()
+
+  const isDiscount = offPrice !== 0
 
   const handleFavorites = () => {
     if (!isAuthenticated) {
@@ -82,7 +87,7 @@ const ProductShopCard = ({ product }: TProductShopCardProps) => {
           <h2 className='text-lg capitalize text-neutral-dark-grey'>{type}</h2>
         </div>
         <div className='flex items-center'>
-          <ProductPrice $isDiscount={offPrice !== 0}>${price}</ProductPrice>
+          <ProductPrice isDiscount={isDiscount}>${price}</ProductPrice>
           {offPrice !== 0 && (
             <div className='flex items-center justify-between w-full'>
               <ProductDiscountPrice>${offPrice}</ProductDiscountPrice>
@@ -101,17 +106,19 @@ const ProductShopCard = ({ product }: TProductShopCardProps) => {
         </div>
         <div className='mb-7 grid grid-cols-4 gap-x-2.5 gap-y-5'>
           {size.map((size) => (
-            <ProductShopCardSizeBtn
-              $activeSize={size === selectedSize}
-              onClick={() => setSelectedSize(size)}
-              key={size}
-              aria-label={`size-${size}`}
-            >
-              {size}
-            </ProductShopCardSizeBtn>
+            <div key={size}>
+              <ProductSize
+                type='button'
+                active={size === selectedSize}
+                onClick={() => setSelectedSize(size)}
+                aria-label={`size-${size}`}
+              >
+                {size}
+              </ProductSize>
+            </div>
           ))}
         </div>
-        <ProductShopCardBtn
+        <Button
           className='mb-4 text-white bg-primary-black'
           aria-label='add product to bag'
           onClick={handleAddToBag}
@@ -129,11 +136,14 @@ const ProductShopCard = ({ product }: TProductShopCardProps) => {
           ) : (
             'ADD TO BAG'
           )}
-        </ProductShopCardBtn>
-        <ProductShopCardBtn
-          className={`border border-neutral-soft-grey ${
-            isFavorite ? 'bg-red-600 text-white' : 'bg-white'
-          }`}
+        </Button>
+        <Button
+          className={cn(
+            'border bg-white text-primary-black border-neutral-soft-grey',
+            {
+              'bg-red-600 text-white': isFavorite
+            }
+          )}
           aria-label='add product to favorite'
           onClick={handleFavorites}
           disabled={isAdding || isRemoving}
@@ -149,7 +159,7 @@ const ProductShopCard = ({ product }: TProductShopCardProps) => {
           ) : (
             'FAVORITE'
           )}
-        </ProductShopCardBtn>
+        </Button>
       </div>
     </div>
   )

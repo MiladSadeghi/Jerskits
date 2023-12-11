@@ -1,6 +1,4 @@
-import tw from 'twin.macro'
-import { Link, useLocation } from 'react-router-dom'
-import styled from 'twin.macro'
+import { NavLink, useLocation } from 'react-router-dom'
 import { useState, useRef, useEffect } from 'react'
 import { ProfilePopup } from '..'
 import { useAppSelector } from '../../App/hooks'
@@ -11,6 +9,7 @@ import BagModal from '../../modals/BagModal'
 import { SearchModal } from '../../modals'
 import NavbarMenu from './NavbarMenu'
 import { useLazySearchProductsQuery } from '../../services'
+import { cn } from '../../utils/utils'
 
 function Navbar() {
   const [popups, setPopups] = useState<TPopups>({
@@ -131,9 +130,10 @@ function Navbar() {
     <>
       {(isPopupsOpen || bagModal || searchModal || isNavBarMenuOpen) && (
         <div
-          className={`
-        ${bagModal || searchModal || isNavBarMenuOpen ? 'z-[102]' : 'z-[60]'}
-        fixed top-0 right-0  w-full h-full bg-transparent-30`}
+          className={cn(
+            'fixed top-0 right-0  w-full h-full bg-transparent-30 z-[60]',
+            { 'z-[102]': bagModal }
+          )}
         />
       )}
 
@@ -156,7 +156,7 @@ function Navbar() {
         ref={navBarMenuRef}
       />
       <nav className='md:relative z-[101] bg-white'>
-        <Wrapper>
+        <div className='container mx-auto h-[90px]'>
           <div className='flex items-center justify-between w-full h-full'>
             <div
               className='block cursor-pointer md:hidden'
@@ -165,17 +165,32 @@ function Navbar() {
               <Hamburger />
             </div>
 
-            <Link to='/'>
+            <NavLink to='/'>
               <img src={'/images/jerskits-black.jpg'} alt='Home' />
-            </Link>
+            </NavLink>
 
             <div className='hidden gap-10 md:flex'>
-              <NavLink to='/men'>Men</NavLink>
-              <NavLink to='/women'>Women</NavLink>
-              <NavLink to='/kid'>Kids</NavLink>
+              <NavLink
+                className='text-sm font-semibold text-primary-black'
+                to='/men'
+              >
+                Men
+              </NavLink>
+              <NavLink
+                className='text-sm font-semibold text-primary-black'
+                to='/women'
+              >
+                Women
+              </NavLink>
+              <NavLink
+                className='text-sm font-semibold text-primary-black'
+                to='/kid'
+              >
+                Kids
+              </NavLink>
             </div>
             <div className='flex items-center gap-10'>
-              <div className='flex items-center gap-10'>
+              <div className='relative flex items-center gap-10'>
                 <div className='w-5 h-5'>
                   <button
                     aria-label='open search modal'
@@ -246,20 +261,20 @@ function Navbar() {
                     />
                   </div>
                 ) : (
-                  <NavLink to='/sign-in'>Sign In</NavLink>
+                  <NavLink
+                    className='text-sm font-semibold text-primary-black'
+                    to='/sign-in'
+                  >
+                    Sign In
+                  </NavLink>
                 )}
               </div>
             </div>
           </div>
-        </Wrapper>
+        </div>
       </nav>
     </>
   )
 }
-
-const Wrapper = tw.div`container mx-auto h-[90px]`
-const NavLink = styled(Link)`
-  text-sm font-semibold text-primary-black
-`
 
 export default Navbar

@@ -10,13 +10,10 @@ import Footer from './Footer/Footer'
 import ProductSkeleton from './Products/ProductSkeleton'
 import Accordion from './Accordion/Accordion'
 
-import {
-  ProductPrice,
-  ProductDiscountPrice,
-  ProductDiscountPercent,
-  ProductShopCardBtn,
-  ProductShopCardSizeBtn
-} from './Products/Product.styles'
+import ProductPrice from './Products/ProductPrice'
+import ProductDiscountPrice from './Products/ProductDiscountPrice'
+import ProductDiscountPercent from './Products/ProductDiscountPercent'
+import ProductSize from './Products/ProductSize'
 
 import ReviewRating from './Review/ReviewRating'
 import Review from './Review/Review'
@@ -27,6 +24,14 @@ import ProductCardContainer from './Products/ProductCardContainer'
 import BagDropdown from './Bag/BagDropdown'
 
 const Products = lazy(() => import('./Products/Products'))
+
+import FormLabel from './Form/FormLabel'
+import FormInput from './Form/FormInput'
+import FormError from './Form/FormError'
+
+import ProfileImage from './Profile/ProfileImage'
+
+import Button from './Button/Button'
 
 export {
   Navbar,
@@ -43,11 +48,15 @@ export {
   ProductPrice,
   ProductDiscountPrice,
   ProductDiscountPercent,
-  ProductShopCardBtn,
-  ProductShopCardSizeBtn,
+  ProductSize,
   ReviewRating,
   Review,
   ReviewForm,
   ProductCardContainer,
-  BagDropdown
+  BagDropdown,
+  FormLabel,
+  FormInput,
+  FormError,
+  ProfileImage,
+  Button
 }

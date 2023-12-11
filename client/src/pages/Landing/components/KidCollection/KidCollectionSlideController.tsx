@@ -1,5 +1,4 @@
 import { MouseEventHandler } from 'react'
-import tw from 'twin.macro'
 import { ArrowRight } from '../../../../icons'
 
 type Props = {
@@ -7,36 +6,35 @@ type Props = {
 }
 const KidCollectionController = ({ controlSlide }: Props) => {
   return (
-    <Wrapper>
+    <div className='flex flex-col w-full mb-12 overflow-hidden sm:w-80 xl:mb-0'>
       <div className='mb-24'>
-        <Title>New Kids Collection</Title>
-        <Description>
+        <h1 className='text-5xl sm:text-6xl md:text-7xl text-primary-black font-bold leading-[63px] md:leading-[93.6px] mb-5'>
+          New Kids Collection
+        </h1>
+        <p className='text-lg leading-7 break-words text-neutral-dark-grey'>
           We are proud of our new work and are happy to present them to you.
-        </Description>
+        </p>
       </div>
       <div className='flex gap-x-5'>
-        <ArrowIcon
+        <button
+          className='p-3 border rounded-full border-neutral-soft-grey'
           aria-label='Previous slide'
           data-test-id='prev-slide'
           onClick={controlSlide('minus')}
         >
           <ArrowRight className='rotate-180' />
-        </ArrowIcon>
-        <ArrowIcon
+        </button>
+        <button
+          className='p-3 border rounded-full border-neutral-soft-grey'
           aria-label='Next slide'
           data-testid='next-slide'
           onClick={controlSlide('plus')}
         >
           <ArrowRight />
-        </ArrowIcon>
+        </button>
       </div>
-    </Wrapper>
+    </div>
   )
 }
-
-const Wrapper = tw.div`flex flex-col w-full sm:w-80 overflow-hidden mb-12 xl:mb-0`
-const Title = tw.h1`text-5xl sm:text-6xl md:text-7xl text-primary-black font-bold leading-[63px] md:leading-[93.6px] mb-5`
-const Description = tw.p`text-neutral-dark-grey text-lg leading-7 break-words`
-const ArrowIcon = tw.button`p-3 border border-neutral-soft-grey rounded-full`
 
 export default KidCollectionController

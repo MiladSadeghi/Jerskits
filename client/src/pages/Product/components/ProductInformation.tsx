@@ -11,6 +11,7 @@ type TProductInformationProps = {
 
 const ProductInformation = ({ details, reviews }: TProductInformationProps) => {
   const [activeAccordion, setActiveAccordion] = useState<number | null>(0)
+
   const changeActiveAccordion = (idx: number) => {
     if (activeAccordion === idx) {
       setActiveAccordion(null)

@@ -4,6 +4,7 @@ import { RootState } from '../../App/store'
 import ProductMiniCard from '../Products/ProductMiniCard'
 import { forwardRef } from 'react'
 import { Close } from '../../icons'
+import { cn } from '../../utils/utils'
 
 type Props = {
   handlePopup: (arg: keyof TPopups) => void
@@ -19,12 +20,11 @@ const FavoritesPopup = forwardRef<HTMLDialogElement, Props>(
       <dialog
         ref={ref}
         open={true}
-        className={`fixed md:absolute z-[99] right-0 bg-white md:top-[75px] md:bottom-[unset] w-full md:w-96 p-[30px] space-y-7 transition-all ${
-          isOpen
-            ? 'bottom-0 md:block duration-500'
-            : '-bottom-full md:hidden duration-1000'
-        }`}
-        css='inset-inline-start: unset;'
+        className={cn(
+          'fixed md:absolute z-[99] right-0 bg-white md:top-[75px] md:bottom-[unset] w-full md:w-96 p-[30px] space-y-7 transition-all -bottom-full md:hidden duration-1000 m-0',
+          { 'bottom-0 md:block duration-500': isOpen }
+        )}
+        style={{ insetInlineStart: 'unset' }}
         data-testid='favorites-popup'
       >
         <div className='flex items-center justify-between'>

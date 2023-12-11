@@ -1,7 +1,5 @@
 import { useForm } from 'react-hook-form'
 import { SpinnerCircular, SpinnerDiamond } from 'spinners-react'
-import tw, { styled } from 'twin.macro'
-import { css } from 'twin.macro'
 import { yupResolver } from '@hookform/resolvers/yup'
 import editProfileSchema from './Edit.schema.ts'
 import { ErrorMessage } from '@hookform/error-message'
@@ -20,6 +18,14 @@ import {
 import { UploadCloud, UploadFile } from '../../../icons'
 import { useAppSelector } from '../../../App/hooks.ts'
 import { RootState } from '../../../App/store.ts'
+import {
+  FormLabel,
+  FormInput,
+  FormError,
+  ProfileImage,
+  Button
+} from '../../../components/'
+import { cn } from '../../../utils/utils.ts'
 
 function Edit() {
   const profileAvatarRef = useRef<HTMLInputElement>(null)
@@ -183,7 +189,8 @@ function Edit() {
   }
 
   return (
-    <Wrapper
+    <form
+      className='relative flex flex-col px-5 py-5 space-y-7'
       onSubmit={handleSubmit(updateProfileHandler)}
       onDragOver={handleAvatarDragOver}
       onDragLeave={handleAvatarDragLeave}
@@ -198,7 +205,7 @@ function Edit() {
             isAvatarDragged ? 'opacity-100 z-10' : 'opacity-0 -z-10'
           }`}
         >
-          <div className='rounded-2xl bg-white w-full py-4 flex justify-center items-center'>
+          <div className='flex items-center justify-center w-full py-4 bg-white rounded-2xl'>
             <UploadCloud />
           </div>
         </div>
@@ -221,12 +228,15 @@ function Edit() {
           )}
         </div>
         <div className='w-full ml-7'>
-          <AvatarInput onClick={() => profileAvatarRef.current?.click()}>
+          <div
+            className='div`w-full h-12 px-5 py-4 border outline-none border-neutral-grey flex items-center justify-between'
+            onClick={() => profileAvatarRef.current?.click()}
+          >
             <p className='text-text-sm text-neutral-grey'>
               Upload Photo (Max 1 Mb)
             </p>
             <UploadFile />
-          </AvatarInput>
+          </div>
           <input
             type='file'
             ref={profileAvatarRef}
@@ -251,7 +261,11 @@ function Edit() {
             render={({ message }) => <FormError>{message}</FormError>}
           />
         </div>
-        <FormInput id='first-name-input' {...register('firstName')} />
+        <FormInput
+          id='first-name-input'
+          type='text'
+          {...register('firstName')}
+        />
       </div>
       <div className='space-y-[10px]'>
         <div className='flex justify-between'>
@@ -262,7 +276,7 @@ function Edit() {
             render={({ message }) => <FormError>{message}</FormError>}
           />
         </div>
-        <FormInput id='last-name-input' {...register('lastName')} />
+        <FormInput id='last-name-input' type='text' {...register('lastName')} />
       </div>
       <div className='space-y-[10px]'>
         <div className='flex justify-between'>
@@ -276,9 +290,9 @@ function Edit() {
           />
         </div>
         <FormInput
-          $isDisabled={!watch('saveAddress')}
           disabled={!watch('saveAddress')}
           id='address-input'
+          type='text'
           {...register('shippingAddress.address')}
         />
       </div>
@@ -352,7 +366,6 @@ function Edit() {
           </div>
           <FormInput
             type='number'
-            $isDisabled={!watch('saveAddress')}
             disabled={!watch('saveAddress')}
             id='postal-code-input'
             placeholder='Postal Code'
@@ -386,7 +399,11 @@ function Edit() {
             render={({ message }) => <FormError>{message}</FormError>}
           />
         </div>
-        <FormInput id='contact-email-input' {...register('contactEmail')} />
+        <FormInput
+          id='contact-email-input'
+          type='text'
+          {...register('contactEmail')}
+        />
       </div>
       <div className='space-y-[10px]'>
         <div className='flex justify-between'>
@@ -403,8 +420,15 @@ function Edit() {
           {...register('phoneNumber')}
         />
       </div>
-      <SubmitButton type='submit' disabled={isLoading}>
-        <SubmitButtonLoader $isLoading={isLoading}>
+      <Button type='submit' disabled={isLoading}>
+        <div
+          className={cn(
+            'overflow-hidden transition-all duration-300 ease-in-out w-0 max-w-0',
+            {
+              'mr-2 w-fit max-w-fit': isLoading
+            }
+          )}
+        >
           <SpinnerCircular
             size={25}
             thickness={260}
@@ -412,45 +436,11 @@ function Edit() {
             color='#fff'
             secondaryColor='#676c70'
           />
-        </SubmitButtonLoader>
+        </div>
         {isLoading ? 'LOADING...' : 'SAVE'}
-      </SubmitButton>
-    </Wrapper>
+      </Button>
+    </form>
   )
 }
 
-const Wrapper = tw.form`flex flex-col space-y-7 relative px-5 py-5`
-
-const FormLabel = tw.label`text-primary-black font-medium text-text-sm`
-const FormInput = styled.input<{
-  $isDisabled?: boolean
-}>`
-  ${tw`w-full h-12 px-5 py-4 border outline-none border-neutral-soft-grey`}
-  ${({ $isDisabled }) => ($isDisabled ? tw`bg-[#f2f2f2]` : tw``)}
-  ${css`
-    &:focus {
-      border-color: #262d33;
-      box-shadow: none;
-    }
-  `}
-`
-const FormError = tw.p`text-red-600 text-sm`
-const ProfileImage = tw.img` rounded-full object-cover w-full h-full`
-const AvatarInput = tw.div`w-full h-12 px-5 py-4 border outline-none border-neutral-grey flex items-center justify-between`
-const SubmitButton = styled.button`
-  ${tw`w-full font-bold text-white h-14 bg-primary-black flex items-center justify-center`}
-  ${css`
-    &:disabled {
-      opacity: 0.7;
-    }
-  `}
-`
-
-const SubmitButtonLoader = styled.div<{
-  $isLoading?: boolean
-}>`
-  ${tw`overflow-hidden transition-all duration-300 ease-in-out`}
-  ${({ $isLoading }) =>
-    $isLoading ? tw`w-fit mr-2 max-w-fit` : tw`!w-0 max-w-0`}
-`
 export default Edit

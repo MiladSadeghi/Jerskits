@@ -38,7 +38,7 @@ const Footer = () => {
             {footerContent.map((content, idx) => (
               <ul
                 key={idx}
-                className='flex flex-col items-center mb-6 xl:items-start'
+                className='flex flex-col items-center mb-6 xl:items-start space-y-2.5'
               >
                 <li className='mb-5 text-lg font-bold text-white'>
                   {content.title}

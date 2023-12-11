@@ -9,7 +9,7 @@ const ArrowDown = ({
   className,
   width = 14,
   height = 14,
-  strokeClassName = '#262D33'
+  strokeClassName = 'stroke-primary-black'
 }: Props) => {
   return (
     <svg

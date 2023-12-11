@@ -1,6 +1,5 @@
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import tw, { styled, css } from 'twin.macro'
 import { ISignUpForm } from './SignUp.types'
 import { yupResolver } from '@hookform/resolvers/yup'
 import SignUpSchema from './SignUp.schema'
@@ -10,6 +9,7 @@ import { useSignUpMutation } from '../../services'
 import { useEffect } from 'react'
 import { ErrorMessage } from '@hookform/error-message'
 import { TAuthResponseError } from '../../shared/types/Auth.types'
+import { Button, FormError, FormInput, FormLabel } from '../../components'
 
 function SignUp() {
   const navigate = useNavigate()
@@ -164,7 +164,7 @@ function SignUp() {
               </p>
             </FormLabel>
           </div>
-          <SubmitButton type='submit' disabled={isLoading}>
+          <Button type='submit' disabled={isLoading}>
             {isLoading ? (
               <SpinnerCircular
                 size={45}
@@ -177,7 +177,7 @@ function SignUp() {
             ) : (
               'CREATE'
             )}
-          </SubmitButton>
+          </Button>
         </form>
 
         <p className='text-neutral-dark-grey text-text-sm mt-7'>
@@ -193,25 +193,5 @@ function SignUp() {
     </div>
   )
 }
-
-const FormLabel = tw.label`text-primary-black font-normal`
-const FormInput = styled.input`
-  ${tw`w-full h-12 px-5 py-4 border border-neutral-grey `}
-  ${css`
-    &:focus {
-      border-color: #262d33;
-      box-shadow: none;
-    }
-  `}
-`
-const FormError = tw.p`text-text-sm text-red-500`
-const SubmitButton = styled.button`
-  ${tw`w-full font-bold text-white h-14 bg-primary-black disabled:opacity-50`}
-  ${css`
-    &:disabled {
-      opacity: 0.7;
-    }
-  `}
-`
 
 export default SignUp
