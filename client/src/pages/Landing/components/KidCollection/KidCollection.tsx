@@ -1,6 +1,6 @@
 import { MouseEventHandler, useRef, useState } from 'react'
 import { IProduct, TBrand } from '../../../../shared/types/Product.types'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { useLazyGetKidBrandCollectionQuery } from '../../../../services'
 import KidCollectionController from './KidCollectionSlideController'
 import KidCollectionSlider from './KidCollectionSlider'
@@ -77,7 +77,7 @@ const KidCollection = ({ products, isError, isLoading }: Props) => {
   return (
     <div className='mx-auto'>
       <div className='container relative flex mx-auto mb-24'>
-        <motion.div
+        <m.div
           className={cn(
             'absolute top-0 w-3/12 lg:w-2/12 h-full bg-primary-black z-[5] mix-blend-color-burn duration-500 bg-opacity-70 ease-linear'
           )}

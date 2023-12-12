@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { m, useMotionValue, useSpring } from 'framer-motion'
 import { useRef, useState } from 'react'
 import FeatureContent from '../../shared/FeatureContent'
 import AuthLayoutSlide from './AuthLayoutSlide'
@@ -26,7 +26,7 @@ const AuthLayoutSlider = () => {
 
   return (
     <div className='relative w-full h-full overflow-hidden'>
-      <motion.ul
+      <m.ul
         style={{
           x: animatedX
         }}
@@ -41,7 +41,7 @@ const AuthLayoutSlider = () => {
             <AuthLayoutSlide {...feature} />
           </li>
         ))}
-      </motion.ul>
+      </m.ul>
       <div className='absolute z-20 flex items-center justify-center w-full bottom-10 gap-x-5'>
         {featureContent.map((_, index) => (
           <div
