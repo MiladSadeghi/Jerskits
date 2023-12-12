@@ -133,7 +133,6 @@ const FilterBar = ({
                   onClick={() => openModalHandler(index)}
                 >
                   {item.title}
-
                   <ArrowDown
                     className='ml-5 '
                     strokeClassName={cn('stroke-neutral-grey', {
@@ -141,18 +140,19 @@ const FilterBar = ({
                     })}
                   />
                 </button>
-
-                <FilterContentModal
-                  btnRef={item.btnRef}
-                  open={openModal && activeFilter === index}
-                  onClose={() => closeModalHandler()}
-                  width={item.modalWidth}
-                  title={item.modalTitle}
-                  applyHandler={applyHandler}
-                  resetFilter={item.resetFilter}
-                >
-                  {item.filterContent}
-                </FilterContentModal>
+                {activeFilter === index && (
+                  <FilterContentModal
+                    open={openModal}
+                    btnRef={item.btnRef}
+                    onClose={closeModalHandler}
+                    width={item.modalWidth}
+                    title={item.modalTitle}
+                    applyHandler={applyHandler}
+                    resetFilter={item.resetFilter}
+                  >
+                    {item.filterContent}
+                  </FilterContentModal>
+                )}
               </div>
             ))}
           </div>
@@ -171,8 +171,8 @@ const FilterBar = ({
               />
             </button>
             <FilterContentModal
-              btnRef={filterBtnRef}
               open={openModal}
+              btnRef={filterBtnRef}
               onClose={() => closeModalHandler()}
               width={'100%'}
               applyHandler={applyHandler}
