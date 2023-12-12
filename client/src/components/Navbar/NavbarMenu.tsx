@@ -8,14 +8,24 @@ import { cn } from '../../utils/utils'
 type Props = {
   searchInput: [string, setState<string>]
   isOpenState: [boolean, setState<string>]
-  handlePopups: (arg: keyof TPopups) => void
+  openProfilePopup: () => void
+  openFavoritesPopup: () => void
+  openBagPopup: () => void
   handleSearch: () => void
   handleSearchModal: setState<boolean>
 }
 
 const NavbarMenu = forwardRef<HTMLDialogElement, Props>(
   (
-    { searchInput, isOpenState, handlePopups, handleSearch, handleSearchModal },
+    {
+      searchInput,
+      isOpenState,
+      openProfilePopup,
+      openFavoritesPopup,
+      openBagPopup,
+      handleSearch,
+      handleSearchModal
+    },
     ref
   ) => {
     const { avatar, fullName, firstName, createdAt } = useAppSelector(
@@ -76,10 +86,7 @@ const NavbarMenu = forwardRef<HTMLDialogElement, Props>(
                 Member since {joinedYear}
               </p>
             </div>
-            <button
-              className='-rotate-90'
-              onClick={() => handlePopups('profile')}
-            >
+            <button className='-rotate-90' onClick={openProfilePopup}>
               <ArrowDown
                 width={24}
                 height={24}
@@ -108,13 +115,13 @@ const NavbarMenu = forwardRef<HTMLDialogElement, Props>(
             <>
               <button
                 className='text-lg font-bold text-primary-black text-start'
-                onClick={() => handlePopups('bag')}
+                onClick={openBagPopup}
               >
                 My Bags ({bagItemLength === 0 ? '' : `${bagItemLength} Items`})
               </button>
               <button
                 className='text-lg font-bold text-primary-black text-start'
-                onClick={() => handlePopups('favorites')}
+                onClick={openFavoritesPopup}
               >
                 Favorites
               </button>

@@ -8,11 +8,11 @@ import { cn } from '../../utils/utils'
 
 type Props = {
   isOpen: boolean
-  handlePopup: (arg: keyof TPopups) => void
+  closePopup: () => void
 }
 
 const ProfilePopup = forwardRef<HTMLDialogElement, Props>(
-  ({ isOpen, handlePopup }, ref) => {
+  ({ isOpen, closePopup }, ref) => {
     const [signOut] = useSignOutMutation()
     const profile = useAppSelector((state) => state.profile)
     const userAvatar = profile.avatar
@@ -30,7 +30,7 @@ const ProfilePopup = forwardRef<HTMLDialogElement, Props>(
       >
         <div className='flex items-center justify-between md:hidden'>
           <h1 className='text-lg font-bold text-primary-black'>Account</h1>
-          <button onClick={() => handlePopup('profile')}>
+          <button onClick={closePopup}>
             <Close />
           </button>
         </div>

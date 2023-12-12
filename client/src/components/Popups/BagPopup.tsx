@@ -9,11 +9,11 @@ import { cn } from '../../utils/utils'
 type Props = {
   isOpen: boolean
   handleBagModal: setState<boolean>
-  handlePopup: setState<keyof TPopups>
+  closePopup: () => void
 }
 
 const BagPopup = forwardRef<HTMLDialogElement, Props>(
-  ({ isOpen, handleBagModal, handlePopup }, ref) => {
+  ({ isOpen, handleBagModal, closePopup }, ref) => {
     const bag = useAppSelector((state: RootState) => state.user.bag)
     return (
       <dialog
@@ -27,7 +27,7 @@ const BagPopup = forwardRef<HTMLDialogElement, Props>(
       >
         <div className='flex items-center justify-between'>
           <h1 className='text-lg font-bold text-primary-black'>Bag</h1>
-          <button onClick={() => handlePopup('bag')} className='md:hidden'>
+          <button onClick={closePopup} className='md:hidden'>
             <Close />
           </button>
         </div>

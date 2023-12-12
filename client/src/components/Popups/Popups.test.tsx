@@ -69,7 +69,7 @@ describe('Popups test', () => {
     test('render profile popup without throwing an error', () => {
       const { store } = renderWithProviders(
         <BrowserRouter>
-          <ProfilePopup isOpen={true} handlePopup={vi.fn()} ref={modalRef} />
+          <ProfilePopup isOpen={true} closePopup={vi.fn()} ref={modalRef} />
         </BrowserRouter>
       )
 
@@ -84,11 +84,7 @@ describe('Popups test', () => {
     test('render popup and display user information and links', async () => {
       renderWithProviders(
         <BrowserRouter>
-          <ProfilePopup
-            isOpen={true}
-            handlePopup={handlePopup}
-            ref={modalRef}
-          />
+          <ProfilePopup isOpen={true} closePopup={handlePopup} ref={modalRef} />
         </BrowserRouter>
       )
 
@@ -102,11 +98,7 @@ describe('Popups test', () => {
     test('display default image when user has no avatar', () => {
       renderWithProviders(
         <BrowserRouter>
-          <ProfilePopup
-            isOpen={true}
-            handlePopup={handlePopup}
-            ref={modalRef}
-          />
+          <ProfilePopup isOpen={true} closePopup={handlePopup} ref={modalRef} />
         </BrowserRouter>
       )
     })
@@ -116,7 +108,7 @@ describe('Popups test', () => {
         <BrowserRouter>
           <ProfilePopup
             isOpen={false}
-            handlePopup={handlePopup}
+            closePopup={handlePopup}
             ref={modalRef}
           />
         </BrowserRouter>
@@ -130,11 +122,7 @@ describe('Popups test', () => {
     test('render favorites popup without throwing an error', () => {
       renderWithProviders(
         <BrowserRouter>
-          <ProfilePopup
-            isOpen={true}
-            handlePopup={handlePopup}
-            ref={modalRef}
-          />
+          <ProfilePopup isOpen={true} closePopup={handlePopup} ref={modalRef} />
         </BrowserRouter>
       )
     })
@@ -144,7 +132,7 @@ describe('Popups test', () => {
         <BrowserRouter>
           <FavoritesPopup
             isOpen={true}
-            handlePopup={handlePopup}
+            closePopup={handlePopup}
             ref={modalRef}
           />
         </BrowserRouter>
@@ -164,7 +152,7 @@ describe('Popups test', () => {
         <BrowserRouter>
           <FavoritesPopup
             isOpen={true}
-            handlePopup={handlePopup}
+            closePopup={handlePopup}
             ref={modalRef}
           />
         </BrowserRouter>
@@ -186,7 +174,7 @@ describe('Popups test', () => {
         <BrowserRouter>
           <FavoritesPopup
             isOpen={true}
-            handlePopup={handlePopup}
+            closePopup={handlePopup}
             ref={modalRef}
           />
         </BrowserRouter>
@@ -202,7 +190,7 @@ describe('Popups test', () => {
         <BrowserRouter>
           <FavoritesPopup
             isOpen={false}
-            handlePopup={handlePopup}
+            closePopup={handlePopup}
             ref={modalRef}
           />
         </BrowserRouter>
@@ -244,7 +232,7 @@ describe('Popups test', () => {
           <BrowserRouter>
             <BagPopup
               isOpen={true}
-              handlePopup={handlePopup}
+              closePopup={handlePopup}
               ref={modalRef}
               handleBagModal={handleBagModal}
             />
@@ -257,7 +245,7 @@ describe('Popups test', () => {
           <BrowserRouter>
             <BagPopup
               isOpen={true}
-              handlePopup={handlePopup}
+              closePopup={handlePopup}
               ref={modalRef}
               handleBagModal={handleBagModal}
             />
@@ -283,7 +271,7 @@ describe('Popups test', () => {
           <BrowserRouter>
             <BagPopup
               isOpen={true}
-              handlePopup={handlePopup}
+              closePopup={handlePopup}
               ref={modalRef}
               handleBagModal={handleBagModal}
             />
@@ -310,7 +298,7 @@ describe('Popups test', () => {
           <BrowserRouter>
             <BagPopup
               isOpen={true}
-              handlePopup={handlePopup}
+              closePopup={handlePopup}
               ref={modalRef}
               handleBagModal={handleBagModal}
             />
@@ -329,7 +317,7 @@ describe('Popups test', () => {
           <BrowserRouter>
             <BagPopup
               isOpen={true}
-              handlePopup={handlePopup}
+              closePopup={handlePopup}
               ref={modalRef}
               handleBagModal={handleBagModal}
             />

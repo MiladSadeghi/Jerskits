@@ -10,26 +10,46 @@ import { SearchModal } from '../../modals'
 import NavbarMenu from './NavbarMenu'
 import { useLazySearchProductsQuery } from '../../services'
 import { cn } from '../../utils/utils'
+import { useOutsideClick } from '../../hooks/useOutsideClick'
 
 function Navbar() {
-  const [popups, setPopups] = useState<TPopups>({
-    profile: false,
-    favorites: false,
-    bag: false
-  })
-  const profileRef = useRef<HTMLDialogElement | null>(null)
-  const favoriteRef = useRef<HTMLDialogElement | null>(null)
-  const bagRef = useRef<HTMLDialogElement | null>(null)
-  const bagModalRef = useRef<HTMLDialogElement | null>(null)
-  const searchModalRef = useRef<HTMLDialogElement | null>(null)
+  const [profilePopup, setProfilePopup] = useState<boolean>(false)
+  const [favoritesPopup, setFavoritesPopup] = useState<boolean>(false)
+  const [bagPopup, setBagPopup] = useState<boolean>(false)
+
   const navBarMenuRef = useRef<HTMLDialogElement | null>(null)
   const profileBtnRef = useRef<HTMLButtonElement | null>(null)
-  const favoriteBtnRef = useRef<HTMLButtonElement | null>(null)
+  const favoritesBtnRef = useRef<HTMLButtonElement | null>(null)
   const bagBtnRef = useRef<HTMLButtonElement | null>(null)
   const location = useLocation()
   const authStatus = useAppSelector((state) => state.auth.isAuthenticated)
   const profile = useAppSelector((state) => state.profile)
-  const isPopupsOpen = Object.values(popups).some((popup) => popup)
+  const isPopupsOpen = [profilePopup, favoritesPopup, bagPopup].some(
+    (popup) => popup
+  )
+
+  const profileRef = useOutsideClick<HTMLDialogElement, HTMLButtonElement>({
+    callback: () => setProfilePopup(false),
+    triggerRef: profileBtnRef
+  })
+  const favoritesRef = useOutsideClick<HTMLDialogElement, HTMLButtonElement>({
+    callback: () => setFavoritesPopup(false),
+    triggerRef: favoritesBtnRef
+  })
+
+  const bagRef = useOutsideClick<HTMLDialogElement, HTMLButtonElement>({
+    callback: () => setBagPopup(false),
+    triggerRef: bagBtnRef
+  })
+
+  const searchModalRef = useOutsideClick<HTMLDialogElement, HTMLButtonElement>({
+    callback: () => setSearchModal(false),
+    triggerRef: bagBtnRef
+  })
+
+  const bagModalRef = useOutsideClick<HTMLDialogElement, HTMLButtonElement>({
+    callback: () => setBagModal(false)
+  })
 
   const [bagModal, setBagModal] = useState<boolean>(false)
   const [searchModal, setSearchModal] = useState<boolean>(false)
@@ -38,83 +58,15 @@ function Navbar() {
 
   const [search, { isFetching, data, isSuccess }] = useLazySearchProductsQuery()
 
-  const handlePopupOpen = (popup: keyof TPopups) => {
-    setPopups((prevPopups) => ({
-      ...prevPopups,
-      [popup]: !prevPopups[popup]
-    }))
-  }
-
-  const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-    const { target } = event
-    const isProfilePopupOpen = profileRef.current?.contains(target as Node)
-    const isFavoritePopupOpen = favoriteRef.current?.contains(target as Node)
-    const isBagModalOpen = bagModalRef.current?.contains(target as Node)
-    const isSearchModalOpen = searchModalRef.current?.contains(target as Node)
-    const isNavbarMenuOpen = navBarMenuRef.current?.contains(target as Node)
-
-    const isProfileButtonClicked = profileBtnRef.current?.contains(
-      target as Node
-    )
-    const isFavoriteButtonClicked = favoriteBtnRef.current?.contains(
-      target as Node
-    )
-    const isBagPopupOpen = bagRef.current?.contains(target as Node)
-
-    const isBagButtonClicked = bagBtnRef.current?.contains(target as Node)
-
-    const updatedPopups: Partial<TPopups> = {}
-
-    if (!isProfilePopupOpen && !isProfileButtonClicked) {
-      updatedPopups.profile = false
-    }
-
-    if (!isFavoritePopupOpen && !isFavoriteButtonClicked) {
-      updatedPopups.favorites = false
-    }
-
-    if (!isBagPopupOpen && !isBagButtonClicked) {
-      updatedPopups.bag = false
-    }
-
-    if (!isBagModalOpen) {
-      setBagModal(false)
-    }
-    if (!isSearchModalOpen) {
-      setSearchModal(false)
-    }
-
-    if (!isNavbarMenuOpen) {
-      setIsNavBarMenuOpen(false)
-    }
-
-    setPopups((prevPopups) => ({
-      ...prevPopups,
-      ...updatedPopups
-    }))
-  }
-
   const handleSearch = () => {
     search(searchInputValue)
   }
 
   useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent | TouchEvent) =>
-      handleClickOutside(event)
+    setProfilePopup(false)
+    setFavoritesPopup(false)
+    setBagPopup(false)
 
-    document.addEventListener('mousedown', handleOutsideClick)
-
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick)
-    }
-  })
-
-  useEffect(() => {
-    setPopups({
-      profile: false,
-      favorites: false,
-      bag: false
-    })
     setIsNavBarMenuOpen(false)
   }, [location, bagModal, searchModal])
 
@@ -124,7 +76,7 @@ function Navbar() {
 
   useEffect(() => {
     setIsNavBarMenuOpen(false)
-  }, [popups.profile, popups.favorites, popups.bag])
+  }, [profilePopup, favoritesPopup, bagPopup])
 
   return (
     <>
@@ -150,7 +102,9 @@ function Navbar() {
       <NavbarMenu
         searchInput={[searchInputValue, setSearchInputValue]}
         isOpenState={[isNavBarMenuOpen, setIsNavBarMenuOpen]}
-        handlePopups={handlePopupOpen}
+        openProfilePopup={() => setProfilePopup(true)}
+        openFavoritesPopup={() => setFavoritesPopup(true)}
+        openBagPopup={() => setBagPopup(true)}
         handleSearch={handleSearch}
         handleSearchModal={setSearchModal}
         ref={navBarMenuRef}
@@ -205,7 +159,7 @@ function Navbar() {
                     aria-label='open bag popup'
                     name='openShoppingBag'
                     ref={bagBtnRef}
-                    onClick={() => handlePopupOpen('bag')}
+                    onClick={() => setBagPopup(true)}
                   >
                     <Bag />
                   </button>
@@ -214,22 +168,22 @@ function Navbar() {
                   <button
                     aria-label='open favorites popup'
                     name='openFavoritesPopup'
-                    onClick={() => handlePopupOpen('favorites')}
-                    ref={favoriteBtnRef}
+                    onClick={() => setFavoritesPopup(true)}
+                    ref={favoritesBtnRef}
                   >
                     <Heart />
                   </button>
                 </div>
                 <BagPopup
                   ref={bagRef}
-                  isOpen={popups.bag}
+                  isOpen={bagPopup}
                   handleBagModal={setBagModal}
-                  handlePopup={handlePopupOpen}
+                  closePopup={() => setBagPopup(false)}
                 />
                 <FavoritesPopup
-                  ref={favoriteRef}
-                  handlePopup={handlePopupOpen}
-                  isOpen={popups.favorites}
+                  ref={favoritesRef}
+                  closePopup={() => setFavoritesPopup(false)}
+                  isOpen={favoritesPopup}
                 />
               </div>
               <div className=''>
@@ -238,7 +192,7 @@ function Navbar() {
                     <button
                       ref={profileBtnRef}
                       className='hidden md:block'
-                      onClick={() => handlePopupOpen('profile')}
+                      onClick={() => setProfilePopup(true)}
                     >
                       <img
                         crossOrigin='anonymous'
@@ -256,13 +210,13 @@ function Navbar() {
                     </button>
                     <ProfilePopup
                       ref={profileRef}
-                      isOpen={popups.profile}
-                      handlePopup={handlePopupOpen}
+                      isOpen={profilePopup}
+                      closePopup={() => setProfilePopup(false)}
                     />
                   </div>
                 ) : (
                   <NavLink
-                    className='text-sm font-semibold text-primary-black'
+                    className='hidden text-sm font-semibold text-primary-black md:block'
                     to='/sign-in'
                   >
                     Sign In

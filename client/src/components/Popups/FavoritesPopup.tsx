@@ -7,12 +7,12 @@ import { Close } from '../../icons'
 import { cn } from '../../utils/utils'
 
 type Props = {
-  handlePopup: (arg: keyof TPopups) => void
+  closePopup: () => void
   isOpen: boolean
 }
 
 const FavoritesPopup = forwardRef<HTMLDialogElement, Props>(
-  ({ handlePopup, isOpen }, ref) => {
+  ({ closePopup, isOpen }, ref) => {
     const favoritesProduct = useAppSelector(
       (state: RootState) => state.user.favorites
     )
@@ -29,10 +29,7 @@ const FavoritesPopup = forwardRef<HTMLDialogElement, Props>(
       >
         <div className='flex items-center justify-between'>
           <h1 className='text-lg font-bold text-primary-black'>Favorites</h1>
-          <button
-            onClick={() => handlePopup('favorites')}
-            className='md:hidden'
-          >
+          <button onClick={closePopup} className='md:hidden'>
             <Close />
           </button>
         </div>
