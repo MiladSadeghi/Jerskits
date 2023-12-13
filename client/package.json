@@ -64,12 +64,5 @@
   "resolutions": {
     "semver": "^7.5.3",
     "word-wrap": "^1.2.4"
-  },
-  "babelMacros": {
-    "twin": {
-      "preset": "styled-components",
-      "config": "./tailwind.config.js",
-      "includeClassNames": true
-    }
   }
 }

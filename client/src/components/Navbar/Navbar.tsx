@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import { useState, useRef, useEffect } from 'react'
-import { ProfilePopup } from '..'
+import { Avatar, ProfilePopup } from '..'
 import { useAppSelector } from '../../App/hooks'
 import { Bag, Hamburger, Heart, MagnifySearch } from '../../icons'
 import FavoritesPopup from '../Popups/FavoritesPopup'
@@ -23,7 +23,6 @@ function Navbar() {
   const bagBtnRef = useRef<HTMLButtonElement | null>(null)
   const location = useLocation()
   const authStatus = useAppSelector((state) => state.auth.isAuthenticated)
-  const profile = useAppSelector((state) => state.profile)
   const isPopupsOpen = [profilePopup, favoritesPopup, bagPopup].some(
     (popup) => popup
   )
@@ -194,19 +193,7 @@ function Navbar() {
                       className='hidden md:block'
                       onClick={() => setProfilePopup(true)}
                     >
-                      <img
-                        crossOrigin='anonymous'
-                        src={
-                          profile.avatar
-                            ? `${import.meta.env.VITE_SERVER_URL.replace(
-                                '/api',
-                                ''
-                              )}/images/${profile.avatar}`
-                            : '/images/blank-profile-picture.png'
-                        }
-                        alt={profile.firstName || profile.fullName}
-                        className='object-contain rounded-full w-7 h-7'
-                      />
+                      <Avatar avatarSizes={[28, 28]} />
                     </button>
                     <ProfilePopup
                       ref={profileRef}

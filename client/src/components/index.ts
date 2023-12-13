@@ -29,9 +29,9 @@ import FormLabel from './Form/FormLabel'
 import FormInput from './Form/FormInput'
 import FormError from './Form/FormError'
 
-import ProfileImage from './Profile/ProfileImage'
-
 import Button from './Button/Button'
+
+import Avatar from './Avatar/Avatar'
 
 export {
   Navbar,
@@ -57,6 +57,6 @@ export {
   FormLabel,
   FormInput,
   FormError,
-  ProfileImage,
-  Button
+  Button,
+  Avatar
 }

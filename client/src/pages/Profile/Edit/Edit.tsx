@@ -16,20 +16,17 @@ import {
   TEditProfileSchema
 } from '../../../shared/types/Profile.types.ts'
 import { UploadCloud, UploadFile } from '../../../icons'
-import { useAppSelector } from '../../../App/hooks.ts'
-import { RootState } from '../../../App/store.ts'
 import {
   FormLabel,
   FormInput,
   FormError,
-  ProfileImage,
-  Button
+  Button,
+  Avatar
 } from '../../../components/'
 import { cn } from '../../../utils/utils.ts'
 
 function Edit() {
   const profileAvatarRef = useRef<HTMLInputElement>(null)
-  const userAvatar = useAppSelector((state: RootState) => state.profile.avatar)
   const [isAvatarDragged, setIsAvatarDragged] = useState<boolean>(false)
   const [selectedCountry, setSelectedCountry] = useState<Option | null>(null)
   const [selectedState, setSelectedState] = useState<Option | null>(null)
@@ -209,25 +206,8 @@ function Edit() {
             <UploadCloud />
           </div>
         </div>
-        <div className='max-w-[100px] max-h-[100px]'>
-          {userAvatar !== '' ? (
-            <ProfileImage
-              crossOrigin='anonymous'
-              src={`${import.meta.env.VITE_SERVER_URL.replace(
-                '/api',
-                ''
-              )}/images/${userAvatar}`}
-            />
-          ) : (
-            <div className='bg-[#e4e6e7] rounded-full w-[100px] h-[100px]'>
-              <ProfileImage
-                src='/images/blank-profile-picture.png'
-                className='p-4'
-              />
-            </div>
-          )}
-        </div>
-        <div className='w-full ml-7'>
+        <Avatar avatarSizes={[100, 100]} />
+        <div className='flex-1 ml-7'>
           <div
             className='div`w-full h-12 px-5 py-4 border outline-none border-neutral-grey flex items-center justify-between'
             onClick={() => profileAvatarRef.current?.click()}

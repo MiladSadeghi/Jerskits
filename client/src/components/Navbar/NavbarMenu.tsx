@@ -4,6 +4,7 @@ import { RootState } from '../../App/store'
 import { ArrowDown, Close, MagnifySearch } from '../../icons'
 import { NavLink } from 'react-router-dom'
 import { cn } from '../../utils/utils'
+import { Avatar } from '..'
 
 type Props = {
   searchInput: [string, setState<string>]
@@ -28,7 +29,7 @@ const NavbarMenu = forwardRef<HTMLDialogElement, Props>(
     },
     ref
   ) => {
-    const { avatar, fullName, firstName, createdAt } = useAppSelector(
+    const { fullName, firstName, createdAt } = useAppSelector(
       (state: RootState) => state.profile
     )
     const joinedYear = new Date(createdAt || Date.now()).getFullYear()
@@ -64,20 +65,7 @@ const NavbarMenu = forwardRef<HTMLDialogElement, Props>(
             </button>
           </div>
           <div className='flex items-center justify-between'>
-            {avatar ? (
-              <img
-                className='object-contain w-16 h-16 rounded-full'
-                crossOrigin='anonymous'
-                src={`${import.meta.env.VITE_SERVER_URL.replace(
-                  '/api',
-                  ''
-                )}/images/${avatar}`}
-              />
-            ) : (
-              <div className='bg-[#e4e6e7] w-16 h-16 p-4 rounded-full'>
-                <img src='/images/blank-profile-picture.png' />
-              </div>
-            )}
+            <Avatar avatarSizes={[48, 48]} />
             <div className='w-full ml-5'>
               <h2 className='text-2xl font-bold leading-9 capitalize text-primary-black line-clamp-1'>
                 Hi, {firstName ?? fullName}
