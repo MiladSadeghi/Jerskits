@@ -40,9 +40,23 @@ const profileSlice = createSlice({
     },
     setAvatar: (state, { payload }: PayloadAction<string>) => {
       state.avatar = payload
+    },
+    clearProfile: (state) => {
+      state.avatar = initialState.avatar
+      state.fullName = initialState.fullName
+      state.firstName = initialState.firstName
+      state.lastName = initialState.lastName
+      state.email = initialState.email
+      state.contactEmail = initialState.contactEmail
+      state.phoneNumber = initialState.phoneNumber
+      state.saveAddress = initialState.saveAddress
+      state.shippingAddress = initialState.shippingAddress
+      state.createdAt = initialState.createdAt
+      state.updatedAt = initialState.updatedAt
+      state.avatar = initialState.avatar
     }
   }
 })
 
-export const { setProfile, setAvatar } = profileSlice.actions
+export const { setProfile, setAvatar, clearProfile } = profileSlice.actions
 export default profileSlice.reducer

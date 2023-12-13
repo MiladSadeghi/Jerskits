@@ -9,6 +9,7 @@ import {
 } from '../shared/types/Auth.types'
 import { IProfile } from '../shared/types/Profile.types'
 import { setAuthStatus } from '../App/feature/auth/authSlice'
+import { clearProfile } from '../App/feature/profile/profileSlice'
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -46,6 +47,7 @@ export const authApi = createApi({
         try {
           await queryFulfilled
           dispatch(setAuthStatus(false))
+          dispatch(clearProfile())
           toast.success('You have successfully signed out')
         } catch (error: unknown) {
           const typedError = error as TAuthResponseError
