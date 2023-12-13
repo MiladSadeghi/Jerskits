@@ -31,7 +31,7 @@ export const getUser = async (req, res, next) => {
     return res.status(200).json({
       error: false,
       profile: foundedUser,
-      favorites: favoritesList.favorites,
+      favorites: favoritesList?.favorites || [],
       bag: userBag,
     });
   } catch (error) {
