@@ -185,7 +185,7 @@ function Navbar() {
                   isOpen={favoritesPopup}
                 />
               </div>
-              <div className=''>
+              <div>
                 {authStatus ? (
                   <div className='flex md:relative'>
                     <button

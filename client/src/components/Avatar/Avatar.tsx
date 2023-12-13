@@ -31,7 +31,7 @@ const Avatar = ({ avatarSizes, className, ...props }: Props) => {
         <div className='bg-[#e4e6e7] rounded-full'>
           <img
             src='/images/blank-profile-picture.png'
-            className='object-contain w-full h-full p-4 rounded-full'
+            className='object-contain w-full h-full p-2 rounded-full'
             alt='profile picture'
           />
         </div>
