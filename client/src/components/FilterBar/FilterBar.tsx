@@ -6,7 +6,7 @@ import ColorFilter from './components/ColorFilter'
 import SizeFilter from './components/SizeFilter'
 import TypeFilter from './components/TypeFilter'
 import BrandFilter from './components/BrandFilter'
-import SortDropdown from './components/SortDropdown'
+import SortDropdown from '../Dropdown/SortDropdown'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 import { ArrowDown } from '../../icons'
 import { cn } from '../../utils/utils'
@@ -123,9 +123,11 @@ const FilterBar = ({
               <div key={item.title} className='relative'>
                 <button
                   className={cn(
-                    'flex items-center font-bold text-lg leading-[27px] text-neutral-grey',
+                    'flex items-center font-bold text-lg leading-[27px] text-primary-black',
                     {
-                      'text-primary-black': activeFilter === index
+                      'text-primary-black': activeFilter === index,
+                      'text-neutral-grey':
+                        !!activeFilter && activeFilter !== index
                     }
                   )}
                   ref={item.btnRef}
@@ -192,7 +194,7 @@ const FilterBar = ({
           </div>
         )}
 
-        <SortDropdown onSortChange={applyHandler} />
+        <SortDropdown handleSort={applyHandler} />
       </div>
     </div>
   )

@@ -28,9 +28,9 @@ import { cn } from '../../../utils/utils.ts'
 function Edit() {
   const profileAvatarRef = useRef<HTMLInputElement>(null)
   const [isAvatarDragged, setIsAvatarDragged] = useState<boolean>(false)
-  const [selectedCountry, setSelectedCountry] = useState<Option | null>(null)
-  const [selectedState, setSelectedState] = useState<Option | null>(null)
-  const [selectedCity, setSelectedCity] = useState<Option | null>(null)
+  const [selectedCountry, setSelectedCountry] = useState<Option>()
+  const [selectedState, setSelectedState] = useState<Option>()
+  const [selectedCity, setSelectedCity] = useState<Option>()
   const acceptedImageTypes = ['image/png', 'image/jpeg', 'image/jpg']
 
   const { data: profileData, isFetching, isSuccess } = useGetUserProfileQuery()
@@ -120,6 +120,7 @@ function Edit() {
   const updateProfileHandler = async (data: TEditProfileSchema) => {
     if (data.saveAddress) {
       data.saveAddress = true
+      console.log(data)
       data.shippingAddress = {
         ...data.shippingAddress,
         country: selectedCountry!.value,
@@ -292,8 +293,9 @@ function Edit() {
             name='country'
             dropdownDisable={!watch('saveAddress')}
             control={control}
-            onSelect={setSelectedCountry}
+            handleLocation={setSelectedCountry}
             selectedValue={selectedCountry}
+            optionLocation='left'
           />
         </div>
         <div className='space-y-[10px]'>
@@ -309,9 +311,10 @@ function Edit() {
             name='state'
             dropdownDisable={!watch('saveAddress')}
             control={control}
-            onSelect={setSelectedState}
+            handleLocation={setSelectedState}
             selectedValue={selectedState}
             selectedCountry={selectedCountry}
+            optionLocation={'right'}
           />
         </div>
         <div className='space-y-[10px]'>
@@ -327,10 +330,11 @@ function Edit() {
             name='city'
             dropdownDisable={!watch('saveAddress')}
             control={control}
-            onSelect={setSelectedCity}
+            handleLocation={setSelectedCity}
             selectedValue={selectedCity}
             selectedCountry={selectedCountry}
             selectedState={selectedState}
+            optionLocation={'left'}
           />
         </div>
         <div className='space-y-[10px]'>

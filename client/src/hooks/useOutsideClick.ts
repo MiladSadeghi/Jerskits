@@ -5,7 +5,10 @@ type Props<P extends HTMLElement> = {
   triggerRef?: RefObject<P>
 }
 
-export const useOutsideClick = <T extends HTMLElement, P extends HTMLElement>({
+export const useOutsideClick = <
+  T extends HTMLElement,
+  P extends HTMLElement = HTMLElement
+>({
   callback,
   triggerRef
 }: Props<P>) => {

@@ -4,7 +4,6 @@ import { RootState } from '../App/store'
 import { Close } from '../icons'
 import ProductMiniCard from '../components/Products/ProductMiniCard'
 import { BagDropdown } from '../components'
-import { SingleValue } from 'react-select'
 import {
   useRemoveFromBagMutation,
   useUpdateBagItemQuantityMutation,
@@ -19,9 +18,20 @@ type Props = {
   isBagModal: [boolean, setState<boolean>]
 }
 
+const toastStyle = {
+  style: {
+    minWidth: '150px'
+  }
+}
+
+const sizeOptionsValue = Array(10)
+  .fill(null)
+  .map((_, index) => String(index + 1))
+
 const BagModal = forwardRef<HTMLDialogElement, Props>(({ isBagModal }, ref) => {
   const [bagModal, setIsBagModal] = isBagModal
   const bag = useAppSelector((state: RootState) => state.user.bag)
+
   const [updateQty, { isLoading: isQtyUpdating, originalArgs: qtyArg }] =
     useUpdateBagItemQuantityMutation()
   const [updateSize, { isLoading: isSizeUpdating, originalArgs: sizeArg }] =
@@ -29,19 +39,10 @@ const BagModal = forwardRef<HTMLDialogElement, Props>(({ isBagModal }, ref) => {
   const [removeFromBag, { isLoading: isRemoving, originalArgs: removeArg }] =
     useRemoveFromBagMutation()
 
-  const toastStyle = {
-    style: {
-      minWidth: '150px'
-    }
-  }
-
-  const handleUpdateSize = (
-    newSize: SingleValue<Option>,
-    productId: string
-  ) => {
+  const handleUpdateSize = (newSize: string, productId: string) => {
     if (!newSize) return
     toast.promise(
-      updateSize({ productId, newSize: newSize?.value }),
+      updateSize({ productId, newSize: newSize }),
       {
         loading: 'Wait...',
         success: 'Size updated',
@@ -51,13 +52,10 @@ const BagModal = forwardRef<HTMLDialogElement, Props>(({ isBagModal }, ref) => {
     )
   }
 
-  const handleUpdateQuantity = (
-    newQty: SingleValue<Option>,
-    productId: string
-  ) => {
+  const handleUpdateQuantity = (newQty: string, productId: string) => {
     if (!newQty) return
     toast.promise(
-      updateQty({ productId, quantity: Number(newQty?.value) }),
+      updateQty({ productId, quantity: Number(newQty) }),
       {
         loading: 'Wait...',
         success: 'Quantity updated',
@@ -65,6 +63,22 @@ const BagModal = forwardRef<HTMLDialogElement, Props>(({ isBagModal }, ref) => {
       },
       toastStyle
     )
+  }
+
+  const handleRemoveFromBag = (productId: string) => {
+    removeFromBag({ productId: productId })
+  }
+
+  const isBagUpdating = (productId: string) => {
+    return (
+      (isRemoving && removeArg?.productId === productId) ||
+      (isSizeUpdating && sizeArg?.productId === productId) ||
+      (isQtyUpdating && qtyArg?.productId === productId)
+    )
+  }
+
+  const isProductRemoving = (productId: string) => {
+    return removeArg?.productId === productId && isRemoving
   }
 
   useEffect(() => {
@@ -104,39 +118,38 @@ const BagModal = forwardRef<HTMLDialogElement, Props>(({ isBagModal }, ref) => {
                 size={item.size}
               />
               <div className='flex flex-col gap-y-4'>
-                <div className='flex w-full px-0.5 gap-x-4'>
+                <div className='flex w-full gap-x-4'>
                   <BagDropdown
-                    value={{ label: `Size : ${item.size}`, value: item.size }}
-                    optionValues={item.product.size}
+                    currentValue={{
+                      label: `Size : ${item.size}`,
+                      value: item.size
+                    }}
+                    optionsValue={item.product.size}
                     label='Size'
-                    handleChange={handleUpdateSize}
-                    disabled={isSizeUpdating}
+                    handleUpdate={handleUpdateSize}
+                    isDisabled={isBagUpdating(item.product._id)}
                     productId={item.product._id}
-                    updatingProductId={sizeArg?.productId}
+                    menuPosition='left'
                   />
                   <BagDropdown
-                    value={{
+                    currentValue={{
                       label: `Qty : ${item.quantity}`,
                       value: String(item.quantity)
                     }}
-                    optionValues={Array(10)
-                      .fill(null)
-                      .map((_, index) => String(index + 1))}
+                    optionsValue={sizeOptionsValue}
                     label='Qty'
-                    handleChange={handleUpdateQuantity}
-                    disabled={isQtyUpdating}
+                    handleUpdate={handleUpdateQuantity}
+                    isDisabled={isBagUpdating(item.product._id)}
                     productId={item.product._id}
-                    updatingProductId={qtyArg?.productId}
+                    menuPosition='right'
                   />
                 </div>
                 <button
                   className='flex items-center justify-center w-full font-bold text-white transition-all bg-red-500 h-14 disabled:opacity-50'
-                  onClick={() => removeFromBag({ productId: item.product._id })}
-                  disabled={
-                    removeArg?.productId === item.product._id && isRemoving
-                  }
+                  onClick={() => handleRemoveFromBag(item.product._id)}
+                  disabled={isBagUpdating(item.product._id)}
                 >
-                  {removeArg?.productId === item.product._id && isRemoving ? (
+                  {isProductRemoving(item.product._id) ? (
                     <SpinnerCircular
                       size={35}
                       thickness={100}

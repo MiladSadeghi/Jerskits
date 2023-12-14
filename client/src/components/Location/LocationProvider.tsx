@@ -5,24 +5,26 @@ import { useLazyGetLocationQuery } from '../../services/locationApi.ts'
 import { TEditProfileSchema } from '../../shared/types/Profile.types.ts'
 
 type Props = {
-  onSelect: (value: Option | null) => void
-  selectedValue: Option | null
+  handleLocation: setState<Option>
+  selectedValue?: Option
   dropdownDisable: boolean
   control: Control<TEditProfileSchema>
-  selectedCountry?: Option | null
-  selectedState?: Option | null
-  selectedCity?: Option | null
+  selectedCountry?: Option
+  selectedState?: Option
+  selectedCity?: Option
   name: 'country' | 'state' | 'city'
+  optionLocation: string
 }
 
 const LocationProvider = ({
-  onSelect,
+  handleLocation,
   dropdownDisable,
   control,
   selectedValue,
   selectedCountry,
   selectedState,
-  name
+  name,
+  optionLocation
 }: Props) => {
   const [trigger, result] = useLazyGetLocationQuery()
 
@@ -42,7 +44,9 @@ const LocationProvider = ({
       isDisabled={dropdownDisable}
       options={result.data ? result.data[name] : undefined}
       control={control}
-      state={[selectedValue, onSelect]}
+      selectedLocation={selectedValue}
+      optionLocation={optionLocation}
+      handleLocation={handleLocation}
     />
   )
 }

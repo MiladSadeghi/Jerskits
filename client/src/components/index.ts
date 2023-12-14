@@ -21,7 +21,7 @@ import ReviewForm from './Review/ReviewForm'
 
 import ProductCardContainer from './Products/ProductCardContainer'
 
-import BagDropdown from './Bag/BagDropdown'
+import BagDropdown from './Dropdown/BagDropdown'
 
 const Products = lazy(() => import('./Products/Products'))
 
@@ -32,6 +32,8 @@ import FormError from './Form/FormError'
 import Button from './Button/Button'
 
 import Avatar from './Avatar/Avatar'
+
+import SearchDropdown from './Dropdown/SearchDropdown'
 
 export {
   Navbar,
@@ -58,5 +60,6 @@ export {
   FormInput,
   FormError,
   Button,
-  Avatar
+  Avatar,
+  SearchDropdown
 }
