@@ -1,62 +1,33 @@
-import { Country, State } from "country-state-city";
+import { City, Country, State } from "country-state-city";
 import UserModel from "../models/user.model.js";
 
 export const getUserProfile = async (req, res, next) => {
   try {
     const { _id, email, fullName } = req.decoded;
-    const findUser = await UserModel.findOne({ _id, email, fullName }).lean();
-    if (!findUser) {
-      const err = new Error("User not found");
-      err.status = 404;
-      return next();
-    }
-    let profile = {
-      email: findUser?.email,
-      fullName: findUser?.fullName,
-      firstName: findUser?.firstName,
-      lastName: findUser?.lastName,
-      avatar: findUser?.avatar,
-      phoneNumber: findUser?.phoneNumber,
-      contactEmail: findUser?.contactEmail,
-    };
+    const user = await UserModel.findOne({ _id, email, fullName }).select(
+      "-_id -password -__v"
+    );
 
-    if (
-      findUser.shippingAddress &&
-      Object.keys(findUser.shippingAddress).length >= 1
-    ) {
-      profile.shippingAddress = {
-        address: findUser.shippingAddress.address,
-        country: {
-          value: Country.getCountryByCode(findUser.shippingAddress.country)
-            .isoCode,
-          label: Country.getCountryByCode(findUser.shippingAddress.country)
-            .name,
-        },
-        state: findUser.shippingAddress.state
-          ? {
-              value: State.getStateByCodeAndCountry(
-                findUser.shippingAddress.state,
-                findUser.shippingAddress.country
-              ).isoCode,
-              label: State.getStateByCodeAndCountry(
-                findUser.shippingAddress.state,
-                findUser.shippingAddress.country
-              ).name,
-            }
-          : undefined,
-        city: findUser.shippingAddress.city
-          ? {
-              value: findUser.shippingAddress.city,
-              label: findUser.shippingAddress.city,
-            }
-          : undefined,
-        postalCode: findUser.shippingAddress.postalCode,
-      };
+    if (!user) {
+      return res.status(404).json({ error: true, message: "User not found" });
     }
+    console.log(user);
+    const profile = {
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      contactEmail: user?.contactEmail,
+      phoneNumber: user?.phoneNumber,
+      address: user?.address,
+      postalCode: user?.postalCode,
+      city: user?.city,
+      state: user?.state,
+      country: user?.country,
+      avatar: user?.avatar,
+    };
     return res.status(200).json({ error: false, profile });
   } catch (error) {
     console.log(error);
-    next();
+    return res.status(500).json({ error: true, message: "Server error" });
   }
 };
 
@@ -66,77 +37,95 @@ export const updateUserProfile = async (req, res, next) => {
     lastName,
     contactEmail,
     phoneNumber,
-    saveAddress,
-    shippingAddress,
+    saveAddress = false,
+    address,
+    postalCode,
+    city,
+    state,
+    country,
   } = req.body;
-  const { email, fullName } = req.decoded;
+  const { _id, email, fullName } = req.decoded;
 
   try {
-    const findUser = await UserModel.findOne({ email, fullName });
-
-    if (!findUser) {
-      const err = new Error("User not found");
-      err.status = 404;
-      return next(err);
+    if (country) {
+      const isCountryExist = Country.getCountryByCode(country);
+      if (!isCountryExist) {
+        return res
+          .status(400)
+          .json({ error: true, message: "Country not found" });
+      }
     }
 
-    let updateOptions = {
+    if (state) {
+      const isStateExist = State.getStateByCode(country, state);
+      if (!isStateExist) {
+        return res
+          .status(400)
+          .json({ error: true, message: "State not found" });
+      }
+    }
+
+    if (city) {
+      const isCityExist = City.getCitiesOfState(countryCode, stateCode).filter(
+        (city) => city.name === city
+      );
+      if (!isCityExist) {
+        return res.status(400).json({ error: true, message: "City not found" });
+      }
+    }
+
+    const updatedUser = {
       firstName,
       lastName,
       contactEmail,
       phoneNumber,
-      ...(saveAddress && {
-        shippingAddress: {
-          address: shippingAddress?.address,
-          postalCode: shippingAddress?.postalCode,
-          city: shippingAddress?.city,
-          state: shippingAddress?.state,
-          country: shippingAddress?.country,
-        },
-      }),
+      address,
+      postalCode,
+      city,
+      state,
+      country,
+      saveAddress,
     };
 
-    const updatedUser = await UserModel.findByIdAndUpdate(
-      findUser?._id,
-      updateOptions,
+    const updateUserProfile = await UserModel.findByIdAndUpdate(
+      { _id, email, fullName },
+      updatedUser,
       { new: true }
-    ).select("-_id -password");
+    ).select("-_id -password -__v");
 
-    return res.status(200).json({ profile: updatedUser });
+    if (!updateUserProfile) {
+      return res.status(404).json({ error: true, message: "User not found" });
+    }
+
+    return res.status(200).json({ profile: updateUserProfile });
   } catch (error) {
     console.error(error);
-    const err = new Error("Server error");
-    err.status = 500;
-    return next(err);
+    return res.status(500).json({ error: true, message: "Server error" });
   }
 };
 
 export const updateUserAvatar = async (req, res, next) => {
   const { _id, email, fullName } = req.decoded;
+  const avatar = req.file?.filename;
 
   try {
-    const findUser = await UserModel.findOne({
-      _id,
-      email,
-      fullName,
-    });
+    const findUser = await UserModel.findByIdAndUpdate(
+      {
+        _id,
+        email,
+        fullName,
+      },
+      { avatar }
+    ).select("-_id -password -__v");
+
     if (!findUser) {
-      const err = new Error("User not found");
-      err.status = 404;
-      return next();
+      console.error(error);
+      return res.status(404).json({ error: true, message: "User not found" });
     }
 
-    const updatedUser = await UserModel.findByIdAndUpdate(
-      findUser?._id,
-      { avatar: req.file?.filename },
-      { new: true }
-    ).select("avatar");
-
-    return res.status(200).json({ error: false, avatar: updatedUser?.avatar });
+    return res.status(200).json({ error: false, avatar });
   } catch (error) {
     console.error(error);
-    const err = new Error("Server error");
-    err.status = 500;
-    return next(err);
+    return res.status(500).json({ error: true, message: "Server error" });
   }
 };

@@ -12,9 +12,7 @@ export const getUser = async (req, res, next) => {
       _id,
       email,
       fullName,
-    })
-      .select("-_id -password -__v")
-      .populate("shippingAddress");
+    }).select("-_id -password -__v");
     if (!foundedUser) {
       const err = new Error("User not found");
       err.status = 404;

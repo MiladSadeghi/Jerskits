@@ -14,7 +14,7 @@ profileRouter.use(verifyJWT);
 profileRouter.get("/", getUserProfile);
 profileRouter.patch("/", updateUserProfile);
 profileRouter.put(
-  "/profile-avatar",
+  "/avatar",
   uploadAvatar.single("avatar"),
   isAvatarUploaded,
   updateUserAvatar
