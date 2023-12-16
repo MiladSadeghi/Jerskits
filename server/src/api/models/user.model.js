@@ -1,16 +1,5 @@
 import { mongoose } from "mongoose";
 
-const AddressSchema = new mongoose.Schema(
-  {
-    address: String,
-    postalCode: Number,
-    city: String,
-    state: String,
-    country: String,
-  },
-  { _id: false }
-);
-
 const UserSchema = mongoose.Schema(
   {
     fullName: {
@@ -26,9 +15,17 @@ const UserSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    saveAddress: {
+      type: Boolean,
+      required: true,
+    },
+    address: String,
+    postalCode: Number,
+    city: String,
+    state: String,
+    country: String,
     firstName: String,
     lastName: String,
-    shippingAddress: AddressSchema,
     avatar: String,
     phoneNumber: Number,
     contactEmail: String,
