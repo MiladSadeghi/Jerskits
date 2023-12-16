@@ -20,7 +20,7 @@ export const SignUp = [
     }
 
     try {
-      const { email, password, fullName } = req.body;
+      const { email, password, fullName, saveAddress = false } = req.body;
       const salt = bcrypt.genSaltSync(10);
       const hashedPassword = bcrypt.hashSync(password, salt);
 
@@ -28,6 +28,7 @@ export const SignUp = [
         email,
         password: hashedPassword,
         fullName,
+        saveAddress,
       });
 
       return res.status(201).json({
@@ -62,42 +63,40 @@ export const SignIn = [
 
     try {
       const { email, password: bodyPassword } = req.body;
-      const foundUser = await UserModel.findOne({
+
+      const user = await UserModel.findOne({
         email,
       });
 
-      if (!foundUser) {
-        const error = new Error("");
-        error.message =
-          "We couldn't find your account. Please check your email and password";
-        error.status = 404;
-        error.error = true;
-        throw error;
+      if (!user) {
+        return res.status(404).json({
+          error: true,
+          message:
+            "We couldn't find your account. Please check your email and password",
+        });
       }
 
       const isPasswordCorrect = await bcrypt.compare(
         bodyPassword,
-        foundUser.password
+        user.password
       );
 
       if (!isPasswordCorrect) {
-        const error = new Error("");
-        error.message =
-          "We couldn't find your account. Please check your email and password";
-        error.status = 404;
-        error.error = true;
-        throw error;
+        return res.status(404).json({
+          error: true,
+          message:
+            "We couldn't find your account. Please check your email and password",
+        });
       }
 
-      const { password, __v, createdAt, updatedAt, ...profileData } =
-        foundUser._doc;
+      const userInformation = {
+        _id: user._id,
+        email: user.email,
+        fullName: user.fullName,
+      };
 
       const accessToken = jwt.sign(
-        {
-          _id: profileData._id,
-          email: profileData.email,
-          fullName: profileData.fullName,
-        },
+        userInformation,
         process.env.ACCESS_TOKEN_SECRET,
         {
           expiresIn: "30m",
@@ -105,11 +104,7 @@ export const SignIn = [
       );
 
       const refreshToken = jwt.sign(
-        {
-          _id: profileData._id,
-          email: profileData.email,
-          fullName: profileData.fullName,
-        },
+        userInformation,
         process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: "7d" }
       );
@@ -128,13 +123,26 @@ export const SignIn = [
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
+      const userProfile = {
+        _id: user._id,
+        email: user.email,
+        fullName: user.fullName,
+        address: user.address,
+        postalCode: user.postalCode,
+        city: user.city,
+        state: user.state,
+        country: user.country,
+        avatar: user.avatar,
+      };
+
       return res.json({
         error: false,
         message: "Welcome back!",
-        profile: profileData,
+        profile: userProfile,
       });
     } catch (error) {
-      next(error);
+      console.log(error);
+      return res.status(500).json({ error: true, message: "Server error" });
     }
   },
 ];

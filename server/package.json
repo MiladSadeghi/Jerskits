@@ -41,6 +41,7 @@
     "node": "^18.15.0"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.5",
     "nodemon": "^2.0.22"
   },
   "resolutions": {
