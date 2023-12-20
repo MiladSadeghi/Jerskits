@@ -1,23 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { IProfile } from '../../../shared/types/Profile.types'
 
-const initialState: IProfile = {
-  fullName: '',
-  email: '',
-  firstName: '',
-  lastName: '',
-  avatar: '',
-  contactEmail: '',
-  phoneNumber: '',
-  saveAddress: false,
-  shippingAddress: {
-    address: '',
-    country: '',
-    state: '',
-    city: '',
-    postalCode: ''
-  }
-}
+const initialState: IProfile = {}
 
 const profileSlice = createSlice({
   name: 'profileSlice',
@@ -32,11 +16,6 @@ const profileSlice = createSlice({
       state.phoneNumber = payload?.phoneNumber ?? state.phoneNumber
       state.avatar = payload?.avatar ?? state.avatar
       state.createdAt = payload?.createdAt ?? state.createdAt
-      state.updatedAt = payload?.updatedAt ?? state.updatedAt
-      state.shippingAddress = {
-        ...state.shippingAddress,
-        ...(payload?.shippingAddress ?? {})
-      }
     },
     setAvatar: (state, { payload }: PayloadAction<string>) => {
       state.avatar = payload
@@ -50,9 +29,7 @@ const profileSlice = createSlice({
       state.contactEmail = initialState.contactEmail
       state.phoneNumber = initialState.phoneNumber
       state.saveAddress = initialState.saveAddress
-      state.shippingAddress = initialState.shippingAddress
       state.createdAt = initialState.createdAt
-      state.updatedAt = initialState.updatedAt
       state.avatar = initialState.avatar
     }
   }

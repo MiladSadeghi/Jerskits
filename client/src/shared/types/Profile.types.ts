@@ -1,9 +1,4 @@
-import * as yup from 'yup'
-import editProfileSchema from '../../pages/Profile/Edit/Edit.schema'
-
-export type TEditProfileSchema = yup.InferType<typeof editProfileSchema>
-
-interface IProfile {
+export interface IProfile {
   avatar?: string
   fullName?: string
   email?: string
@@ -13,34 +8,39 @@ interface IProfile {
   phoneNumber?: string
   saveAddress?: boolean
   createdAt?: Date
-  updatedAt?: Date
-  shippingAddress?: {
-    address?: string
-    country?: string
-    state?: string
-    city?: string
-    postalCode?: string
-  }
+  address?: string
+  country?: string
+  state?: string
+  city?: string
+  postalCode?: string
 }
 
-type TGetProfileResponse = IProfile & {
-  shippingAddress?: {
-    address?: string
-    country?: Option
-    state?: Option
-    city?: Option
-  }
+export interface IProfileFrom {
+  firstName: string
+  lastName: string
+  address: string
+  postalCode: string
+  country: string
+  state: string
+  city: string
+  contactEmail: string
+  phoneNumber: string
+  saveAddress: boolean
 }
 
-type TUploadProfileAvatarRequest = FormData
+export type TGetProfileResponse = Omit<
+  IProfileFrom,
+  'address' | 'country' | 'state' | 'city' | 'postalCode'
+> & {
+  address?: string
+  country?: Option
+  state?: Option
+  city?: Option
+  postalCode?: string
+}
 
-type TUploadProfileAvatarResponse = {
+export type TUploadProfileAvatarRequest = FormData
+
+export type TUploadProfileAvatarResponse = {
   avatar: string
-}
-
-export type {
-  IProfile,
-  TGetProfileResponse,
-  TUploadProfileAvatarRequest,
-  TUploadProfileAvatarResponse
 }

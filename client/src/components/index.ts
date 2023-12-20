@@ -1,6 +1,5 @@
 import { lazy } from 'react'
 import Navbar from './Navbar/Navbar'
-import LocationProvider from './Location/LocationProvider'
 import ProfilePopup from './Popups/ProfilePopup'
 import FullScreenLoader from './FullScreenLoader/FullScreenLoader'
 import ProfileLink from './ProfileLink/ProfileLink'
@@ -28,16 +27,16 @@ const Products = lazy(() => import('./Products/Products'))
 import FormLabel from './Form/FormLabel'
 import FormInput from './Form/FormInput'
 import FormError from './Form/FormError'
+import UserForm from './Form/UserForm'
 
 import Button from './Button/Button'
 
 import Avatar from './Avatar/Avatar'
 
-import SearchDropdown from './Dropdown/SearchDropdown'
+import SearchDropdown from './Dropdown/LocationDropdown'
 
 export {
   Navbar,
-  LocationProvider,
   ProfilePopup,
   FullScreenLoader,
   ProfileLink,
@@ -61,5 +60,6 @@ export {
   FormError,
   Button,
   Avatar,
-  SearchDropdown
+  SearchDropdown,
+  UserForm
 }

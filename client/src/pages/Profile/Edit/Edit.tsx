@@ -1,137 +1,29 @@
-import { useForm } from 'react-hook-form'
-import { SpinnerCircular, SpinnerDiamond } from 'spinners-react'
-import { yupResolver } from '@hookform/resolvers/yup'
-import editProfileSchema from './Edit.schema.ts'
-import { ErrorMessage } from '@hookform/error-message'
-import { ChangeEvent, DragEvent, useEffect, useRef, useState } from 'react'
-import LocationProvider from '../../../components/Location/LocationProvider.tsx'
 import toast from 'react-hot-toast'
 import {
   useGetUserProfileQuery,
   useUpdateUserProfileMutation,
   useUploadProfileAvatarMutation
 } from '../../../services/profileApi.ts'
-import {
-  IProfile,
-  TEditProfileSchema
-} from '../../../shared/types/Profile.types.ts'
 import { UploadCloud, UploadFile } from '../../../icons'
-import {
-  FormLabel,
-  FormInput,
-  FormError,
-  Button,
-  Avatar
-} from '../../../components/'
-import { cn } from '../../../utils/utils.ts'
+import { ChangeEvent, useRef, useState, DragEvent, useEffect } from 'react'
+import { Avatar, UserForm } from '../../../components/index.ts'
+import { TProfileSchema } from './Schema.ts'
+import { SpinnerDiamond } from 'spinners-react'
 
 function Edit() {
   const profileAvatarRef = useRef<HTMLInputElement>(null)
   const [isAvatarDragged, setIsAvatarDragged] = useState<boolean>(false)
-  const [selectedCountry, setSelectedCountry] = useState<Option>()
-  const [selectedState, setSelectedState] = useState<Option>()
-  const [selectedCity, setSelectedCity] = useState<Option>()
   const acceptedImageTypes = ['image/png', 'image/jpeg', 'image/jpg']
-
-  const { data: profileData, isFetching, isSuccess } = useGetUserProfileQuery()
-  const [updateProfile, { isLoading, isSuccess: updateProfileSuccessfully }] =
-    useUpdateUserProfileMutation()
-
   const [uploadAvatar] = useUploadProfileAvatarMutation()
 
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    setValue,
-    control,
-    reset
-  } = useForm<TEditProfileSchema>({
-    resolver: yupResolver(editProfileSchema),
-    reValidateMode: 'onChange',
-    mode: 'onChange',
-    shouldUnregister: true
-  })
-
-  useEffect(() => {
-    if (isSuccess && profileData) {
-      reset()
-      if (profileData.profile.firstName)
-        setValue('firstName', profileData.profile.firstName)
-      if (profileData.profile.lastName)
-        setValue('lastName', profileData.profile.lastName)
-      if (profileData.profile.contactEmail)
-        setValue('contactEmail', profileData.profile.contactEmail)
-      if (profileData.profile.phoneNumber)
-        setValue('phoneNumber', profileData.profile.phoneNumber)
-      if (profileData.profile.shippingAddress?.address) {
-        setValue('saveAddress', true)
-        setValue(
-          'shippingAddress.address',
-          profileData.profile.shippingAddress?.address
-        )
-        if (profileData.profile.shippingAddress?.country) {
-          setValue(
-            'shippingAddress.country',
-            profileData.profile.shippingAddress?.country.value
-          )
-          setSelectedCountry({
-            label: profileData.profile.shippingAddress?.country.label,
-            value: profileData.profile.shippingAddress?.country.value
-          })
-        }
-        if (profileData.profile.shippingAddress?.state) {
-          setValue(
-            'shippingAddress.state',
-            profileData.profile.shippingAddress?.state.value
-          )
-          setSelectedState({
-            label: profileData.profile.shippingAddress?.state.label,
-            value: profileData.profile.shippingAddress?.state.value
-          })
-        }
-        if (profileData.profile.shippingAddress?.city) {
-          setValue(
-            'shippingAddress.city',
-            profileData.profile.shippingAddress?.city.value
-          )
-          setSelectedCity({
-            label: profileData.profile.shippingAddress?.city.label,
-            value: profileData.profile.shippingAddress?.city.value
-          })
-        }
-        if (profileData.profile.shippingAddress?.postalCode) {
-          setValue(
-            'shippingAddress.postalCode',
-            profileData.profile.shippingAddress?.postalCode
-          )
-        }
-      }
-    }
-  }, [isSuccess, profileData])
-
-  useEffect(() => {
-    if (updateProfileSuccessfully) {
-      toast.success('Profile saved', { position: 'top-right' })
-    }
-  }, [updateProfileSuccessfully])
-
-  const updateProfileHandler = async (data: TEditProfileSchema) => {
-    if (data.saveAddress) {
-      data.saveAddress = true
-      console.log(data)
-      data.shippingAddress = {
-        ...data.shippingAddress,
-        country: selectedCountry!.value,
-        state: selectedState!.value,
-        city: selectedCity!.value,
-        postalCode: data.shippingAddress.postalCode
-      }
-    }
-
-    await updateProfile(data as IProfile)
-  }
+    data: profile,
+    isLoading: isProfileLoading,
+    error,
+    isError
+  } = useGetUserProfileQuery()
+  const [updateProfile, { isLoading: isProfileUpdateLoading }] =
+    useUpdateUserProfileMutation()
 
   const uploadAvatarErrorHandler = async (image: File) => {
     if (!acceptedImageTypes.includes(image.type) || image.size > 1000000) {
@@ -149,12 +41,12 @@ function Edit() {
     await uploadAvatar(formData)
   }
 
-  const handleUploadInputAvatar = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleUploadInputAvatar = async (e: ChangeEvent<HTMLInputElement>) => {
     const image = e.target.files![0]
-    uploadAvatarErrorHandler(image)
+    await uploadAvatarErrorHandler(image)
   }
 
-  const handleAvatarDragOver = (e: DragEvent<HTMLFormElement>) => {
+  const handleAvatarDragOver = (e: DragEvent<HTMLElement>) => {
     e.stopPropagation()
     e.preventDefault()
     setIsAvatarDragged(true)
@@ -164,7 +56,7 @@ function Edit() {
     setIsAvatarDragged(false)
   }
 
-  const handleDropAvatar = async (e: DragEvent<HTMLFormElement>) => {
+  const handleDropAvatar = async (e: DragEvent<HTMLElement>) => {
     e.preventDefault()
     setIsAvatarDragged(true)
 
@@ -173,7 +65,22 @@ function Edit() {
     setIsAvatarDragged(false)
   }
 
-  if (isFetching) {
+  const handleSubmitForm = async (e: TProfileSchema) => {
+    const filteredValues = Object.fromEntries(
+      Object.entries(e).filter(
+        ([, value]) => value !== null && value !== undefined && value !== ''
+      )
+    )
+    await updateProfile(filteredValues)
+  }
+
+  useEffect(() => {
+    if (isError) {
+      console.log(error)
+    }
+  }, [isError])
+
+  if (isProfileLoading) {
     return (
       <SpinnerDiamond
         size={50}
@@ -185,11 +92,9 @@ function Edit() {
       />
     )
   }
-
   return (
-    <form
+    <div
       className='relative flex flex-col px-5 py-5 space-y-7'
-      onSubmit={handleSubmit(updateProfileHandler)}
       onDragOver={handleAvatarDragOver}
       onDragLeave={handleAvatarDragLeave}
       onDrop={handleDropAvatar}
@@ -199,7 +104,7 @@ function Edit() {
       </h5>
       <div className='flex items-center '>
         <div
-          className={`absolute left-0 top-0 p-10 w-full h-full transition-all duration-150 bg-gradient-to-b from-primary-black via-transparent to-transparent  ${
+          className={`absolute left-0 top-0 p-10 w-full h-full transition-all duration-150 bg-gradient-to-b from-primary-black via-transparent to-transparent delay-300 ${
             isAvatarDragged ? 'opacity-100 z-10' : 'opacity-0 -z-10'
           }`}
         >
@@ -226,204 +131,15 @@ function Edit() {
             accept={acceptedImageTypes.toString()}
             onChange={handleUploadInputAvatar}
           />
-          <ErrorMessage
-            errors={errors}
-            name='avatar'
-            render={({ message }) => <FormError>{message}</FormError>}
-          />
         </div>
       </div>
-      <div className='space-y-[10px]'>
-        <div className='flex justify-between'>
-          <FormLabel htmlFor='first-name-input'>First Name</FormLabel>
-          <ErrorMessage
-            errors={errors}
-            name='firstName'
-            render={({ message }) => <FormError>{message}</FormError>}
-          />
-        </div>
-        <FormInput
-          id='first-name-input'
-          type='text'
-          {...register('firstName')}
-        />
-      </div>
-      <div className='space-y-[10px]'>
-        <div className='flex justify-between'>
-          <FormLabel htmlFor='last-name-input'>Last Name</FormLabel>
-          <ErrorMessage
-            errors={errors}
-            name='lastName'
-            render={({ message }) => <FormError>{message}</FormError>}
-          />
-        </div>
-        <FormInput id='last-name-input' type='text' {...register('lastName')} />
-      </div>
-      <div className='space-y-[10px]'>
-        <div className='flex justify-between'>
-          <FormLabel htmlFor='address-input'>Address</FormLabel>
-          <ErrorMessage
-            errors={errors}
-            name='shippingAddress.address'
-            render={({ message }) => (
-              <FormError data-testid='address-error'>{message}</FormError>
-            )}
-          />
-        </div>
-        <FormInput
-          disabled={!watch('saveAddress')}
-          id='address-input'
-          type='text'
-          {...register('shippingAddress.address')}
-        />
-      </div>
-      <div className='grid grid-cols-2 gap-x-[10px] gap-y-[30px]'>
-        <div className='space-y-[10px]'>
-          <div className='flex justify-between'>
-            <FormLabel htmlFor='country-input'>Country</FormLabel>
-            <ErrorMessage
-              errors={errors}
-              name='shippingAddress.country'
-              render={({ message }) => (
-                <FormError data-testid='country-error'>{message}</FormError>
-              )}
-            />
-          </div>
-          <LocationProvider
-            name='country'
-            dropdownDisable={!watch('saveAddress')}
-            control={control}
-            handleLocation={setSelectedCountry}
-            selectedValue={selectedCountry}
-            optionLocation='left'
-          />
-        </div>
-        <div className='space-y-[10px]'>
-          <div className='flex justify-between'>
-            <FormLabel htmlFor='state-input'>Province/State</FormLabel>
-            <ErrorMessage
-              errors={errors}
-              name='shippingAddress.state'
-              render={({ message }) => <FormError>{message}</FormError>}
-            />
-          </div>
-          <LocationProvider
-            name='state'
-            dropdownDisable={!watch('saveAddress')}
-            control={control}
-            handleLocation={setSelectedState}
-            selectedValue={selectedState}
-            selectedCountry={selectedCountry}
-            optionLocation={'right'}
-          />
-        </div>
-        <div className='space-y-[10px]'>
-          <div className='flex justify-between'>
-            <FormLabel htmlFor='city-input'>City</FormLabel>
-            <ErrorMessage
-              errors={errors}
-              name='shippingAddress.city'
-              render={({ message }) => <FormError>{message}</FormError>}
-            />
-          </div>
-          <LocationProvider
-            name='city'
-            dropdownDisable={!watch('saveAddress')}
-            control={control}
-            handleLocation={setSelectedCity}
-            selectedValue={selectedCity}
-            selectedCountry={selectedCountry}
-            selectedState={selectedState}
-            optionLocation={'left'}
-          />
-        </div>
-        <div className='space-y-[10px]'>
-          <div className='flex justify-between'>
-            <FormLabel htmlFor='postal-code-input'>Postal Code</FormLabel>
-            <ErrorMessage
-              errors={errors}
-              name='shippingAddress.postalCode'
-              render={({ message }) => (
-                <FormError data-testid='postal-code-error'>{message}</FormError>
-              )}
-            />
-          </div>
-          <FormInput
-            type='number'
-            disabled={!watch('saveAddress')}
-            id='postal-code-input'
-            placeholder='Postal Code'
-            {...register('shippingAddress.postalCode')}
-          />
-        </div>
-      </div>
-      <div className='flex items-start gap-2'>
-        <input
-          type='checkbox'
-          className={`form-checkbox rounded-full !outline-none focus:!outline-none focus:!border-none text-primary-black w-5 h-5 border-none ring-primary-black ring-1 focus:ring-primary-black ring-offset-0 focus:ring-offset-0 `}
-          id='save-address'
-          data-testid='save-address-checkbox'
-          {...register('saveAddress')}
-        />
-        <FormLabel htmlFor='save-address' className='flex-1'>
-          <p className={`text-text-xs text-neutral-dark-grey leading-[150%] `}>
-            Save this address to my profile
-          </p>
-        </FormLabel>
-      </div>
-      <h3 className='text-text-2xl text-primary-black font-bold leading-[150%]'>
-        Contact
-      </h3>
-      <div className='space-y-[10px] '>
-        <div className='flex justify-between'>
-          <FormLabel htmlFor='contact-email-input'>Email</FormLabel>
-          <ErrorMessage
-            errors={errors}
-            name='contactEmail'
-            render={({ message }) => <FormError>{message}</FormError>}
-          />
-        </div>
-        <FormInput
-          id='contact-email-input'
-          type='text'
-          {...register('contactEmail')}
-        />
-      </div>
-      <div className='space-y-[10px]'>
-        <div className='flex justify-between'>
-          <FormLabel htmlFor='phone-number-input'>Phone Number</FormLabel>
-          <ErrorMessage
-            errors={errors}
-            name='phoneNumber'
-            render={({ message }) => <FormError>{message}</FormError>}
-          />
-        </div>
-        <FormInput
-          id='phone-number-input'
-          type='number'
-          {...register('phoneNumber')}
-        />
-      </div>
-      <Button type='submit' disabled={isLoading}>
-        <div
-          className={cn(
-            'overflow-hidden transition-all duration-300 ease-in-out w-0 max-w-0',
-            {
-              'mr-2 w-fit max-w-fit': isLoading
-            }
-          )}
-        >
-          <SpinnerCircular
-            size={25}
-            thickness={260}
-            speed={100}
-            color='#fff'
-            secondaryColor='#676c70'
-          />
-        </div>
-        {isLoading ? 'LOADING...' : 'SAVE'}
-      </Button>
-    </form>
+      <UserForm
+        handleSubmitForm={handleSubmitForm}
+        isLoading={isProfileUpdateLoading}
+        buttonText='Save'
+        profileData={profile?.profile}
+      />
+    </div>
   )
 }
 

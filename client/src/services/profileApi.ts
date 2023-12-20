@@ -4,6 +4,7 @@ import { setAvatar, setProfile } from '../App/feature/profile/profileSlice'
 import toast from 'react-hot-toast'
 import {
   IProfile,
+  IProfileFrom,
   TGetProfileResponse,
   TUploadProfileAvatarRequest,
   TUploadProfileAvatarResponse
@@ -23,7 +24,14 @@ export const profileApi = createApi({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-          dispatch(setProfile(data.profile))
+          dispatch(
+            setProfile({
+              ...data.profile,
+              country: data.profile.country?.label,
+              state: data.profile.state?.label,
+              city: data.profile.city?.label
+            })
+          )
         } catch (error: unknown) {
           if (typeof error === 'object' && error !== null) {
             const err = error as Record<string, unknown>
@@ -41,7 +49,7 @@ export const profileApi = createApi({
     }),
     updateUserProfile: build.mutation<
       { profile: IProfile },
-      Omit<IProfile, 'avatar'>
+      Partial<IProfileFrom>
     >({
       query(profile) {
         return {
@@ -54,6 +62,7 @@ export const profileApi = createApi({
         try {
           const { data } = await queryFulfilled
           dispatch(setProfile(data.profile))
+          toast.success('Profile saved', { position: 'top-right' })
         } catch (error: unknown) {
           if (typeof error === 'object' && error !== null) {
             const err = error as Record<string, unknown>
