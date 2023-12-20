@@ -8,12 +8,12 @@ import UserModel from "../models/user.model.js";
 export const getUser = async (req, res, next) => {
   try {
     const { _id, email, fullName } = req.decoded;
-    const foundedUser = await UserModel.findOne({
+    const user = await UserModel.findOne({
       _id,
       email,
       fullName,
     }).select("-_id -password -__v");
-    if (!foundedUser) {
+    if (!user) {
       const err = new Error("User not found");
       err.status = 404;
       return next();
@@ -28,7 +28,7 @@ export const getUser = async (req, res, next) => {
     );
     return res.status(200).json({
       error: false,
-      profile: foundedUser,
+      profile: user,
       favorites: favoritesList?.favorites || [],
       bag: userBag,
     });

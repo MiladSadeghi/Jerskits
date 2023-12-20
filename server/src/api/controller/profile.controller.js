@@ -4,14 +4,45 @@ import UserModel from "../models/user.model.js";
 export const getUserProfile = async (req, res, next) => {
   try {
     const { _id, email, fullName } = req.decoded;
-    const user = await UserModel.findOne({ _id, email, fullName }).select(
-      "-_id -password -__v"
-    );
+    const user = await UserModel.findOne({ _id, email, fullName })
+      .select("-_id -password -__v")
+      .lean();
 
     if (!user) {
       return res.status(404).json({ error: true, message: "User not found" });
     }
-    console.log(user);
+
+    if (user?.country) {
+      const country = Country.getCountryByCode(user?.country);
+      user.country = {
+        label: country.name,
+        value: country.isoCode,
+      };
+    }
+
+    if (user?.state) {
+      const state = State.getStateByCodeAndCountry(
+        user?.state,
+        user?.country.value
+      );
+      user.state = {
+        label: state.name,
+        value: state.isoCode,
+      };
+    }
+
+    if (user?.city) {
+      const city = City.getCityByCode(
+        user?.country.value,
+        user?.state.value,
+        user?.city
+      );
+      user.city = {
+        label: city.name,
+        value: city.isoCode,
+      };
+    }
+
     const profile = {
       firstName: user?.firstName,
       lastName: user?.lastName,
@@ -23,6 +54,7 @@ export const getUserProfile = async (req, res, next) => {
       state: user?.state,
       country: user?.country,
       avatar: user?.avatar,
+      saveAddress: user?.saveAddress,
     };
     return res.status(200).json({ error: false, profile });
   } catch (error) {
