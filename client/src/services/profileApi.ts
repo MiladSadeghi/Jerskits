@@ -77,7 +77,7 @@ export const profileApi = createApi({
     >({
       query(avatar) {
         return {
-          url: '/profile/profile-avatar',
+          url: '/profile/avatar',
           method: 'PUT',
           body: avatar
         }

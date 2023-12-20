@@ -4,11 +4,13 @@ import ProfileLinks from '../../utils/profile-links'
 import { useSignOutMutation } from '../../services'
 import { Avatar, ProfileLink } from '../../components'
 import { ArrowDown } from '../../icons'
+import { useRef } from 'react'
 
 function ProfileLayout() {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
   const location = useLocation()
   const profile = useAppSelector((state) => state.profile)
+  const profileRef = useRef<HTMLDivElement>(null)
   const [signOut] = useSignOutMutation()
 
   if (!isAuthenticated)
@@ -43,8 +45,8 @@ function ProfileLayout() {
             </button>
           </div>
         </div>
-        <div className='w-full max-w-[400px]'>
-          <Outlet />
+        <div className='w-full max-w-[400px]' ref={profileRef}>
+          <Outlet context={profileRef} />
         </div>
       </div>
     </div>

@@ -5,15 +5,22 @@ import {
   useUploadProfileAvatarMutation
 } from '../../../services/profileApi.ts'
 import { UploadCloud, UploadFile } from '../../../icons'
-import { ChangeEvent, useRef, useState, DragEvent, useEffect } from 'react'
+import { ChangeEvent, useRef, useEffect, useState, RefObject } from 'react'
 import { Avatar, UserForm } from '../../../components/index.ts'
 import { TProfileSchema } from './Schema.ts'
 import { SpinnerDiamond } from 'spinners-react'
+import { useOutletContext } from 'react-router-dom'
+import { cn } from '../../../utils/utils.ts'
+
+type OutletContextType = RefObject<HTMLDivElement | null>
 
 function Edit() {
   const profileAvatarRef = useRef<HTMLInputElement>(null)
-  const [isAvatarDragged, setIsAvatarDragged] = useState<boolean>(false)
   const acceptedImageTypes = ['image/png', 'image/jpeg', 'image/jpg']
+  const profileRef = useOutletContext<OutletContextType>()
+  const [dragging, setDragging] = useState<boolean>(false)
+  const dragRef = useRef<HTMLDivElement>(null)
+  const avatarRef = useRef<HTMLDivElement>(null)
   const [uploadAvatar] = useUploadProfileAvatarMutation()
 
   const {
@@ -25,7 +32,7 @@ function Edit() {
   const [updateProfile, { isLoading: isProfileUpdateLoading }] =
     useUpdateUserProfileMutation()
 
-  const uploadAvatarErrorHandler = async (image: File) => {
+  const handleUpdateAvatar = async (image: File) => {
     if (!acceptedImageTypes.includes(image.type) || image.size > 1000000) {
       toast.error(
         "The image type isn't valid or image size is too bigger than 1MB.",
@@ -41,28 +48,9 @@ function Edit() {
     await uploadAvatar(formData)
   }
 
-  const handleUploadInputAvatar = async (e: ChangeEvent<HTMLInputElement>) => {
+  const handleAvatar = async (e: ChangeEvent<HTMLInputElement>) => {
     const image = e.target.files![0]
-    await uploadAvatarErrorHandler(image)
-  }
-
-  const handleAvatarDragOver = (e: DragEvent<HTMLElement>) => {
-    e.stopPropagation()
-    e.preventDefault()
-    setIsAvatarDragged(true)
-  }
-
-  const handleAvatarDragLeave = () => {
-    setIsAvatarDragged(false)
-  }
-
-  const handleDropAvatar = async (e: DragEvent<HTMLElement>) => {
-    e.preventDefault()
-    setIsAvatarDragged(true)
-
-    const image = e.dataTransfer.files[0]
-    await uploadAvatarErrorHandler(image)
-    setIsAvatarDragged(false)
+    await handleUpdateAvatar(image)
   }
 
   const handleSubmitForm = async (e: TProfileSchema) => {
@@ -72,6 +60,55 @@ function Edit() {
       )
     )
     await updateProfile(filteredValues)
+  }
+
+  useEffect(() => {
+    profileRef?.current?.addEventListener('dragover', handleDragOver)
+    profileRef?.current?.addEventListener('drop', handleDrop)
+    profileRef?.current?.addEventListener('dragenter', handleDragEnter)
+    profileRef?.current?.addEventListener('dragleave', handleDragLeave)
+
+    return () => {
+      profileRef?.current?.removeEventListener('dragover', handleDragOver)
+      profileRef?.current?.removeEventListener('drop', handleDrop)
+      profileRef?.current?.removeEventListener('dragenter', handleDragEnter)
+      profileRef?.current?.removeEventListener('dragleave', handleDragLeave)
+    }
+  }, [])
+
+  const handleDragOver = (e: DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+
+  const handleDrop = async (e: DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    setDragging(false)
+
+    const image = e.dataTransfer?.files[0]
+    if (image) {
+      await handleUpdateAvatar(image)
+    }
+  }
+
+  const handleDragEnter = (e: DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (e.target !== dragRef?.current) {
+      setDragging(true)
+    }
+  }
+
+  const handleDragLeave = (e: DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (e.target === avatarRef?.current) {
+      setDragging(false)
+    }
   }
 
   useEffect(() => {
@@ -93,25 +130,27 @@ function Edit() {
     )
   }
   return (
-    <div
-      className='relative flex flex-col px-5 py-5 space-y-7'
-      onDragOver={handleAvatarDragOver}
-      onDragLeave={handleAvatarDragLeave}
-      onDrop={handleDropAvatar}
-    >
+    <div className='relative flex flex-col px-5 py-5 space-y-7' ref={dragRef}>
       <h5 className='font-bold text-primary-black text-text-2xl leading-[150%]'>
         Edit Account
       </h5>
-      <div className='flex items-center '>
+      <div className='flex items-center'>
         <div
-          className={`absolute left-0 top-0 p-10 w-full h-full transition-all duration-150 bg-gradient-to-b from-primary-black via-transparent to-transparent delay-300 ${
-            isAvatarDragged ? 'opacity-100 z-10' : 'opacity-0 -z-10'
-          }`}
+          ref={avatarRef}
+          className={cn(
+            'absolute left-0 top-0 p-10 w-full duration-150 bg-gradient-to-b from-primary-black via-transparent to-transparent',
+            {
+              'h-3/4 opacity-100': dragging,
+              'h-0 transition-[height,opacity] delay-[0s,50ms] opacity-0':
+                !dragging
+            }
+          )}
         >
           <div className='flex items-center justify-center w-full py-4 bg-white rounded-2xl'>
             <UploadCloud />
           </div>
         </div>
+
         <Avatar avatarSizes={[100, 100]} />
         <div className='flex-1 ml-7'>
           <div
@@ -129,7 +168,7 @@ function Edit() {
             className='hidden'
             hidden
             accept={acceptedImageTypes.toString()}
-            onChange={handleUploadInputAvatar}
+            onChange={handleAvatar}
           />
         </div>
       </div>
