@@ -91,7 +91,9 @@ const UserForm = ({
           <ErrorMessage
             errors={errors}
             name='address'
-            render={({ message }) => <FormError>{message}</FormError>}
+            render={({ message }) => (
+              <FormError data-testid='address-error'>{message}</FormError>
+            )}
           />
         </div>
         <FormInput id='address-input' type='text' {...register('address')} />
@@ -103,7 +105,9 @@ const UserForm = ({
             <ErrorMessage
               errors={errors}
               name='postalCode'
-              render={({ message }) => <FormError>{message}</FormError>}
+              render={({ message }) => (
+                <FormError data-testid='postal-code-error'>{message}</FormError>
+              )}
             />
           </div>
           <FormInput
@@ -115,11 +119,13 @@ const UserForm = ({
 
         <div className='space-y-2.5'>
           <div className='flex justify-between'>
-            <FormLabel htmlFor='country-dropdown'>Country</FormLabel>
+            <FormLabel>Country</FormLabel>
             <ErrorMessage
               errors={errors}
               name='country'
-              render={({ message }) => <FormError>{message}</FormError>}
+              render={({ message }) => (
+                <FormError data-testid='country-error'>{message}</FormError>
+              )}
             />
           </div>
           <LocationDropdown
@@ -132,11 +138,13 @@ const UserForm = ({
 
         <div className='space-y-2.5'>
           <div className='flex justify-between'>
-            <FormLabel htmlFor='state-dropdown'>State</FormLabel>
+            <FormLabel>State</FormLabel>
             <ErrorMessage
               errors={errors}
               name='state'
-              render={({ message }) => <FormError>{message}</FormError>}
+              render={({ message }) => (
+                <FormError data-testid='state-error'>{message}</FormError>
+              )}
             />
           </div>
           <LocationDropdown
@@ -149,11 +157,13 @@ const UserForm = ({
 
         <div className='space-y-2.5'>
           <div className='flex justify-between'>
-            <FormLabel htmlFor='state-dropdown'>City</FormLabel>
+            <FormLabel>City</FormLabel>
             <ErrorMessage
               errors={errors}
               name='city'
-              render={({ message }) => <FormError>{message}</FormError>}
+              render={({ message }) => (
+                <FormError data-testid='address-city'>{message}</FormError>
+              )}
             />
           </div>
           <LocationDropdown
@@ -190,7 +200,7 @@ const UserForm = ({
           />
         </div>
         <FormInput
-          id='contact-email-input'
+          id='contact-input'
           type='text'
           {...register('contactEmail')}
         />
@@ -198,7 +208,7 @@ const UserForm = ({
 
       <div className='space-y-2.5'>
         <div className='flex justify-between'>
-          <FormLabel htmlFor='contact-input'>Phone Number</FormLabel>
+          <FormLabel htmlFor='phone-number-input'>Phone Number</FormLabel>
           <ErrorMessage
             errors={errors}
             name='phoneNumber'
@@ -206,7 +216,7 @@ const UserForm = ({
           />
         </div>
         <FormInput
-          id='phoneNumber-input'
+          id='phone-number-input'
           type='text'
           {...register('phoneNumber')}
         />

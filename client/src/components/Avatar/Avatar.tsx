@@ -21,7 +21,7 @@ const Avatar = ({ avatarSizes, className, ...props }: Props) => {
         <img
           className='object-contain w-full h-full rounded-full'
           crossOrigin='anonymous'
-          alt='profile picture'
+          alt='user-avatar'
           src={`${import.meta.env.VITE_SERVER_URL.replace(
             '/api',
             ''
@@ -32,7 +32,7 @@ const Avatar = ({ avatarSizes, className, ...props }: Props) => {
           <img
             src='/images/blank-profile-picture.png'
             className='object-contain w-full h-full p-2 rounded-full'
-            alt='profile picture'
+            alt='user-avatar'
           />
         </div>
       )}
