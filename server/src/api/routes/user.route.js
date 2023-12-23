@@ -9,13 +9,10 @@ import {
   removeFromBag,
   updateBagItemQuantity,
   updateBagItemSize,
-  submitOrderInformation,
   getOrder,
-  createOrder,
   getOrders,
-  submitOrderDelivery,
-  completeOrder,
-  submitOrderPayment,
+  validateOrder,
+  submitOrder,
 } from "../controller/user.controller.js";
 import { verifyJWT } from "../middleware/verifyJWT.js";
 import {
@@ -24,13 +21,13 @@ import {
   validateOrderStepBody,
   validateProductAddition,
   validateProductRemoval,
+  validateSubmitOrderBody,
   validateUpdateQuantityBody,
   validateUpdateSizeBody,
 } from "../middleware/userMiddleware.js";
 import {
   validateOrderDeliveryBody,
-  validateOrderIdFromParam,
-  validateOrderInformationBody,
+  validateOrderInformation,
   validateOrderPaymentBody,
 } from "../../utils/validation.js";
 
@@ -70,32 +67,45 @@ userRouter.get("/orders", getOrders);
 // get order by param
 userRouter.get("/orders/:orderId", validateOrderId, getOrder);
 
-// create order
-userRouter.post("/orders/new", createOrder);
+// validate order information
+userRouter.post(
+  "/orders/validate/information",
+  validateOrderStepBody(validateOrderInformation()),
+  validateOrder
+);
 
-// submit order first step
-userRouter.post("/orders/:orderId/information", [
-  validateOrderIdFromParam,
-  validateOrderInformationBody,
-  validateOrderStepBody,
-  submitOrderInformation,
-]);
+// validate order delivery
+userRouter.post(
+  "/orders/validate/delivery",
+  validateOrderStepBody(validateOrderDeliveryBody()),
+  validateOrder
+);
 
-// submit order delivery
-userRouter.post("/orders/:orderId/delivery", [
-  validateOrderIdFromParam,
-  validateOrderDeliveryBody,
-  validateOrderStepBody,
-  submitOrderDelivery,
-]);
+// validate order payment
+userRouter.post(
+  "/orders/validate/payment",
+  validateOrderStepBody(validateOrderPaymentBody()),
+  validateOrder
+);
 
-// submit order payment and end order
-userRouter.post("/orders/:orderId/payment", [
-  validateOrderIdFromParam,
-  validateOrderPaymentBody,
-  validateOrderStepBody,
-  submitOrderPayment,
-  completeOrder,
-]);
+userRouter.post(
+  "/orders",
+  validateSubmitOrderBody(
+    validateOrderInformation("information"),
+    1,
+    "Please complete order information!"
+  ),
+  validateSubmitOrderBody(
+    validateOrderDeliveryBody("delivery"),
+    2,
+    "Please choose a delivery time"
+  ),
+  validateSubmitOrderBody(
+    validateOrderPaymentBody("payment"),
+    4,
+    "Please check your payment"
+  ),
+  submitOrder
+);
 
 export default userRouter;

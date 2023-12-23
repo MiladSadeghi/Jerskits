@@ -177,68 +177,123 @@ export const validateOrderIdFromParam = [
     .withMessage("Invalid order ID, must be a 6-digit number"),
 ];
 
-export const validateOrderInformationBody = [
-  body("firstName").notEmpty().withMessage("First name is required"),
-  body("lastName").notEmpty().withMessage("Last name is required"),
-  body("address").notEmpty().withMessage("Address is required"),
-  body("country").notEmpty().withMessage("Country is required"),
-  body("state").notEmpty().withMessage("State is required"),
-  body("city").notEmpty().withMessage("City is required"),
-  body("postalCode")
-    .notEmpty()
-    .withMessage("Postal code is required")
-    .isPostalCode("any"),
-  body("email")
-    .notEmpty()
-    .withMessage("Email is required")
-    .isEmail()
-    .withMessage("Invalid email"),
-  body("phoneNumber")
-    .notEmpty()
-    .withMessage("Phone number is required")
-    .isMobilePhone("any"),
-  body("save").optional().toBoolean(),
-];
+export const validateOrderInformation = (field = "") => {
+  let fieldName = field ? `${field}.` : "";
+  return [
+    body(`${fieldName}firstName`)
+      .notEmpty()
+      .withMessage("First name is required"),
+    body(`${fieldName}lastName`)
+      .notEmpty()
+      .withMessage("Last name is required"),
+    body(`${fieldName}address`).notEmpty().withMessage("Address is required"),
+    body(`${fieldName}country`).notEmpty().withMessage("Country is required"),
+    body(`${fieldName}state`).notEmpty().withMessage("State is required"),
+    body(`${fieldName}city`).notEmpty().withMessage("City is required"),
+    body(`${fieldName}postalCode`)
+      .exists()
+      .withMessage("Postal code is required")
+      .isPostalCode("any"),
+    body(`${fieldName}email`)
+      .notEmpty()
+      .withMessage("Email is required")
+      .isEmail()
+      .withMessage("Invalid email"),
+    body(`${fieldName}phoneNumber`)
+      .exists()
+      .withMessage("Phone number is required")
+      .isMobilePhone("any"),
+    body(`${fieldName}saveAddress`).optional().toBoolean().default(false),
+  ];
+};
 
-export const validateOrderDeliveryBody = [
-  body("arriveTime")
-    .notEmpty()
-    .withMessage("Arrive time is required")
-    .isISO8601()
-    .toDate()
-    .withMessage("Invalid date format"),
-];
+export const validateOrderDeliveryBody = (field = "") => {
+  let fieldName = field ? `${field}.` : "";
+  return [
+    check(`${fieldName}arriveTime`)
+      .exists({ checkFalsy: true })
+      .withMessage("Delivery arrival time is required.")
+      .bail()
+      .isISO8601()
+      .withMessage("Invalid date format.")
+      .bail()
+      .custom((value) => {
+        const date = new Date(value);
+        if (date <= new Date()) {
+          throw new Error("Delivery arrival time must be a future date.");
+        }
+        return true;
+      }),
 
-export const validateOrderPaymentBody = [
-  body("nameOnCard")
-    .notEmpty()
-    .withMessage("Name on card is required")
-    .isString()
-    .isLength({ min: 5 })
-    .withMessage("Name on card must be at least 5 characters long"),
-  body("cardNumber")
-    .notEmpty()
-    .withMessage("Card number is required")
-    .isCreditCard()
-    .withMessage("Invalid card number")
-    .isLength({ min: 16, max: 16 })
-    .withMessage("Invalid card number")
-    .isNumeric()
-    .withMessage("Invalid card number")
-    .isInt({ min: 1000000000000000, max: 9999999999999999n })
-    .withMessage("Invalid card number"),
-  body("expirationDate")
-    .notEmpty()
-    .withMessage("Expiration date is required")
-    .isISO8601()
-    .toDate()
-    .withMessage("Invalid date format"),
-  body("cvv")
-    .notEmpty()
-    .withMessage("CVV is required")
-    .isNumeric()
-    .withMessage("Invalid CVV")
-    .isLength({ min: 3, max: 3 })
-    .withMessage("Invalid CVV"),
-  body("save").optional().toBoolean(),
-];
+    check(`${fieldName}type`)
+      .exists()
+      .withMessage("Delivery type is required.")
+      .isIn(["standard", "express"])
+      .withMessage("Invalid delivery type selected."),
+
+    check(`${fieldName}price`)
+      .exists()
+      .withMessage("Delivery price is required.")
+      .isNumeric()
+      .withMessage("Delivery price must be a number.")
+      .custom((value, { req }) => {
+        if (
+          value === 10 &&
+          (req.body.type || req.body.delivery.type) === "standard"
+        ) {
+          return true;
+        } else if (
+          value === 20 &&
+          (req.body.type || req.body.delivery.type) === "express"
+        ) {
+          return true;
+        } else {
+          throw new Error("Delivery price does not match delivery type.");
+        }
+      }),
+  ];
+};
+
+export const validateOrderPaymentBody = (field = "") => {
+  let fieldName = field ? `${field}.` : "";
+  return [
+    body(`${fieldName}nameOnCard`)
+      .notEmpty()
+      .withMessage("Name on card is required")
+      .isString()
+      .withMessage("Name on card must be a string")
+      .isLength({ min: 5 })
+      .withMessage("Name on card must be at least 5 characters long"),
+
+    body(`${fieldName}cardNumber`)
+      .notEmpty()
+      .withMessage("Card number is required")
+      .isCreditCard()
+      .withMessage("Invalid card number"),
+
+    body(`${fieldName}expirationDate`)
+      .notEmpty()
+      .withMessage("Expiration date is required")
+      .matches(/^(0[1-91[0-2])\/(20[2-9][0-9])$/)
+      .withMessage("Expiration date must be in MM/YYYY format")
+      .custom((value) => {
+        const [month, year] = value.split("/").map((v) => parseInt(v, 10));
+        const currentDate = new Date();
+        const expDate = new Date(year, month);
+        if (currentDate >= expDate) {
+          throw new Error("Card is expired");
+        }
+        return true;
+      }),
+
+    body(`${fieldName}cvv`)
+      .notEmpty()
+      .withMessage("CVV is required")
+      .isNumeric()
+      .withMessage("CVV must be numeric")
+      .isLength({ min: 3, max: 4 })
+      .withMessage("Invalid CVV"),
+
+    body(`${fieldName}savePayment`).optional().isBoolean().toBoolean(),
+  ];
+};

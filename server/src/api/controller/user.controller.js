@@ -1,4 +1,4 @@
-import { generateFiveDigitNumber } from "../../utils/utility.js";
+import { generateOrderNumber } from "../../utils/utility.js";
 import BagModel from "../models/bag.model.js";
 import FavoriteModel from "../models/favorite.model.js";
 import OrderModel from "../models/order.model.js";
@@ -407,253 +407,29 @@ export const getOrders = async (req, res, next) => {
   }
 };
 
-export const createOrder = async (req, res, next) => {
+export const validateOrder = (req, res, next) => {
+  try {
+    return res.sendStatus(200);
+  } catch (error) {
+    return res.status(500).json({ error: true, message: "Server error" });
+  }
+};
+
+export const submitOrder = async (req, res, next) => {
   const { _id: userId } = req.decoded;
+  const { information, delivery, payment } = req.body;
 
   try {
-    const bag = await BagModel.findOne({ user: userId });
-    console.log(bag);
-    if (!bag || !bag.items || bag.items.length === 0) {
-      return res.status(400).json({
-        error: true,
-        message: "Bag is empty",
-      });
-    }
-    const orderNumber = generateFiveDigitNumber();
-    const createOrder = await OrderModel.create({
-      orderNumber,
+    const orderNumber = generateOrderNumber();
+    const order = new OrderModel({
       user: userId,
-      currentStep: 0,
+      information,
+      delivery,
+      payment,
+      orderNumber,
     });
 
-    return res.status(201).json({
-      error: false,
-      order: createOrder.orderNumber,
-    });
-  } catch (error) {
-    console.log(error);
-    if (error.code === 11000) {
-      return res.status(400).json({
-        error: true,
-        message: "Please complete your previous order",
-      });
-    }
-    if (error.name === "ValidationError" && error.errors.currentStep !== 0) {
-      return res.status(400).json({
-        error: true,
-        message: "Please complete your previous order",
-      });
-    }
-    return res.status(500).json({ error: true, message: "Server error" });
-  }
-};
-
-export const submitOrderInformation = async (req, res, next) => {
-  const { orderId } = req.params;
-  const {
-    firstName,
-    lastName,
-    address,
-    country,
-    state,
-    city,
-    postalCode,
-    email,
-    phoneNumber,
-  } = req.body;
-
-  try {
-    if (!orderId) {
-      return res.status(400).json({
-        error: true,
-        message: "Order not found",
-      });
-    }
-
-    let order = await OrderModel.findOne({ orderNumber: orderId });
-    if (!order) {
-      return res.status(400).json({
-        error: true,
-        message: "Order not found",
-      });
-    }
-    if (order.currentStep > 3) {
-      return res.status(400).json({
-        error: true,
-        message: "Order already completed",
-      });
-    }
-
-    order.currentStep = 1;
-    order.information = {
-      firstName,
-      lastName,
-      address,
-      country,
-      state,
-      city,
-      postalCode,
-      email,
-      phoneNumber,
-    };
-    await order.save();
-
-    return res.sendStatus(200);
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ error: true, message: "Server error" });
-  }
-};
-
-export const submitOrderDelivery = async (req, res, next) => {
-  const { orderId } = req.params;
-  const { arriveTime } = req.body;
-
-  try {
-    if (!orderId) {
-      return res.status(400).json({
-        error: true,
-        message: "Order not found",
-      });
-    }
-    let order = await OrderModel.findOne({ orderNumber: orderId });
-    if (!order) {
-      return res.status(400).json({
-        error: true,
-        message: "Order not found",
-      });
-    }
-    if (order.currentStep < 1) {
-      return res.status(400).json({
-        error: true,
-        message: "Please complete your previous step",
-      });
-    }
-    if (order.currentStep > 3) {
-      return res.status(400).json({
-        error: true,
-        message: "Order already completed",
-      });
-    }
-
-    order.currentStep = 2;
-    order.delivery = {
-      arriveTime,
-    };
-    await order.save();
-
-    return res.sendStatus(200);
-  } catch (error) {
-    console.log(error);
-    if (error.code === 11000) {
-      return res.status(400).json({
-        error: true,
-        message:
-          "Please complete your previous order or check the current step",
-      });
-    }
-    return res.status(500).json({ error: true, message: "Server error" });
-  }
-};
-
-export const submitOrderPayment = async (req, res, next) => {
-  const { _id: userId } = req.decoded;
-  const { orderId } = req.params;
-  const { nameOnCard, cardNumber, expirationDate, cvv, save } = req.body;
-
-  try {
-    if (!orderId) {
-      return res.status(400).json({
-        error: true,
-        message: "Order not found",
-      });
-    }
-    let order = await OrderModel.findOne({ orderNumber: orderId });
-    if (!order) {
-      return res.status(400).json({
-        error: true,
-        message: "Order not found",
-      });
-    }
-    if (order.currentStep < 2) {
-      console.log(order.currentStep);
-      return res.status(400).json({
-        error: true,
-        message: "Please complete your previous step",
-      });
-    }
-    if (order.currentStep > 3) {
-      return res.status(400).json({
-        error: true,
-        message: "Order already completed",
-      });
-    }
-
-    if (save) {
-      payment = await PaymentModel.create({
-        user: userId,
-        orderNumber: orderId,
-        nameOnCard,
-        cardNumber,
-        expirationDate,
-        cvv,
-      });
-      await payment.save();
-    }
-
-    order.currentStep = 3;
-    order.payment = {
-      nameOnCard,
-      cardNumber,
-      expirationDate,
-      cvv,
-    };
-    await order.save();
-
-    return next();
-  } catch (error) {
-    console.log(error);
-    if (error.code === 11000) {
-      return res.status(400).json({
-        error: true,
-        message:
-          "Please complete your previous order or check the current step",
-      });
-    }
-    return res.status(500).json({ error: true, message: "Server error" });
-  }
-};
-
-export const completeOrder = async (req, res, next) => {
-  const { orderId } = req.params;
-
-  try {
-    const order = await OrderModel.findOne({ orderNumber: orderId });
-    if (!order) {
-      return res.status(400).json({
-        error: true,
-        message: "Order not found",
-      });
-    }
-    if (order.currentStep < 3) {
-      return res.status(400).json({
-        error: true,
-        message: "Please complete your previous step",
-      });
-    }
-
-    let error = false;
-    if (!order.information) error = true;
-    if (!order.delivery) error = true;
-    if (!order.payment) error = true;
-    if (error) {
-      return res.status(400).json({
-        error: true,
-        message: "Please complete your order",
-      });
-    }
-
-    const userBag = await BagModel.findOne({ user: order.user });
+    const userBag = await BagModel.findOne({ user: userId });
 
     if (!userBag) {
       return res.status(400).json({
@@ -672,14 +448,13 @@ export const completeOrder = async (req, res, next) => {
     order.orderItems = {
       subTotal: userBag.subTotal,
       items: userBag.items,
+      price: userBag.subTotal + delivery.price,
     };
-
-    order.currentStep = 4;
 
     await BagModel.findOneAndDelete({ _id: userBag._id });
     await order.save();
 
-    return res.status(200).json({ error: false, message: "Order completed" });
+    return res.sendStatus(200);
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: true, message: "Server error" });

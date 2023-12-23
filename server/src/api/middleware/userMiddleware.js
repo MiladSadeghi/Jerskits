@@ -91,14 +91,43 @@ export const validateUpdateSizeBody = [
   },
 ];
 
-export const validateOrderStepBody = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
+export const validateOrderStepBody = (validations) => {
+  return async (req, res, next) => {
     const errorObj = {};
-    errors.array().forEach((error) => {
-      errorObj[error.path] = error.msg;
-    });
+    for (let validation of validations) {
+      const result = await validation.run(req);
+      if (result.errors[0]) {
+        errorObj[result.errors[0].path] = result.errors[0].msg;
+      }
+    }
+
+    if (Object.keys(errorObj).length === 0) {
+      return next();
+    }
+
     return res.status(400).json({ errors: errorObj });
-  }
-  return next();
+  };
+};
+
+export const validateSubmitOrderBody = (validations, step, errorMsg) => {
+  return async (req, res, next) => {
+    const errorObj = {};
+    for (let validation of validations) {
+      const result = await validation.run(req);
+      if (result.errors[0]) {
+        errorObj[result.errors[0].path.split(".")[1]] = result.errors[0].msg;
+      }
+    }
+
+    if (Object.keys(errorObj).length === 0) {
+      return next();
+    }
+
+    return res.status(400).json({
+      error: true,
+      step,
+      message: errorMsg,
+      errors: errorObj,
+    });
+  };
 };

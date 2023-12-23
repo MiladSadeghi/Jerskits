@@ -47,7 +47,16 @@ const informationSchema = Schema(
 const DeliverySchema = Schema(
   {
     arriveTime: {
+      type: Date,
+      required: true,
+    },
+    type: {
       type: String,
+      enum: ["standard", "express"],
+      required: true,
+    },
+    price: {
+      type: Number,
       required: true,
     },
   },
@@ -111,45 +120,12 @@ const OrderSchema = Schema(
     orderItems: {
       type: OrderItemSchema,
     },
-    currentStep: {
+    price: {
       type: Number,
-      default: 0,
-      validate: {
-        validator: async function (value) {
-          // Validate currentStep based on different steps of the order process
-          if (value === 1) return this.information !== undefined;
-          if (value === 2) return this.delivery !== undefined;
-          if (value === 3) return this.payment !== undefined;
-
-          if (value <= 3) {
-            const count = await this.constructor.countDocuments({
-              user: this.user,
-              currentStep: { $lte: 3, $ne: this.currentStep },
-            });
-            return count === 0;
-          }
-
-          return true;
-        },
-        message:
-          "Invalid currentStep value or non-unique user for currentStep <= 4",
-      },
     },
   },
   { timestamps: true }
 );
-
-OrderSchema.index(
-  { user: 1 },
-  { unique: true, partialFilterExpression: { currentStep: { $lte: 3 } } }
-);
-
-OrderSchema.pre("save", function (next) {
-  if (this.isModified("information")) this.currentStep = 1;
-  if (this.isModified("delivery")) this.currentStep = 2;
-  if (this.isModified("payment")) this.currentStep = 3;
-  next();
-});
 
 const OrderModel = mongoose.model("Order", OrderSchema);
 
