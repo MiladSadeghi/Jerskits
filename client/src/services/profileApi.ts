@@ -4,7 +4,7 @@ import { setAvatar, setProfile } from '../App/feature/profile/profileSlice'
 import toast from 'react-hot-toast'
 import {
   IProfile,
-  IProfileFrom,
+  IProfileForm,
   TGetProfileResponse,
   TUploadProfileAvatarRequest,
   TUploadProfileAvatarResponse
@@ -49,7 +49,7 @@ export const profileApi = createApi({
     }),
     updateUserProfile: build.mutation<
       { profile: IProfile },
-      Partial<IProfileFrom>
+      Partial<IProfileForm>
     >({
       query(profile) {
         return {

@@ -31,7 +31,13 @@ import {
   useAddToBagMutation,
   useRemoveFromBagMutation,
   useUpdateBagItemQuantityMutation,
-  useUpdateBagItemSizeMutation
+  useUpdateBagItemSizeMutation,
+  useGetOrderQuery,
+  useGetOrdersQuery,
+  useValidateCheckoutInformationMutation,
+  useValidateCheckoutDeliveryMutation,
+  useValidateCheckoutPaymentMutation,
+  usePlaceOrderMutation
 } from './userApi'
 
 export {
@@ -55,5 +61,11 @@ export {
   useRemoveFromBagMutation,
   useUpdateBagItemQuantityMutation,
   useUpdateBagItemSizeMutation,
-  useLazySearchProductsQuery
+  useLazySearchProductsQuery,
+  useGetOrderQuery,
+  useGetOrdersQuery,
+  useValidateCheckoutInformationMutation,
+  useValidateCheckoutDeliveryMutation,
+  useValidateCheckoutPaymentMutation,
+  usePlaceOrderMutation
 }

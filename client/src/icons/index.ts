@@ -12,6 +12,11 @@ import BestQualityMaterial from './BestQualityMaterial'
 import Star from './Star'
 import Close from './Close'
 import Hamburger from './Hamburger'
+import InformationIcon from './Information'
+import DeliveryIcon from './Delivery'
+import BillingIcon from './Billing'
+import PaymentIcon from './Payment'
+import Checkmark from './Checkmark'
 
 export {
   ArrowDown,
@@ -27,5 +32,10 @@ export {
   BestQualityMaterial,
   Star,
   Close,
-  Hamburger
+  Hamburger,
+  InformationIcon,
+  DeliveryIcon,
+  BillingIcon,
+  PaymentIcon,
+  Checkmark
 }

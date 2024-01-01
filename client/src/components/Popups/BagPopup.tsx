@@ -1,6 +1,5 @@
 import { forwardRef } from 'react'
 import { useAppSelector } from '../../App/hooks'
-import { RootState } from '../../App/store'
 import ProductMiniCard from '../Products/ProductMiniCard'
 import { Link } from 'react-router-dom'
 import { Close } from '../../icons'
@@ -14,7 +13,7 @@ type Props = {
 
 const BagPopup = forwardRef<HTMLDialogElement, Props>(
   ({ isOpen, handleBagModal, closePopup }, ref) => {
-    const bag = useAppSelector((state: RootState) => state.user.bag)
+    const bag = useAppSelector((state) => state.user.bag)
     return (
       <dialog
         ref={ref}
@@ -55,7 +54,7 @@ const BagPopup = forwardRef<HTMLDialogElement, Props>(
             VIEW BAG ({bag?.items.length})
           </button>
           <Link
-            to={''}
+            to={'/checkout'}
             className='w-full py-[18px] font-bold text-center text-white border bg-primary-black'
           >
             CHECKOUT

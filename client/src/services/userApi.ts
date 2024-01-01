@@ -23,6 +23,17 @@ import {
   setBag,
   setFavorites
 } from '../App/feature/userSlice'
+import {
+  IGetOrderRequest,
+  IGetOrderResponse,
+  IGetOrdersResponse,
+  TValidateCheckoutInformationRequest,
+  TValidateCheckoutDeliveryRequest,
+  TValidateCheckoutPaymentRequest,
+  TValidateCheckoutInformationResponse,
+  TPlaceOrderRequest,
+  TPlaceOrderResponse
+} from '../shared/types/Order.types'
 
 const userApi = createApi({
   reducerPath: 'userApi',
@@ -221,6 +232,74 @@ const userApi = createApi({
           toast.error(err.message)
         }
       }
+    }),
+    getOrders: build.query<IGetOrdersResponse, undefined>({
+      query() {
+        return {
+          url: 'user/orders',
+          method: 'GET'
+        }
+      }
+    }),
+    getOrder: build.query<IGetOrderResponse, IGetOrderRequest>({
+      query(orderId) {
+        return {
+          url: `user/orders/${orderId}`,
+          method: 'GET'
+        }
+      }
+    }),
+    validateCheckoutInformation: build.mutation<
+      TValidateCheckoutInformationResponse,
+      TValidateCheckoutInformationRequest
+    >({
+      query(information) {
+        return {
+          url: 'user/checkout/validate/information',
+          method: 'POST',
+          body: information
+        }
+      }
+    }),
+    validateCheckoutDelivery: build.mutation<
+      undefined,
+      TValidateCheckoutDeliveryRequest
+    >({
+      query(delivery) {
+        return {
+          url: 'user/checkout/validate/delivery',
+          method: 'POST',
+          body: delivery,
+          responseHandler: 'text'
+        }
+      }
+    }),
+    validateCheckoutPayment: build.mutation<
+      undefined,
+      TValidateCheckoutPaymentRequest
+    >({
+      query(payment) {
+        return {
+          url: 'user/checkout/validate/payment',
+          method: 'POST',
+          body: payment,
+          responseHandler: (response) => {
+            if (response.status === 400) {
+              return response.json()
+            }
+            return response.text()
+          }
+        }
+      }
+    }),
+    placeOrder: build.mutation<TPlaceOrderResponse, TPlaceOrderRequest>({
+      query(placeOrder) {
+        return {
+          url: 'user/orders',
+          method: 'POST',
+          body: placeOrder
+        }
+      }
     })
   })
 })
@@ -234,7 +313,13 @@ export const {
   useAddToBagMutation,
   useRemoveFromBagMutation,
   useUpdateBagItemQuantityMutation,
-  useUpdateBagItemSizeMutation
+  useUpdateBagItemSizeMutation,
+  useGetOrderQuery,
+  useGetOrdersQuery,
+  useValidateCheckoutInformationMutation,
+  useValidateCheckoutDeliveryMutation,
+  useValidateCheckoutPaymentMutation,
+  usePlaceOrderMutation
 } = userApi
 
 export default userApi

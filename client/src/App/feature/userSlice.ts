@@ -38,6 +38,11 @@ const userSlice = createSlice({
   }
 })
 
-export const { setFavorites, addToFavorites, removeFromFavorites, setBag } =
-  userSlice.actions
+export const {
+  setFavorites,
+  addToFavorites,
+  removeFromFavorites,
+  setBag,
+  clearBag
+} = userSlice.actions
 export default userSlice.reducer

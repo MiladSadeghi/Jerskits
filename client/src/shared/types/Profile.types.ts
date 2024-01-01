@@ -15,7 +15,7 @@ export interface IProfile {
   postalCode?: string
 }
 
-export interface IProfileFrom {
+export interface IProfileForm {
   firstName: string
   lastName: string
   address: string
@@ -29,7 +29,7 @@ export interface IProfileFrom {
 }
 
 export type TGetProfileResponse = Omit<
-  IProfileFrom,
+  IProfileForm,
   'address' | 'country' | 'state' | 'city' | 'postalCode'
 > & {
   address?: string
