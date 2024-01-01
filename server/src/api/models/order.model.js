@@ -36,7 +36,7 @@ const informationSchema = Schema(
       type: Number,
       required: true,
     },
-    email: {
+    contactEmail: {
       type: String,
       required: true,
     },

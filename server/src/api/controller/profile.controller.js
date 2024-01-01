@@ -32,14 +32,13 @@ export const getUserProfile = async (req, res, next) => {
     }
 
     if (user?.city) {
-      const city = City.getCityByCode(
+      const city = City.getCitiesOfState(
         user?.country.value,
-        user?.state.value,
-        user?.city
-      );
+        user?.state.value
+      ).find((city) => city.name === user.city);
       user.city = {
         label: city.name,
-        value: city.isoCode,
+        value: city.name,
       };
     }
 
@@ -98,7 +97,7 @@ export const updateUserProfile = async (req, res, next) => {
     }
 
     if (city) {
-      const isCityExist = City.getCitiesOfState(countryCode, stateCode).filter(
+      const isCityExist = City.getCitiesOfState(country, state).filter(
         (city) => city.name === city
       );
       if (!isCityExist) {

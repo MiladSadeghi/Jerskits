@@ -91,7 +91,7 @@ export const validateUpdateSizeBody = [
   },
 ];
 
-export const validateOrderStepBody = (validations) => {
+export const validateCheckoutStepBody = (validations) => {
   return async (req, res, next) => {
     const errorObj = {};
     for (let validation of validations) {

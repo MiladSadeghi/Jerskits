@@ -11,14 +11,15 @@ import {
   updateBagItemSize,
   getOrder,
   getOrders,
-  validateOrder,
   submitOrder,
+  validateCheckout,
+  validateInformationCheckout,
 } from "../controller/user.controller.js";
 import { verifyJWT } from "../middleware/verifyJWT.js";
 import {
   validateAddToBag,
+  validateCheckoutStepBody,
   validateOrderId,
-  validateOrderStepBody,
   validateProductAddition,
   validateProductRemoval,
   validateSubmitOrderBody,
@@ -26,9 +27,9 @@ import {
   validateUpdateSizeBody,
 } from "../middleware/userMiddleware.js";
 import {
-  validateOrderDeliveryBody,
-  validateOrderInformation,
-  validateOrderPaymentBody,
+  validateCheckoutDeliveryBody,
+  validateCheckoutInformation,
+  validateCheckoutPaymentBody,
 } from "../../utils/validation.js";
 
 const userRouter = Router();
@@ -67,41 +68,41 @@ userRouter.get("/orders", getOrders);
 // get order by param
 userRouter.get("/orders/:orderId", validateOrderId, getOrder);
 
-// validate order information
+// validate checkout information
 userRouter.post(
-  "/orders/validate/information",
-  validateOrderStepBody(validateOrderInformation()),
-  validateOrder
+  "/checkout/validate/information",
+  validateCheckoutStepBody(validateCheckoutInformation()),
+  validateInformationCheckout
 );
 
-// validate order delivery
+// validate checkout delivery
 userRouter.post(
-  "/orders/validate/delivery",
-  validateOrderStepBody(validateOrderDeliveryBody()),
-  validateOrder
+  "/checkout/validate/delivery",
+  validateCheckoutStepBody(validateCheckoutDeliveryBody()),
+  validateCheckout
 );
 
-// validate order payment
+// validate checkout payment
 userRouter.post(
-  "/orders/validate/payment",
-  validateOrderStepBody(validateOrderPaymentBody()),
-  validateOrder
+  "/checkout/validate/payment",
+  validateCheckoutStepBody(validateCheckoutPaymentBody()),
+  validateCheckout
 );
 
 userRouter.post(
   "/orders",
   validateSubmitOrderBody(
-    validateOrderInformation("information"),
+    validateCheckoutInformation("information"),
     1,
     "Please complete order information!"
   ),
   validateSubmitOrderBody(
-    validateOrderDeliveryBody("delivery"),
+    validateCheckoutDeliveryBody("delivery"),
     2,
     "Please choose a delivery time"
   ),
   validateSubmitOrderBody(
-    validateOrderPaymentBody("payment"),
+    validateCheckoutPaymentBody("payment"),
     4,
     "Please check your payment"
   ),

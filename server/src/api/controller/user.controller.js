@@ -1,3 +1,4 @@
+import { City, Country, State } from "country-state-city";
 import { generateOrderNumber } from "../../utils/utility.js";
 import BagModel from "../models/bag.model.js";
 import FavoriteModel from "../models/favorite.model.js";
@@ -105,7 +106,6 @@ export const removeProductFromFavorites = async (req, res, next) => {
   try {
     const { _id } = req.decoded;
     const { productId } = req.params;
-    console.log(productId);
 
     const userFavorites = await FavoriteModel.findOneAndUpdate(
       { user: _id },
@@ -407,10 +407,41 @@ export const getOrders = async (req, res, next) => {
   }
 };
 
-export const validateOrder = (req, res, next) => {
+export const validateInformationCheckout = (req, res, next) => {
+  try {
+    let country = Country.getCountryByCode(req.body.country);
+    let state = State.getStateByCodeAndCountry(req.body.state, country.isoCode);
+    let city = City.getCitiesOfState(country.isoCode, state.isoCode).find(
+      (city) => city.name === req.body.city
+    );
+
+    country = {
+      label: country.name,
+      value: country.isoCode,
+    };
+
+    state = {
+      label: state.name,
+      value: state.isoCode,
+    };
+
+    city = {
+      label: city.name,
+      value: city.name,
+    };
+
+    return res.status(200).json({ ...req.body, country, state, city });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: true, message: "Server error" });
+  }
+};
+
+export const validateCheckout = (req, res, next) => {
   try {
     return res.sendStatus(200);
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: true, message: "Server error" });
   }
 };
@@ -454,7 +485,7 @@ export const submitOrder = async (req, res, next) => {
     await BagModel.findOneAndDelete({ _id: userBag._id });
     await order.save();
 
-    return res.sendStatus(200);
+    return res.status(201).json({ error: false, orderId: orderNumber });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: true, message: "Server error" });

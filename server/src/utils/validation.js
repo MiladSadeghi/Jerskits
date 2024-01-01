@@ -177,7 +177,7 @@ export const validateOrderIdFromParam = [
     .withMessage("Invalid order ID, must be a 6-digit number"),
 ];
 
-export const validateOrderInformation = (field = "") => {
+export const validateCheckoutInformation = (field = "") => {
   let fieldName = field ? `${field}.` : "";
   return [
     body(`${fieldName}firstName`)
@@ -194,7 +194,7 @@ export const validateOrderInformation = (field = "") => {
       .exists()
       .withMessage("Postal code is required")
       .isPostalCode("any"),
-    body(`${fieldName}email`)
+    body(`${fieldName}contactEmail`)
       .notEmpty()
       .withMessage("Email is required")
       .isEmail()
@@ -207,7 +207,7 @@ export const validateOrderInformation = (field = "") => {
   ];
 };
 
-export const validateOrderDeliveryBody = (field = "") => {
+export const validateCheckoutDeliveryBody = (field = "") => {
   let fieldName = field ? `${field}.` : "";
   return [
     check(`${fieldName}arriveTime`)
@@ -254,7 +254,7 @@ export const validateOrderDeliveryBody = (field = "") => {
   ];
 };
 
-export const validateOrderPaymentBody = (field = "") => {
+export const validateCheckoutPaymentBody = (field = "") => {
   let fieldName = field ? `${field}.` : "";
   return [
     body(`${fieldName}nameOnCard`)
@@ -274,8 +274,8 @@ export const validateOrderPaymentBody = (field = "") => {
     body(`${fieldName}expirationDate`)
       .notEmpty()
       .withMessage("Expiration date is required")
-      .matches(/^(0[1-91[0-2])\/(20[2-9][0-9])$/)
-      .withMessage("Expiration date must be in MM/YYYY format")
+      .matches(/^(0[1-9]|1[0-2])\/(20[2-9][0-9])$/)
+      .withMessage("Expiration date is not valid. Format must be MM/YYYY")
       .custom((value) => {
         const [month, year] = value.split("/").map((v) => parseInt(v, 10));
         const currentDate = new Date();
