@@ -4,24 +4,32 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Button, FormError, FormInput, FormLabel } from '..'
 import { ErrorMessage } from '@hookform/error-message'
 import { SpinnerCircular } from 'spinners-react'
-import { cn } from '../../utils/utils'
+import { cn, isValidationError } from '../../utils/utils'
 
 import LocationDropdown from '../Dropdown/LocationDropdown'
 import { TGetProfileResponse } from '../../shared/types/Profile.types'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import {
+  TValidateCheckoutError,
+  TValidatingError
+} from '../../shared/types/Order.types'
+import { SerializedError } from '@reduxjs/toolkit'
 
 type Props = {
   handleSubmitForm: (e: TProfileSchema) => void
   isLoading: boolean
   buttonText: string
-  profileData?: TGetProfileResponse
+  formFieldsValue?: TGetProfileResponse
+  checkoutError?: FetchBaseQueryError | SerializedError
 }
 
 const UserForm = ({
   handleSubmitForm,
   isLoading,
   buttonText,
-  profileData
+  formFieldsValue,
+  checkoutError
 }: Props) => {
   const {
     handleSubmit,
@@ -30,31 +38,49 @@ const UserForm = ({
     formState: { errors },
     setValue,
     getValues,
-    watch
+    watch,
+    setError
   } = useForm<TProfileSchema>({
     resolver: yupResolver(ProfileSchema),
     defaultValues: {
-      ...profileData,
+      ...formFieldsValue,
       ...{
-        country: profileData?.country?.value,
-        state: profileData?.state?.value,
-        city: profileData?.city?.value
+        country: formFieldsValue?.country?.value,
+        state: formFieldsValue?.state?.value,
+        city: formFieldsValue?.city?.value
       }
     }
   })
 
   useEffect(() => {
-    if (getValues('country') !== profileData?.country) {
-      setValue('state', undefined)
-      setValue('city', undefined)
+    if (getValues('country') !== formFieldsValue?.country?.value) {
+      setValue('state', '', { shouldValidate: true })
+      setValue('city', '', { shouldValidate: true })
     }
   }, [watch('country')])
 
   useEffect(() => {
-    if (getValues('state') !== profileData?.state) {
-      setValue('city', undefined)
+    if (getValues('state') !== formFieldsValue?.state?.value) {
+      setValue('city', '', { shouldValidate: true })
     }
   }, [watch('state')])
+
+  const handleError = useCallback(() => {
+    if (isValidationError(checkoutError)) {
+      const { errors } = checkoutError.data as TValidatingError<
+        TValidateCheckoutError<TProfileSchema>
+      >['data']
+
+      Object.keys(errors).map((error) => {
+        const errorKey = error as keyof TProfileSchema
+        setError(errorKey, { message: errors[errorKey] })
+      })
+    }
+  }, [checkoutError])
+
+  useEffect(() => {
+    handleError()
+  }, [handleError])
 
   return (
     <form onSubmit={handleSubmit(handleSubmitForm)} className='space-y-7'>
@@ -132,7 +158,7 @@ const UserForm = ({
             control={control}
             name='country'
             menuPosition='right'
-            defaultLocation={profileData?.country}
+            defaultLocation={formFieldsValue?.country}
           />
         </div>
 
@@ -151,7 +177,7 @@ const UserForm = ({
             control={control}
             name='state'
             menuPosition='left'
-            defaultLocation={profileData?.state}
+            defaultLocation={formFieldsValue?.state}
           />
         </div>
 
@@ -170,7 +196,7 @@ const UserForm = ({
             control={control}
             name='city'
             menuPosition='right'
-            defaultLocation={profileData?.city}
+            defaultLocation={formFieldsValue?.city}
           />
         </div>
       </div>
@@ -189,6 +215,10 @@ const UserForm = ({
           </p>
         </FormLabel>
       </div>
+
+      <h2 className='font-bold text-text-2xl text-primary-black leading-[48px]'>
+        Contact
+      </h2>
 
       <div className='space-y-2.5'>
         <div className='flex justify-between'>

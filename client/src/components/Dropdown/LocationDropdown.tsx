@@ -19,7 +19,11 @@ const LocationDropdown = ({
   menuPosition,
   defaultLocation
 }: Props) => {
-  const { field } = useController({ control, name })
+  const { field } = useController({
+    control,
+    name
+  })
+
   const [getLocation, { data }] = useLazyGetLocationQuery()
   const [options, setOptions] = useState<Option[]>()
   const [openMenu, setOpenMenu] = useState<boolean>(false)
@@ -42,7 +46,7 @@ const LocationDropdown = ({
   }, [defaultLocation])
 
   useEffect(() => {
-    if (inputRef.current && field.value === undefined) {
+    if (inputRef.current && !field?.value?.length) {
       inputRef.current.value = ''
     }
   }, [field.value])
@@ -85,8 +89,6 @@ const LocationDropdown = ({
   }
 
   const handleSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
-    field.onChange(e.target.value)
-
     if (e.target.value.length === 0) {
       setOptions(data?.[name])
     } else {

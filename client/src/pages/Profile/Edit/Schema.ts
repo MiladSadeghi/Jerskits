@@ -18,8 +18,7 @@ const ProfileSchema = yup.object().shape({
     .matches(/^[0-9]{10}$/, {
       message: 'Phone number must be 10 digits',
       excludeEmptyString: true
-    })
-    .nullable(),
+    }),
   saveAddress: yup.boolean().default(false),
   address: yup.string().trim().max(100, 'Address cannot exceed 100 characters'),
   country: yup
@@ -35,7 +34,6 @@ const ProfileSchema = yup.object().shape({
       message: 'Postal code must be 5 digits',
       excludeEmptyString: true
     })
-    .nullable()
 })
 
 export type TProfileSchema = yup.InferType<typeof ProfileSchema>

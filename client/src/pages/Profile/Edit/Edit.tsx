@@ -23,12 +23,8 @@ function Edit() {
   const avatarRef = useRef<HTMLDivElement>(null)
   const [uploadAvatar] = useUploadProfileAvatarMutation()
 
-  const {
-    data: profile,
-    isLoading: isProfileLoading,
-    error,
-    isError
-  } = useGetUserProfileQuery()
+  const { data: profile, isLoading: isProfileLoading } =
+    useGetUserProfileQuery()
   const [updateProfile, { isLoading: isProfileUpdateLoading }] =
     useUpdateUserProfileMutation()
 
@@ -111,12 +107,6 @@ function Edit() {
     }
   }
 
-  useEffect(() => {
-    if (isError) {
-      console.log(error)
-    }
-  }, [isError])
-
   if (isProfileLoading) {
     return (
       <SpinnerDiamond
@@ -131,9 +121,9 @@ function Edit() {
   }
   return (
     <div className='relative flex flex-col px-5 py-5 space-y-7' ref={dragRef}>
-      <h5 className='font-bold text-primary-black text-text-2xl leading-[150%]'>
+      <h1 className='font-bold text-primary-black text-text-2xl leading-[150%]'>
         Edit Account
-      </h5>
+      </h1>
       <div className='flex items-center'>
         <div
           ref={avatarRef}
@@ -176,7 +166,7 @@ function Edit() {
         handleSubmitForm={handleSubmitForm}
         isLoading={isProfileUpdateLoading}
         buttonText='Save'
-        profileData={profile?.profile}
+        formFieldsValue={profile?.profile}
       />
     </div>
   )
