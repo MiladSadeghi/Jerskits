@@ -35,6 +35,12 @@ import Avatar from './Avatar/Avatar'
 
 import SearchDropdown from './Dropdown/LocationDropdown'
 
+import CheckoutSteps from './Checkout/CheckoutSteps'
+import CheckoutSummary from './Checkout/CheckoutSummary'
+import CheckoutDelivery from './Checkout/CheckoutDelivery'
+import DeliverySummary from './Checkout/DeliverySummary'
+import OrderConfirmation from './Order/OrderConfirmation'
+
 export {
   Navbar,
   ProfilePopup,
@@ -61,5 +67,10 @@ export {
   Button,
   Avatar,
   SearchDropdown,
-  UserForm
+  UserForm,
+  CheckoutSteps,
+  CheckoutSummary,
+  CheckoutDelivery,
+  DeliverySummary,
+  OrderConfirmation
 }

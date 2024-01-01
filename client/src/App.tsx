@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import {
+  Checkout,
   Edit,
   Favorites,
   Landing,
@@ -11,7 +12,7 @@ import {
   SignUp
 } from './pages'
 import { AuthenticationLayout, Layout, ProfileLayout } from './layouts'
-import { FullScreenLoader, Products } from './components'
+import { FullScreenLoader, OrderConfirmation, Products } from './components'
 import { useGetUserQuery } from './services'
 
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -57,6 +58,8 @@ function App() {
             path='/sign-up'
             element={<AuthenticationLayout children={<SignUp />} />}
           />
+          <Route path='checkout' element={<Checkout />} />
+          <Route path='checkout/:orderId' element={<OrderConfirmation />} />
         </Routes>
       </main>
     </Suspense>

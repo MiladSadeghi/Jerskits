@@ -11,11 +11,20 @@ type Props = {
   key?: string | number
   testId?: string
   size?: string
+  qty?: number
 }
 
-const ProductMiniCard = ({ product, removable, testId, size }: Props) => {
+const ProductMiniCard = ({ product, removable, testId, size, qty }: Props) => {
   const [remove, { isLoading }] = useRemoveProductFromFavoritesMutation()
   const isOffPrice = product.offPrice !== 0
+  const price = qty
+    ? (product.price * qty).toLocaleString('en-US', {
+        maximumFractionDigits: 2
+      })
+    : product.price
+  const discount = qty
+    ? calculateDiscount(product.price * qty, product.offPrice)
+    : calculateDiscount(product.price, product.offPrice)
   return (
     <div data-testid={testId} className='relative flex items-start gap-x-5'>
       <div className='flex items-center justify-center  max-w-[6rem] h-[8rem] bg-neutral-light-grey relative'>
@@ -44,12 +53,13 @@ const ProductMiniCard = ({ product, removable, testId, size }: Props) => {
         </Link>
         <div className='flex'>
           <p className='text-base leading-6 capitalize text-neutral-dark-grey'>
-            {product.type} {!!size && `. Size ${size}`}
+            {product.type} {!!size && `. Size ${size}`}{' '}
+            {!!qty && `. QTY ${qty}`}
           </p>
         </div>
         <div className='flex justify-between w-full'>
           <ProductPrice className='text-lg' isDiscount={isOffPrice}>
-            ${product.price}
+            ${price}
           </ProductPrice>
           {isOffPrice && (
             <div className='flex items-center justify-between w-full'>
@@ -57,7 +67,7 @@ const ProductMiniCard = ({ product, removable, testId, size }: Props) => {
                 ${product.offPrice}
               </ProductDiscountPrice>
               <ProductDiscountPercent className='!text-lg'>
-                {calculateDiscount(product.price, product.offPrice)}% Off
+                {discount}% Off
               </ProductDiscountPercent>
             </div>
           )}
