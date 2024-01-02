@@ -479,7 +479,7 @@ export const submitOrder = async (req, res, next) => {
     order.orderItems = {
       subTotal: userBag.subTotal,
       items: userBag.items,
-      price: userBag.subTotal + delivery.price,
+      price: userBag.subTotal + delivery.price + 90,
     };
 
     await BagModel.findOneAndDelete({ _id: userBag._id });
