@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { TLandingPageHeaderProduct } from '../../../../shared/types/LandingPage.types'
 import HeaderSlide from './HeaderSlide'
@@ -13,8 +13,31 @@ type Props = {
 const Header = ({ products, isError, isLoading }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [currentSlide, setCurrentSlide] = useState<number>(0)
+  const [imagesLoaded, setImagesLoaded] = useState<boolean>(false)
 
-  if (isLoading || isError || !products) {
+  useEffect(() => {
+    const imagesSrc = products
+      ?.map((product) => product.gallery)
+      .reduce((a, b) => a.concat(b), [])
+    let loadedImages = 0
+
+    imagesSrc?.forEach((src) => {
+      preloadImage(src, () => {
+        loadedImages++
+        if (loadedImages === imagesSrc?.length) {
+          setImagesLoaded(true)
+        }
+      })
+    })
+  }, [products])
+
+  const preloadImage = (src: string, callback: () => void): void => {
+    const image = new Image()
+    image.onload = callback
+    image.src = src
+  }
+
+  if (isLoading || isError || !products || !imagesLoaded) {
     return (
       <Skeleton
         containerClassName='h-screen block'
