@@ -34,7 +34,7 @@ const FavoritesPopup = forwardRef<HTMLDialogElement, Props>(
           </button>
         </div>
         <div className='flex flex-col gap-y-5 h-[276px] overflow-y-auto'>
-          {favoritesProduct.length !== 0 ? (
+          {favoritesProduct?.length !== 0 ? (
             favoritesProduct.map((product) => (
               <ProductMiniCard
                 key={product._id}

@@ -23,7 +23,7 @@ function Favorites() {
     )
   }
 
-  if (favoritesProduct.length === 0) {
+  if (!isLoading && favoritesProduct?.length === 0) {
     return (
       <h1 className='text-3xl font-bold text-primary-black'>
         No favorites yet
@@ -36,7 +36,6 @@ function Favorites() {
       <h1 className='text-primary-black text-[32px] font-bold leading-[48px]'>
         Favorites Product
       </h1>
-      {favoritesProduct.length === 0 && <h1></h1>}
       <div className='flex flex-col'>
         {favoritesProduct.map((product) => (
           <ProductMiniCard

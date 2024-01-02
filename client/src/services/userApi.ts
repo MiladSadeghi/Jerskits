@@ -50,7 +50,7 @@ const userApi = createApi({
           const { data } = await queryFulfilled
           dispatch(setProfile(data.profile))
           dispatch(setAuthStatus(true))
-          dispatch(setFavorites(data.favorites))
+          if (data.favorites) dispatch(setFavorites(data.favorites))
           if (data.bag) dispatch(setBag(data.bag))
         } catch (error: unknown) {
           if (typeof error === 'object' && error !== null) {
@@ -76,7 +76,7 @@ const userApi = createApi({
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-          dispatch(setFavorites(data.favorites))
+          if (data.favorites) dispatch(setFavorites(data.favorites))
         } catch (error) {
           console.log(error)
         }
