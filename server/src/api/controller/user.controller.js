@@ -24,14 +24,20 @@ export const getUser = async (req, res, next) => {
       "favorites"
     );
 
-    const userBag = await BagModel.findOne({ user: _id }).populate(
+    const userBag = await BagModel.find({ user: _id }).populate(
       "items.product"
     );
+
+    const userOrders = await OrderModel.findOne({ user: _id }).populate(
+      "orderItems.items.product"
+    );
+
     return res.status(200).json({
       error: false,
       profile: user,
-      favorites: favoritesList?.favorites || [],
-      bag: userBag,
+      favorites: favoritesList.favorites,
+      bag: userBag[0],
+      orders: userOrders,
     });
   } catch (error) {
     console.log(error);
