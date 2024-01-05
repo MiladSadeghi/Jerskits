@@ -404,9 +404,19 @@ export const getOrders = async (req, res, next) => {
   const { _id: userId } = req.decoded;
   try {
     const orders = await OrderModel.find({ user: userId });
+    const currentDate = new Date();
+    const categorizedOrders = orders.reduce(
+      (acc, order) => {
+        const orderCategory =
+          order.delivery.arriveTime < currentDate ? "history" : "ongoing";
+        acc[orderCategory].push(order);
+        return acc;
+      },
+      { history: [], ongoing: [] }
+    );
     return res.status(200).json({
       error: false,
-      orders,
+      orders: categorizedOrders,
     });
   } catch (error) {
     return res.status(500).json({ error: true, message: "Server error" });
