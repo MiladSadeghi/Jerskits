@@ -1,0 +1,6 @@
+<svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Check in a Circle">
+<circle id="Outer Circle" cx="12" cy="12.5" r="9.4" stroke="#262D33" stroke-width="1.2"/>
+<path id="Checkmark" d="M7 12.5L10.4375 15.5L17 9" stroke="#262D33" stroke-width="1.2"/>
+</g>
+</svg>

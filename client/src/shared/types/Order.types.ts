@@ -32,7 +32,10 @@ export interface IOrderItems {
 
 export interface IGetOrdersResponse {
   error: boolean
-  order: IOrder[]
+  orders: {
+    history: IOrder[]
+    ongoing: IOrder[]
+  }
 }
 
 export interface IGetOrderResponse {

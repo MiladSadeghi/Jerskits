@@ -12,10 +12,16 @@ import {
   SignUp
 } from './pages'
 import { AuthenticationLayout, Layout, ProfileLayout } from './layouts'
-import { FullScreenLoader, OrderConfirmation, Products } from './components'
+import {
+  FullScreenLoader,
+  OrderConfirmation,
+  OrdersHistory,
+  Products
+} from './components'
 import { useGetUserQuery } from './services'
 
 import 'react-loading-skeleton/dist/skeleton.css'
+import OngoingOrders from './components/Order/OngoingOrders'
 
 function App() {
   const getUser = useGetUserQuery()
@@ -46,7 +52,10 @@ function App() {
             <Route path='profile' element={<ProfileLayout />}>
               <Route path='edit' element={<Edit />} />
               <Route path='favorites' element={<Favorites />} />
-              <Route path='orders' element={<Orders />} />
+              <Route path='orders' element={<Orders />}>
+                <Route path='ongoing' element={<OngoingOrders />} />
+                <Route path='history' element={<OrdersHistory />} />
+              </Route>
               <Route path='setting' element={<Setting />} />
             </Route>
           </Route>
