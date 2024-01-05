@@ -39,7 +39,7 @@ const NavbarMenu = forwardRef<HTMLDialogElement, Props>(
       (state: RootState) => state.auth.isAuthenticated
     )
     const bagItemLength = useAppSelector(
-      (state: RootState) => state.user.bag?.items.length
+      (state: RootState) => state.user.bag?.items?.length
     )
 
     const handleSearching = () => {

@@ -82,7 +82,7 @@ const BagModal = forwardRef<HTMLDialogElement, Props>(({ isBagModal }, ref) => {
   }
 
   useEffect(() => {
-    if (bag?.items.length === 0) {
+    if (bag?.items?.length === 0) {
       setIsBagModal(false)
     }
   }, [bag])
@@ -99,7 +99,7 @@ const BagModal = forwardRef<HTMLDialogElement, Props>(({ isBagModal }, ref) => {
     >
       <div className='flex items-center justify-between '>
         <h1 className='text-lg font-bold text-primary-black'>
-          Bag ({bag?.items.length} Item)
+          Bag ({bag?.items?.length} Item)
         </h1>
         <button
           onClick={() => setIsBagModal(false)}
@@ -110,7 +110,7 @@ const BagModal = forwardRef<HTMLDialogElement, Props>(({ isBagModal }, ref) => {
       </div>
       <div className='flex flex-col h-full gap-y-7 pb-[30px]'>
         <div className='h-[75%] overflow-y-auto space-y-7'>
-          {bag?.items.map((item) => (
+          {bag?.items?.map((item) => (
             <div className='space-y-7' key={item.product._id}>
               <ProductMiniCard
                 product={item.product}

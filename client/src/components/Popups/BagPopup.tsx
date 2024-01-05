@@ -31,7 +31,7 @@ const BagPopup = forwardRef<HTMLDialogElement, Props>(
           </button>
         </div>
         <div className='flex flex-col gap-y-5'>
-          {(bag && bag?.items.length) !== 0 ? (
+          {(bag && bag?.items?.length) !== 0 ? (
             bag?.items.map((item) => (
               <ProductMiniCard
                 key={item.product._id}
