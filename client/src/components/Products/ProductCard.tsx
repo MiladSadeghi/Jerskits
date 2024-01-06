@@ -23,7 +23,7 @@ const ProductCard = ({
 }: Props) => {
   const isOffPrice = product.offPrice !== 0
   return (
-    <div className='min-w-full w-full xl:min-w-[380px] flex flex-col justify-between h-full group'>
+    <div className='flex flex-col justify-between w-full h-full max-w-full group'>
       <div className='h-[440px] w-full relative bg-neutral-light-grey flex items-end justify-center'>
         <img
           className='w-[70%] object-contain object-bottom bg-neutral-light-grey h-[440px]'
