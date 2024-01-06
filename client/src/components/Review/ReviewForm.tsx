@@ -9,8 +9,15 @@ import toast from 'react-hot-toast'
 import { SpinnerCircular } from 'spinners-react'
 import SubmitReviewSchema from './ReviewSchema'
 
-const ReviewForm = () => {
-  const { slug } = useParams()
+type Props = {
+  productSlug?: string
+}
+
+const ReviewForm = ({ productSlug }: Props) => {
+  let { slug } = useParams()
+  if (productSlug) {
+    slug = productSlug
+  }
 
   const {
     control,
