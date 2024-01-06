@@ -1,5 +1,4 @@
 import { Button } from '..'
-import { TBagItem } from '../../shared/types/User.types'
 
 type Props = {
   orderId: number
@@ -7,7 +6,7 @@ type Props = {
   orderTotalPrice: number
   onDelivery?: boolean
   isLastItem: boolean
-  orderItems?: TBagItem
+  onReview?: () => void
 }
 
 function formatDate(date: Date) {
@@ -44,7 +43,7 @@ const OrderSummary = ({
   orderTotalPrice,
   onDelivery = false,
   isLastItem,
-  orderItems
+  onReview
 }: Props) => {
   return (
     <div>
@@ -66,8 +65,11 @@ const OrderSummary = ({
         <h2 className='text-2xl font-semibold leading-9 text-primary-black'>
           ${orderTotalPrice}
         </h2>
-        {orderItems && (
-          <Button className='bg-white border text-primary-black border-neutral-soft-grey'>
+        {!!onReview && (
+          <Button
+            onClick={onReview}
+            className='bg-white border text-primary-black border-neutral-soft-grey'
+          >
             GIVE REVIEW
           </Button>
         )}

@@ -26,7 +26,7 @@ export interface IOrderPayment {
 }
 
 export interface IOrderItems {
-  items: TBagItem
+  items: TBagItem[]
   subTotal: number
 }
 

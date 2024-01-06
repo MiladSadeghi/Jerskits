@@ -41,6 +41,7 @@ import CheckoutDelivery from './Checkout/CheckoutDelivery'
 import DeliverySummary from './Checkout/DeliverySummary'
 import OrderConfirmation from './Order/OrderConfirmation'
 import OrdersHistory from './Order/OrdersHistory'
+import OngoingOrders from './Order/OngoingOrders'
 import OrderSummary from './Order/OrderSummary'
 
 export {
@@ -76,5 +77,6 @@ export {
   DeliverySummary,
   OrderConfirmation,
   OrdersHistory,
-  OrderSummary
+  OrderSummary,
+  OngoingOrders
 }

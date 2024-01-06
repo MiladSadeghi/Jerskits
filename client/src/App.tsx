@@ -16,12 +16,12 @@ import {
   FullScreenLoader,
   OrderConfirmation,
   OrdersHistory,
+  OngoingOrders,
   Products
 } from './components'
 import { useGetUserQuery } from './services'
 
 import 'react-loading-skeleton/dist/skeleton.css'
-import OngoingOrders from './components/Order/OngoingOrders'
 
 function App() {
   const getUser = useGetUserQuery()
