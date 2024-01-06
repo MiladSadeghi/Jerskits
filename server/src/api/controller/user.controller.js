@@ -403,7 +403,9 @@ export const getOrder = async (req, res, next) => {
 export const getOrders = async (req, res, next) => {
   const { _id: userId } = req.decoded;
   try {
-    const orders = await OrderModel.find({ user: userId });
+    const orders = await OrderModel.find({ user: userId }).populate(
+      "orderItems.items.product"
+    );
     const currentDate = new Date();
     const categorizedOrders = orders.reduce(
       (acc, order) => {
@@ -419,6 +421,7 @@ export const getOrders = async (req, res, next) => {
       orders: categorizedOrders,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: true, message: "Server error" });
   }
 };
