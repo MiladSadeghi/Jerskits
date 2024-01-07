@@ -22,7 +22,8 @@ import {
   removeFromFavorites,
   setBag,
   setFavorites,
-  setOrders
+  setOrders,
+  setPayment
 } from '../App/feature/userSlice'
 import {
   IGetOrderRequest,
@@ -54,6 +55,7 @@ const userApi = createApi({
           if (data.favorites) dispatch(setFavorites(data.favorites))
           if (data.bag) dispatch(setBag(data.bag))
           if (data.orders) dispatch(setOrders(data.orders))
+          if (data.payment) dispatch(setPayment(data.payment))
         } catch (error: unknown) {
           if (typeof error === 'object' && error !== null) {
             const err = error as Record<string, unknown>

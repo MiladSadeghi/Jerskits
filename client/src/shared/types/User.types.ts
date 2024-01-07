@@ -1,4 +1,4 @@
-import { IOrder } from './Order.types'
+import { IOrder, IOrderPayment } from './Order.types'
 import { IProduct } from './Product.types'
 import { IProfile } from './Profile.types'
 
@@ -7,12 +7,14 @@ export interface IGetUserResponse {
   favorites: IProduct[]
   bag?: TBag
   orders?: IOrder[]
+  payment?: IOrderPayment
 }
 
 export interface IUserSlice {
   favorites: IProduct[]
   bag: TBag
   orders?: IOrder[]
+  payment?: IOrderPayment
 }
 
 export interface IGetUserFavoritesResponse {

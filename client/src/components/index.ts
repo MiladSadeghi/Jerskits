@@ -43,6 +43,8 @@ import OrderConfirmation from './Order/OrderConfirmation'
 import OrdersHistory from './Order/OrdersHistory'
 import OngoingOrders from './Order/OngoingOrders'
 import OrderSummary from './Order/OrderSummary'
+import InformationSummary from './Checkout/InformationSummary'
+import CheckoutPayment from './Checkout/CheckoutPayment'
 
 export {
   Navbar,
@@ -78,5 +80,7 @@ export {
   OrderConfirmation,
   OrdersHistory,
   OrderSummary,
-  OngoingOrders
+  OngoingOrders,
+  InformationSummary,
+  CheckoutPayment
 }

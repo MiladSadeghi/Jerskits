@@ -71,7 +71,9 @@ export type TInformation = Omit<
 
 export type TValidateCheckoutDeliveryRequest = IOrderDelivery
 
-export type TValidateCheckoutPaymentRequest = IOrderPayment
+export type TValidateCheckoutPaymentRequest = IOrderPayment & {
+  saveAsDefault: boolean
+}
 
 export enum ECheckoutSteps {
   INFORMATION = 1,
@@ -94,7 +96,9 @@ export type TValidateCheckoutError<T> = {
 export type TPlaceOrderRequest = {
   information?: IProfileForm
   delivery?: IOrderDelivery
-  payment?: IOrderPayment
+  payment?: IOrderPayment & {
+    saveAsDefault: boolean
+  }
 }
 
 export type TPlaceOrderResponse = {

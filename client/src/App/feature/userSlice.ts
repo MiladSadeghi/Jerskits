@@ -1,4 +1,4 @@
-import { IOrder } from '../../shared/types/Order.types'
+import { IOrder, IOrderPayment } from '../../shared/types/Order.types'
 import { IProduct } from '../../shared/types/Product.types'
 import { IUserSlice, TBag } from '../../shared/types/User.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
@@ -46,6 +46,9 @@ const userSlice = createSlice({
       state.orders = state.orders?.filter(
         (order) => order?.orderNumber !== payload
       )
+    },
+    setPayment: (state, { payload }: PayloadAction<IOrderPayment>) => {
+      state.payment = payload
     }
   }
 })
@@ -58,6 +61,7 @@ export const {
   clearBag,
   setOrders,
   addOrder,
-  removeOrder
+  removeOrder,
+  setPayment
 } = userSlice.actions
 export default userSlice.reducer

@@ -14,6 +14,7 @@ import {
 import { SpinnerCircular } from 'spinners-react'
 import { useValidateCheckoutPaymentMutation } from '../../services'
 import { QueryStatus } from '@reduxjs/toolkit/query'
+import { useAppSelector } from '../../App/hooks'
 
 type Props = {
   onSubmit: (payment: TPaymentForm) => void
@@ -39,6 +40,7 @@ const paymentMethod = [
 const formatCreditCardNumber = (input: string): string => {
   const formatted =
     input
+      .toString()
       .replace(/\s+/g, '')
       .match(/.{1,4}/g)
       ?.join('-') || ''
@@ -52,6 +54,7 @@ const CheckoutPayment = ({
   handleActiveStep,
   placeOrderStatus
 }: Props) => {
+  const userPayment = useAppSelector((state) => state.user.payment)
   const {
     register,
     handleSubmit,
@@ -59,8 +62,15 @@ const CheckoutPayment = ({
     setValue,
     setError
   } = useForm<TPaymentForm>({
-    resolver: yupResolver(PaymentSchema)
+    resolver: yupResolver(PaymentSchema),
+    defaultValues: {
+      nameOnCard: userPayment?.nameOnCard,
+      cvv: userPayment?.cvv,
+      cardNumber: userPayment?.cardNumber,
+      expirationDate: userPayment?.expirationDate
+    }
   })
+
   const [validatePayment, { isLoading: isValidatingPayment }] =
     useValidateCheckoutPaymentMutation()
 
@@ -100,7 +110,7 @@ const CheckoutPayment = ({
     }
   }
 
-  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCardNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
     const unformattedValue = e.target.value.replace(/-/g, '')
     const formattedValue = formatCreditCardNumber(unformattedValue)
     setValue('cardNumber', unformattedValue)
@@ -196,8 +206,9 @@ const CheckoutPayment = ({
           <FormInput
             id='card-number-input'
             type='text'
-            onChange={(e) => handleCardNumberChange(e)}
             maxLength={19}
+            onChange={handleCardNumberChange}
+            defaultValue={formatCreditCardNumber(userPayment?.cardNumber ?? '')}
           />
         </div>
         <div className='grid grid-cols-2 gap-2.5'>
@@ -209,7 +220,8 @@ const CheckoutPayment = ({
                 type='text'
                 placeholder='MM/YYYY'
                 maxLength={7}
-                onChange={(e) => handleExpiryChange(e)}
+                defaultValue={userPayment?.expirationDate}
+                onChange={handleExpiryChange}
               />
               <ErrorMessage
                 errors={errors}

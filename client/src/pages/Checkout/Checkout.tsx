@@ -13,7 +13,9 @@ import {
   CheckoutSteps,
   DeliverySummary,
   CheckoutSummary,
-  UserForm
+  UserForm,
+  InformationSummary,
+  CheckoutPayment
 } from '../../components'
 import { ArrowRight, Bag } from '../../icons'
 import { BagModal } from '../../modals'
@@ -24,10 +26,8 @@ import {
   useValidateCheckoutDeliveryMutation,
   useValidateCheckoutInformationMutation
 } from '../../services'
-import InformationSummary from '../../components/Checkout/InformationSummary'
 import { IProfileForm } from '../../shared/types/Profile.types'
 import { SpinnerCircular } from 'spinners-react'
-import CheckoutPayment from '../../components/Checkout/CheckoutPayment'
 import { TPaymentForm } from '../../components/Checkout/CheckoutPayment.schema'
 import { SerializedError } from '@reduxjs/toolkit'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
