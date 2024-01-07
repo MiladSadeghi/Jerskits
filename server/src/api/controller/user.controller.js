@@ -33,12 +33,15 @@ export const getUser = async (req, res, next) => {
       "orderItems.items.product"
     );
 
+    const userPayment = await PaymentModel.find({ user: _id });
+
     return res.status(200).json({
       error: false,
       profile: user,
       favorites: favoritesList.favorites,
       bag: userBag[0],
       orders: userOrders,
+      payment: userPayment[0],
     });
   } catch (error) {
     console.log(error);
@@ -516,7 +519,7 @@ export const submitOrder = async (req, res, next) => {
         userPayment.cardNumber = payment.cardNumber;
         userPayment.expirationDate = payment.expirationDate;
         userPayment.cvv = payment.cvv;
-        userPayment.saveAsDefault = true
+        userPayment.saveAsDefault = true;
         await userPayment.save();
       }
 
