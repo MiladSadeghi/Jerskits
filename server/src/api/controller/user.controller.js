@@ -5,6 +5,7 @@ import FavoriteModel from "../models/favorite.model.js";
 import OrderModel from "../models/order.model.js";
 import ProductModel from "../models/product.model.js";
 import UserModel from "../models/user.model.js";
+import { PaymentModel } from "../models/payment.model.js";
 
 export const getUser = async (req, res, next) => {
   try {
@@ -495,6 +496,32 @@ export const submitOrder = async (req, res, next) => {
       });
     }
 
+    if (information.saveAddress) {
+      await UserModel.findOneAndUpdate(
+        { _id: userId },
+        {
+          address: information.address,
+          country: information.country,
+          state: information.state,
+          city: information.city,
+          postalCode: information.postalCode,
+        }
+      );
+    }
+
+    if (payment.saveAsDefault) {
+      const userPayment = await PaymentModel.findOne({ user: userId });
+      if (userPayment) {
+        userPayment.nameOnCard = payment.nameOnCard;
+        userPayment.cardNumber = payment.cardNumber;
+        userPayment.expirationDate = payment.expirationDate;
+        userPayment.cvv = payment.cvv;
+        userPayment.saveAsDefault = true
+        await userPayment.save();
+      }
+
+      await PaymentModel.create({ ...payment, user: userId });
+    }
     order.orderItems = {
       subTotal: userBag.subTotal,
       items: userBag.items,
