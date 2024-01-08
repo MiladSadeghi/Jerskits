@@ -17,9 +17,9 @@ function ProfileLayout() {
     return <Navigate to='/' state={{ from: location }} replace />
 
   return (
-    <div className='mx-auto max-w-[950px] my-24'>
+    <div className='container mx-auto my-24 md:max-w-5xl'>
       <div className='flex justify-between'>
-        <div className='w-[350px]'>
+        <div className='w-[350px] hidden md:block'>
           <div className='space-y-7'>
             <div className='flex items-center'>
               <Avatar avatarSizes={[56, 56]} />
@@ -45,7 +45,7 @@ function ProfileLayout() {
             </button>
           </div>
         </div>
-        <div className='w-full max-w-[400px]' ref={profileRef}>
+        <div className='w-full md:max-w-[400px]' ref={profileRef}>
           <Outlet context={profileRef} />
         </div>
       </div>
