@@ -1,10 +1,10 @@
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Checkmark } from '../../icons'
 
 const OrderConfirmation = () => {
   document.title = 'Checkout Confirmed'
   const { orderId } = useParams()
-  const navigate = useNavigate()
+
   return (
     <div className='relative w-full h-screen'>
       <div className='absolute w-full h-full max-w-4xl -translate-x-1/2 -translate-y-1/2 shadow-lg top-1/2 left-1/2 md:w-full max-h-[550px] rounded-lg bg-[url(/images/hideout.svg)] bg-[length:120px] bg-opacity-40 bg-center'>
@@ -18,15 +18,20 @@ const OrderConfirmation = () => {
               {orderId}. We'll get it to you quick!
             </h1>
             <div className='grid grid-cols-12 gap-4'>
-              <button className='w-full col-span-5 gap-4 py-4 text-xl font-bold tracking-wide text-center font-BebasNeue bg-slate-100'>
+              <Link
+                to='/profile/orders/ongoing'
+                replace={true}
+                className='w-full col-span-5 gap-4 py-4 text-xl font-bold tracking-wide text-center font-BebasNeue bg-slate-100'
+              >
                 View Order
-              </button>
-              <button
-                className='col-span-7 py-4 text-xl font-bold tracking-wider text-white font-BebasNeue bg-primary-black'
-                onClick={() => navigate('/', { replace: true })}
+              </Link>
+              <Link
+                to='/'
+                replace={true}
+                className='col-span-7 py-4 text-xl font-bold tracking-wider text-center text-white font-BebasNeue bg-primary-black'
               >
                 Continue Shopping
-              </button>
+              </Link>
             </div>
           </div>
         </div>
