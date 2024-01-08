@@ -12,9 +12,23 @@ type Props = {
   testId?: string
   size?: string
   qty?: number
+  likeable?: boolean
+  likeLoading?: boolean
+  isLiked?: boolean
+  favoriteHandler?: () => void
 }
 
-const ProductMiniCard = ({ product, removable, testId, size, qty }: Props) => {
+const ProductMiniCard = ({
+  product,
+  removable,
+  testId,
+  size,
+  qty,
+  likeable,
+  likeLoading,
+  isLiked,
+  favoriteHandler
+}: Props) => {
   const [remove, { isLoading }] = useRemoveProductFromFavoritesMutation()
   const isOffPrice = product.offPrice !== 0
   const price = qty
@@ -33,6 +47,16 @@ const ProductMiniCard = ({ product, removable, testId, size, qty }: Props) => {
           alt={product.name}
           className='object-contain'
         />
+        {likeable && (
+          <button
+            className='absolute z-50 flex items-center justify-center w-8 h-8 bg-white shadow-lg bottom-4 right-4 disabled:opacity-50'
+            aria-label={`like-${product.name}`}
+            disabled={likeLoading}
+            onClick={favoriteHandler}
+          >
+            <Heart width={24} height={24} fill={isLiked} />
+          </button>
+        )}
         {removable && (
           <button
             className='absolute z-50 flex items-center justify-center w-8 h-8 bg-white shadow-lg bottom-2 right-2 disabled:opacity-50'
