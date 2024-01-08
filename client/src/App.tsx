@@ -31,47 +31,119 @@ function App() {
   }
 
   return (
-    <Suspense fallback={<FullScreenLoader />}>
-      <main>
-        <Routes>
-          <Route path='/' element={<Layout />}>
-            <Route index element={<Landing />} />
+    <main>
+      <Routes>
+        <Route path='/' element={<Layout />}>
+          <Route
+            index
+            element={
+              <Suspense fallback={'Please wait...'}>
+                <Landing />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path='men'
+            element={
+              <Suspense fallback={'Please wait...'}>
+                <Products gender='men' title='Men’s Jerskits' />
+              </Suspense>
+            }
+          />
+          <Route
+            path='women'
+            element={
+              <Suspense fallback={'Please wait...'}>
+                <Products gender='women' title='Women’s Jerskits' />
+              </Suspense>
+            }
+          />
+          <Route
+            path='kid'
+            element={
+              <Suspense fallback={'Please wait...'}>
+                <Products gender='kid' title='Kid’s Jerskits' />
+              </Suspense>
+            }
+          />
+          <Route
+            path=':slug'
+            element={
+              <Suspense fallback={'Please wait...'}>
+                <Product />
+              </Suspense>
+            }
+          />
+
+          <Route path='profile' element={<ProfileLayout />}>
             <Route
-              path='men'
-              element={<Products gender='men' title='Men’s Jerskits' />}
+              path='edit'
+              element={
+                <Suspense fallback={'Please wait...'}>
+                  <Edit />
+                </Suspense>
+              }
             />
             <Route
-              path='women'
-              element={<Products gender='women' title='Women’s Jerskits' />}
+              path='favorites'
+              element={
+                <Suspense fallback={'Please wait...'}>
+                  <Favorites />
+                </Suspense>
+              }
             />
             <Route
-              path='kid'
-              element={<Products gender='kid' title='Kid’s Jerskits' />}
-            />
-            <Route path=':slug' element={<Product />} />
-            <Route path='profile' element={<ProfileLayout />}>
-              <Route path='edit' element={<Edit />} />
-              <Route path='favorites' element={<Favorites />} />
-              <Route path='orders' element={<Orders />}>
-                <Route path='ongoing' element={<OngoingOrders />} />
-                <Route path='history' element={<OrdersHistory />} />
-              </Route>
-              <Route path='setting' element={<Setting />} />
+              path='orders'
+              element={
+                <Suspense fallback={'Please wait...'}>
+                  <Orders />
+                </Suspense>
+              }
+            >
+              <Route path='ongoing' element={<OngoingOrders />} />
+              <Route path='history' element={<OrdersHistory />} />
             </Route>
+            <Route
+              path='setting'
+              element={
+                <Suspense fallback={'Please wait...'}>
+                  <Setting />
+                </Suspense>
+              }
+            />
           </Route>
+        </Route>
+        <Route element={<AuthenticationLayout />}>
           <Route
             path='/sign-in'
-            element={<AuthenticationLayout children={<SignIn />} />}
+            element={
+              <Suspense fallback={'Please wait...'}>
+                <SignIn />
+              </Suspense>
+            }
           />
           <Route
             path='/sign-up'
-            element={<AuthenticationLayout children={<SignUp />} />}
+            element={
+              <Suspense fallback={'Please wait...'}>
+                <SignUp />
+              </Suspense>
+            }
           />
-          <Route path='checkout' element={<Checkout />} />
-          <Route path='checkout/:orderId' element={<OrderConfirmation />} />
-        </Routes>
-      </main>
-    </Suspense>
+        </Route>
+
+        <Route
+          path='checkout'
+          element={
+            <Suspense fallback={'Please wait...'}>
+              <Checkout />
+            </Suspense>
+          }
+        />
+        <Route path='checkout/:orderId' element={<OrderConfirmation />} />
+      </Routes>
+    </main>
   )
 }
 

@@ -1,7 +1,5 @@
-import { lazy } from 'react'
-
-const Layout = lazy(() => import('./Layout'))
-const AuthenticationLayout = lazy(() => import('./AuthLayout/AuthLayout'))
-const ProfileLayout = lazy(() => import('./ProfileLayout/ProfileLayout'))
+import Layout from './Layout'
+import ProfileLayout from './ProfileLayout/ProfileLayout'
+import AuthenticationLayout from './AuthLayout/AuthLayout'
 
 export { Layout, AuthenticationLayout, ProfileLayout }

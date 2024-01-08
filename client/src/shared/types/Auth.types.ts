@@ -1,9 +1,4 @@
-import { ReactNode } from 'react'
 import { IProfile } from './Profile.types'
-
-export interface IAuthenticationLayoutProps {
-  children: ReactNode
-}
 
 export interface IAuthSlice {
   isAuthenticated: boolean

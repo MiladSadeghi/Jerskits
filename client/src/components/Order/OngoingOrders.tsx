@@ -8,7 +8,6 @@ type TOutlet = {
 
 const OngoingOrders = () => {
   const { ongoing } = useOutletContext<TOutlet>()
-  console.log(ongoing)
   return (
     <div>
       {ongoing.map((order, index) => (

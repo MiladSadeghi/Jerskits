@@ -9,7 +9,6 @@ function Favorites() {
   const favoritesProduct = useAppSelector(
     (state: RootState) => state.user.favorites
   )
-  console.log(favoritesProduct)
 
   if (isLoading) {
     return (
