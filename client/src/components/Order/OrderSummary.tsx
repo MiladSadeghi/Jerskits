@@ -63,7 +63,7 @@ const OrderSummary = ({
           {formatDate(orderArriveDate)}
         </p>
         <h2 className='text-2xl font-semibold leading-9 text-primary-black'>
-          ${orderTotalPrice}
+          ${orderTotalPrice.toFixed(2)}
         </h2>
         {!!onReview && (
           <Button

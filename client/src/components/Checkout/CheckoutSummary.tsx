@@ -13,11 +13,13 @@ const CheckoutSummary = ({ bag, deliveryPrice = 10 }: Props) => {
   const [open, setOpen] = useState(false)
 
   const subTotal = bag.subTotal.toLocaleString('en-US', {
-    maximumSignificantDigits: 2
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
   })
 
   const total = (bag.subTotal + 90 + deliveryPrice).toLocaleString('en-US', {
-    maximumSignificantDigits: 2
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
   })
 
   return (
