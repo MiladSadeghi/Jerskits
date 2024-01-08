@@ -11,9 +11,10 @@ import SubmitReviewSchema from './ReviewSchema'
 
 type Props = {
   productSlug?: string
+  textAreaRows?: number
 }
 
-const ReviewForm = ({ productSlug }: Props) => {
+const ReviewForm = ({ productSlug, textAreaRows = 6 }: Props) => {
   let { slug } = useParams()
   if (productSlug) {
     slug = productSlug
@@ -96,7 +97,7 @@ const ReviewForm = ({ productSlug }: Props) => {
         Review
       </label>
       <textarea
-        rows={6}
+        rows={textAreaRows}
         placeholder='Your review'
         id='review-textarea'
         className={`text-lg resize-none focus:ring-0  ${
