@@ -142,7 +142,7 @@ function Navbar() {
                 Kids
               </NavLink>
             </div>
-            <div className='flex items-center gap-10'>
+            <div className='flex items-center md:gap-10'>
               <div className='relative flex items-center gap-10'>
                 <div className='w-5 h-5'>
                   <button

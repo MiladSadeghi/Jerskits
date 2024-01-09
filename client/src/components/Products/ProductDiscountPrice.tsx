@@ -7,12 +7,12 @@ const ProductDiscountPrice = ({ className, children, ...props }: Props) => {
   return (
     <h3
       className={cn(
-        'ml-2.5 font-bold text-primary-black text-text-xl',
+        'ml-2.5 font-bold text-primary-black text-2xl leading-9',
         className
       )}
       {...props}
     >
-      {children}
+      {`$${children}`}
     </h3>
   )
 }

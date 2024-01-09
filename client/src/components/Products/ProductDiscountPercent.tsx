@@ -7,12 +7,12 @@ const ProductDiscountPercent = ({ className, children, ...props }: Props) => {
   return (
     <p
       className={cn(
-        'font-bold text-text-lg text-secondary-red leading-7',
+        'font-bold text-lg text-secondary-red leading-7',
         className
       )}
       {...props}
     >
-      {children}
+      {`$${children}% Off`}
     </p>
   )
 }
