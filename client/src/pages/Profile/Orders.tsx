@@ -31,7 +31,7 @@ function Orders() {
   }
 
   return (
-    <div className='space-y-7'>
+    <div className='space-y-7 md:px-5'>
       <h1 className='font-bold leading-[48px] text-primary-black text-text-2xl '>
         My Orders
       </h1>

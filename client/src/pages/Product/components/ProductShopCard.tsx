@@ -87,12 +87,12 @@ const ProductShopCard = ({ product }: TProductShopCardProps) => {
           <h2 className='text-lg capitalize text-neutral-dark-grey'>{type}</h2>
         </div>
         <div className='flex items-center'>
-          <ProductPrice isDiscount={isDiscount}>${price}</ProductPrice>
+          <ProductPrice isDiscount={isDiscount}>{price}</ProductPrice>
           {offPrice !== 0 && (
             <div className='flex items-center justify-between w-full'>
-              <ProductDiscountPrice>${offPrice}</ProductDiscountPrice>
+              <ProductDiscountPrice>{offPrice}</ProductDiscountPrice>
               <ProductDiscountPercent>
-                {calculateDiscount(price, offPrice)}% Off
+                {calculateDiscount(price, offPrice)}
               </ProductDiscountPercent>
             </div>
           )}

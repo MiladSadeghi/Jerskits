@@ -30,16 +30,12 @@ const ProductCardContainer = ({ products }: Props) => {
     <ProductCard
       product={product}
       key={product._id}
-      likeable={isUserAuthenticated}
-      isLiked={userFavoriteProductsId.includes(product._id)}
-      likeLoading={likeLoading}
-      favoriteHandler={() =>
-        isUserAuthenticated
-          ? userFavoriteProductsId.includes(product._id)
-            ? removeProductFromFavorites(product._id)
-            : addProductToFavorites(product._id)
-          : null
-      }
+      isLikeable={isUserAuthenticated}
+      isCurrentLiked={userFavoriteProductsId.includes(product._id)}
+      isLikeLoading={likeLoading}
+      isMini={false}
+      addFavorite={() => addProductToFavorites(product._id)}
+      removeFavorite={() => removeProductFromFavorites(product._id)}
     />
   ))
 }

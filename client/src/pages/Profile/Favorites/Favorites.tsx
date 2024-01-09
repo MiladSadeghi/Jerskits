@@ -1,11 +1,18 @@
 import { SpinnerDiamond } from 'spinners-react'
-import { useGetUserFavoritesQuery } from '../../../services'
-import ProductMiniCard from '../../../components/Products/ProductMiniCard'
+import {
+  useAddProductToFavoritesMutation,
+  useGetUserFavoritesQuery,
+  useRemoveProductFromFavoritesMutation
+} from '../../../services'
 import { useAppSelector } from '../../../App/hooks'
 import { RootState } from '../../../App/store'
+import { ProductCard } from '../../../components'
 
 function Favorites() {
   const { isLoading } = useGetUserFavoritesQuery()
+  const [remove, { isLoading: isRemoving }] =
+    useRemoveProductFromFavoritesMutation()
+  const [add, { isLoading: isAdding }] = useAddProductToFavoritesMutation()
   const favoritesProduct = useAppSelector(
     (state: RootState) => state.user.favorites
   )
@@ -32,17 +39,22 @@ function Favorites() {
   }
 
   return (
-    <div className='relative flex flex-col px-5 py-5 gap-y-7'>
+    <div className='relative md:px-5 space-y-7'>
       <h1 className='text-primary-black text-[32px] font-bold leading-[48px]'>
         Favorites Product
       </h1>
-      <div className='flex flex-col'>
+      <div className='space-y-7'>
         {favoritesProduct.map((product) => (
-          <ProductMiniCard
+          <ProductCard
             key={product._id}
             product={product}
-            removable={true}
             testId={'favorite-product'}
+            isMini={true}
+            isLikeable={true}
+            isCurrentLiked={true}
+            isLikeLoading={isRemoving || isAdding}
+            addFavorite={() => add(product._id)}
+            removeFavorite={() => remove(product._id)}
           />
         ))}
       </div>

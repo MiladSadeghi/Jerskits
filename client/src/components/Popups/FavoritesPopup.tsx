@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
 import { useAppSelector } from '../../App/hooks'
 import { RootState } from '../../App/store'
-import ProductMiniCard from '../Products/ProductMiniCard'
 import { forwardRef } from 'react'
 import { Close } from '../../icons'
 import { cn } from '../../utils/utils'
+import { ProductCard } from '..'
 
 type Props = {
   closePopup: () => void
@@ -21,7 +21,7 @@ const FavoritesPopup = forwardRef<HTMLDialogElement, Props>(
         ref={ref}
         open={true}
         className={cn(
-          'fixed md:absolute z-[99] right-0 bg-white md:top-[75px] md:bottom-[unset] w-full md:w-96 p-[30px] space-y-7 transition-all -bottom-full md:hidden duration-1000 m-0',
+          'fixed md:absolute z-[99] right-0 bg-white md:top-[75px] md:bottom-[unset] w-full md:w-[460px] p-[30px] space-y-7 transition-all -bottom-full md:hidden duration-1000 m-0',
           { 'bottom-0 md:block duration-500': isOpen }
         )}
         style={{ insetInlineStart: 'unset' }}
@@ -36,10 +36,11 @@ const FavoritesPopup = forwardRef<HTMLDialogElement, Props>(
         <div className='flex flex-col gap-y-5 h-[276px] overflow-y-auto'>
           {favoritesProduct?.length !== 0 ? (
             favoritesProduct.map((product) => (
-              <ProductMiniCard
+              <ProductCard
                 key={product._id}
                 product={product}
-                removable={false}
+                isLikeable={false}
+                isMini={true}
               />
             ))
           ) : (

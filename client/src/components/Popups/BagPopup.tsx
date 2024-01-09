@@ -1,9 +1,9 @@
 import { forwardRef } from 'react'
 import { useAppSelector } from '../../App/hooks'
-import ProductMiniCard from '../Products/ProductMiniCard'
 import { Link } from 'react-router-dom'
 import { Close } from '../../icons'
 import { cn } from '../../utils/utils'
+import { ProductCard } from '..'
 
 type Props = {
   isOpen: boolean
@@ -33,11 +33,12 @@ const BagPopup = forwardRef<HTMLDialogElement, Props>(
         <div className='flex flex-col gap-y-5'>
           {(bag && bag?.items?.length) !== 0 ? (
             bag?.items.map((item) => (
-              <ProductMiniCard
+              <ProductCard
                 key={item.product._id}
                 product={item.product}
-                removable={false}
+                isLikeable={false}
                 size={item.size}
+                isMini={true}
               />
             ))
           ) : (

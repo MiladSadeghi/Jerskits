@@ -105,7 +105,7 @@ const Products = ({ title, gender }: Props) => {
         highestPrice={highestPrice}
         applyHandler={applyFilter}
       />
-      <div className='grid grid-cols-1 gap-x-7 gap-y-12 lg:grid-cols-2 2xl:grid-cols-3'>
+      <div className='grid grid-cols-1 gap-x-7 gap-y-12 md:grid-cols-2 2xl:grid-cols-3'>
         {isFetching || isError ? (
           productCardSkeletonArray.map((_, index) => (
             <ProductCardSkeleton key={index} />

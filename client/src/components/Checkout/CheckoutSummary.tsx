@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ArrowDown } from '../../icons'
 import { TBag } from '../../shared/types/User.types'
 import { cn } from '../../utils/utils'
-import ProductMiniCard from '../Products/ProductMiniCard'
+import { ProductCard } from '..'
 
 type Props = {
   bag: TBag
@@ -85,11 +85,12 @@ const CheckoutSummary = ({ bag, deliveryPrice = 10 }: Props) => {
               {bag.items.map((item) => (
                 <div key={item._id}>
                   <div className='w-full h-px bg-neutral-soft-grey my-7' />
-                  <ProductMiniCard
+                  <ProductCard
                     product={item.product}
-                    removable={false}
+                    isLikeable={false}
                     size={item.size}
-                    qty={item.quantity}
+                    quantity={item.quantity}
+                    isMini={true}
                   />
                 </div>
               ))}

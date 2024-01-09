@@ -8,7 +8,7 @@ import {
   useAddProductToFavoritesMutation,
   useRemoveProductFromFavoritesMutation
 } from '../services'
-import ProductMiniCard from '../components/Products/ProductMiniCard'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 
 type Props = {
   orderItems: TBagItem[]
@@ -18,6 +18,7 @@ type Props = {
 
 const OrderReviewModal = ({ orderItems, isOpen, handleCloseModal }: Props) => {
   const [orderIdx, setOrderIdx] = useState<number>(0)
+  const isMini = useMediaQuery('(max-width: 768px)')
   const userFavoriteProductsId = useAppSelector(
     (state) => state.user.favorites
   ).map((product) => product._id)
@@ -48,42 +49,20 @@ const OrderReviewModal = ({ orderItems, isOpen, handleCloseModal }: Props) => {
             </button>
           </div>
           <div className='flex flex-col w-full lg:flex-row gap-7'>
-            <div className='w-full lg:flex max-w-[281px] hidden'>
+            <div className='w-full flex lg:max-w-[281px]'>
               <ProductCard
-                likeable={true}
-                isLiked={userFavoriteProductsId.includes(
+                product={orderItems[orderIdx].product}
+                isLikeable={true}
+                isCurrentLiked={userFavoriteProductsId.includes(
                   orderItems[orderIdx].product._id
                 )}
-                product={orderItems[orderIdx].product}
-                likeLoading={likeLoading}
-                favoriteHandler={() =>
-                  userFavoriteProductsId.includes(
-                    orderItems[orderIdx].product._id
-                  )
-                    ? removeProductFromFavorites(
-                        orderItems[orderIdx].product._id
-                      )
-                    : addProductToFavorites(orderItems[orderIdx].product._id)
+                isLikeLoading={likeLoading}
+                isMini={isMini}
+                addFavorite={() =>
+                  addProductToFavorites(orderItems[orderIdx].product._id)
                 }
-              />
-            </div>
-            <div className='lg:hidden'>
-              <ProductMiniCard
-                product={orderItems[orderIdx].product}
-                removable={false}
-                likeable={true}
-                isLiked={userFavoriteProductsId.includes(
-                  orderItems[orderIdx].product._id
-                )}
-                likeLoading={likeLoading}
-                favoriteHandler={() =>
-                  userFavoriteProductsId.includes(
-                    orderItems[orderIdx].product._id
-                  )
-                    ? removeProductFromFavorites(
-                        orderItems[orderIdx].product._id
-                      )
-                    : addProductToFavorites(orderItems[orderIdx].product._id)
+                removeFavorite={() =>
+                  removeProductFromFavorites(orderItems[orderIdx].product._id)
                 }
               />
             </div>
@@ -95,7 +74,7 @@ const OrderReviewModal = ({ orderItems, isOpen, handleCloseModal }: Props) => {
             </div>
           </div>
         </div>
-        <div className='absolute flex items-center gap-5 -top-12 lg:bottom-7 right-7'>
+        <div className='absolute flex items-center gap-5 -top-12 lg:top-[unset] lg:bottom-7 right-7'>
           <button
             onClick={() => setOrderIdx(orderIdx - 1)}
             disabled={orderIdx === 0 || orderItems.length === 1}

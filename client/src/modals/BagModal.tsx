@@ -2,8 +2,7 @@ import { forwardRef, useEffect } from 'react'
 import { useAppSelector } from '../App/hooks'
 import { RootState } from '../App/store'
 import { Close } from '../icons'
-import ProductMiniCard from '../components/Products/ProductMiniCard'
-import { BagDropdown } from '../components'
+import { BagDropdown, ProductCard } from '../components'
 import {
   useRemoveFromBagMutation,
   useUpdateBagItemQuantityMutation,
@@ -112,10 +111,11 @@ const BagModal = forwardRef<HTMLDialogElement, Props>(({ isBagModal }, ref) => {
         <div className='h-[75%] overflow-y-auto space-y-7'>
           {bag?.items?.map((item) => (
             <div className='space-y-7' key={item.product._id}>
-              <ProductMiniCard
+              <ProductCard
                 product={item.product}
-                removable={false}
+                isLikeable={false}
                 size={item.size}
+                isMini={true}
               />
               <div className='flex flex-col gap-y-4'>
                 <div className='flex w-full gap-x-4'>

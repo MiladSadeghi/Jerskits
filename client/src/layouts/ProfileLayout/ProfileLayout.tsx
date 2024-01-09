@@ -17,7 +17,7 @@ function ProfileLayout() {
     return <Navigate to='/' state={{ from: location }} replace />
 
   return (
-    <div className='container mx-auto my-24 md:max-w-5xl'>
+    <div className='container mx-auto my-24 xl:max-w-5xl'>
       <div className='flex justify-between'>
         <div className='w-[350px] hidden md:block'>
           <div className='space-y-7'>
