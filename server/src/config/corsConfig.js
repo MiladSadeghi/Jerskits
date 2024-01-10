@@ -1,6 +1,6 @@
 let whitelist = [
   "http://localhost:5173",
-  "http://jerskits.miladsdgh.ir",
+  "https://jerskits.miladsdgh.ir",
   "http://localhost",
   "http://localhost:4173",
   "http://192.168.1.2:5173",
@@ -9,6 +9,7 @@ let whitelist = [
 export const corsOptions = {
   credentials: true,
   origin: function (origin, callback) {
+    console.log(origin);
     if (!origin || whitelist.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
