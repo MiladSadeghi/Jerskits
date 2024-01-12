@@ -39,7 +39,8 @@ export const setupStore = (
         productApi.middleware,
         reviewApi.middleware
       ),
-    preloadedState
+    preloadedState,
+    devTools: import.meta.env.VITE_NODE_ENV !== 'production'
   })
 }
 

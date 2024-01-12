@@ -10,7 +10,7 @@
 
 <div align="center">
 
-![License](https://img.shields.io/github/license/miladsadeghi/jerskits.svg?style=for-the-badge)
+![License](https://img.shields.io/github/license/miladsadeghi/jerskits?style=for-the-badge)
 [![Website](https://img.shields.io/website-up-down-green-red/http/jerskits.miladsdgh.ir.svg?style=for-the-badge)](https://jerskits.miladsdgh.ir)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/miladsadeghi/jerskits?style=for-the-badge)
 ![GitHub language count](https://img.shields.io/github/languages/count/miladsadeghi/jerskits?style=for-the-badge)
