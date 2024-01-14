@@ -5,6 +5,7 @@ import {
   Edit,
   Favorites,
   Landing,
+  NotFound,
   Orders,
   Product,
   Setting,
@@ -113,6 +114,7 @@ function App() {
               }
             />
           </Route>
+          <Route path='/404' element={<NotFound />} />
         </Route>
         <Route element={<AuthenticationLayout />}>
           <Route

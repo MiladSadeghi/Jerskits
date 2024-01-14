@@ -28,7 +28,7 @@ const Product = () => {
   }
 
   if (isError) {
-    if ((error as TError).data.message) {
+    if ((error as TError)?.data?.message) {
       toast.error(
         "Unfortunately, we couldn't locate the product you were looking for."
       )

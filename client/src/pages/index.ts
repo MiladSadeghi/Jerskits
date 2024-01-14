@@ -9,6 +9,7 @@ const Setting = lazy(() => import('./Profile/Setting'))
 const Landing = lazy(() => import('./Landing/Landing'))
 const Product = lazy(() => import('./Product/Product'))
 const Checkout = lazy(() => import('./Checkout/Checkout'))
+import NotFound from './NotFound/NotFound'
 
 export {
   SignIn,
@@ -19,5 +20,6 @@ export {
   Setting,
   Landing,
   Product,
-  Checkout
+  Checkout,
+  NotFound
 }
