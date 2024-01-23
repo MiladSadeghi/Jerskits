@@ -63,7 +63,10 @@ const Header = ({ products, isError, isLoading }: Props) => {
 
   return (
     <header>
-      <div className='relative flex overflow-hidden' ref={containerRef}>
+      <div
+        className='relative flex overflow-hidden h-[934px]'
+        ref={containerRef}
+      >
         {products.map((product: TLandingPageHeaderProduct, index: number) => (
           <HeaderSlide
             product={product}

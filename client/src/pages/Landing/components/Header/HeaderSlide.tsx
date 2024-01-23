@@ -241,7 +241,7 @@ const HeaderSlide = ({ product, currentSlide, index }: Props) => {
         variants={slideVariants}
         initial='initial'
         animate={index - 1 === currentSlide ? 'animate' : 'initial'}
-        className='relative flex min-h-screen min-w-full overflow-hidden [--slide-animate-margin:0rem] xl:[--slide-animate-margin:-20rem]'
+        className='relative flex h-full min-w-full overflow-hidden [--slide-animate-margin:0rem] xl:[--slide-animate-margin:-20rem]'
       >
         <m.div
           variants={backgroundVariants}
