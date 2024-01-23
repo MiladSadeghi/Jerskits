@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ProductCard, ReviewForm } from '../components'
 import { ArrowRight, Close } from '../icons'
 import { TBagItem } from '../shared/types/User.types'
@@ -17,7 +17,7 @@ type Props = {
 }
 
 const OrderReviewModal = ({ orderItems, isOpen, handleCloseModal }: Props) => {
-  const [orderIdx, setOrderIdx] = useState<number>(0)
+  const [orderIdx, setOrderIdx] = useState<number | null>()
   const isMini = useMediaQuery('(max-width: 768px)')
   const userFavoriteProductsId = useAppSelector(
     (state) => state.user.favorites
@@ -29,6 +29,10 @@ const OrderReviewModal = ({ orderItems, isOpen, handleCloseModal }: Props) => {
     useRemoveProductFromFavoritesMutation()
 
   const likeLoading = isAdding || isRemoving
+
+  useEffect(() => {
+    if (!isOpen) setOrderIdx(null)
+  }, [isOpen])
 
   return (
     <dialog
@@ -51,39 +55,42 @@ const OrderReviewModal = ({ orderItems, isOpen, handleCloseModal }: Props) => {
           <div className='flex flex-col w-full lg:flex-row gap-7'>
             <div className='w-full flex lg:max-w-[281px]'>
               <ProductCard
-                product={orderItems[orderIdx].product}
+                product={orderItems[orderIdx ?? 0].product}
                 isLikeable={true}
                 isCurrentLiked={userFavoriteProductsId.includes(
-                  orderItems[orderIdx].product._id
+                  orderItems[orderIdx ?? 0].product._id
                 )}
                 isLikeLoading={likeLoading}
                 isMini={isMini}
                 addFavorite={() =>
-                  addProductToFavorites(orderItems[orderIdx].product._id)
+                  addProductToFavorites(orderItems[orderIdx ?? 0].product._id)
                 }
                 removeFavorite={() =>
-                  removeProductFromFavorites(orderItems[orderIdx].product._id)
+                  removeProductFromFavorites(
+                    orderItems[orderIdx ?? 0].product._id
+                  )
                 }
               />
             </div>
             <div className='w-full'>
               <ReviewForm
-                productSlug={orderItems[orderIdx].product.slug}
+                productSlug={orderItems[orderIdx ?? 0].product.slug}
                 textAreaRows={1}
+                isReset={!!orderIdx}
               />
             </div>
           </div>
         </div>
         <div className='absolute flex items-center gap-5 -top-12 lg:top-[unset] lg:bottom-7 right-7'>
           <button
-            onClick={() => setOrderIdx(orderIdx - 1)}
+            onClick={() => setOrderIdx((orderIdx ?? 0) - 1)}
             disabled={orderIdx === 0 || orderItems.length === 1}
             className='p-1 -rotate-180 bg-white border rounded-full disabled:opacity-50'
           >
             <ArrowRight width={24} height={24} />
           </button>
           <button
-            onClick={() => setOrderIdx(orderIdx + 1)}
+            onClick={() => setOrderIdx((orderIdx ?? 0) + 1)}
             disabled={
               orderIdx === orderItems.length - 1 || orderItems.length === 1
             }

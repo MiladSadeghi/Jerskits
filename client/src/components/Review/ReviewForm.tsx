@@ -12,9 +12,25 @@ import SubmitReviewSchema from './ReviewSchema'
 type Props = {
   productSlug?: string
   textAreaRows?: number
+  isReset?: boolean
 }
 
-const ReviewForm = ({ productSlug, textAreaRows = 6 }: Props) => {
+const getRatingMessage = (rate: number) => {
+  switch (rate) {
+    case 1:
+      return 'Very Bad!'
+    case 2:
+      return 'Bad!'
+    case 3:
+      return 'Good!'
+    case 4:
+      return 'Nice!'
+    case 5:
+      return 'Excellent!'
+  }
+}
+
+const ReviewForm = ({ productSlug, textAreaRows = 6, isReset }: Props) => {
   let { slug } = useParams()
   if (productSlug) {
     slug = productSlug
@@ -32,21 +48,6 @@ const ReviewForm = ({ productSlug, textAreaRows = 6 }: Props) => {
   const [submitReview, { isLoading, data, error, isError }] =
     useSubmitReviewMutation()
 
-  const getRatingMessage = (rate: number) => {
-    switch (rate) {
-      case 1:
-        return 'Poor'
-      case 2:
-        return 'Fair'
-      case 3:
-        return 'Good'
-      case 4:
-        return 'Very Good'
-      case 5:
-        return 'Excellent!'
-    }
-  }
-
   useEffect(() => {
     if (data) {
       toast.success(data.message)
@@ -59,6 +60,10 @@ const ReviewForm = ({ productSlug, textAreaRows = 6 }: Props) => {
       toast.error((error as Error).message)
     }
   }, [isError])
+
+  useEffect(() => {
+    reset()
+  }, [isReset])
 
   const onSubmitReview = async (formValues: TSubmitReviewSchema) => {
     await submitReview({
@@ -83,7 +88,7 @@ const ReviewForm = ({ productSlug, textAreaRows = 6 }: Props) => {
             <div className='flex items-center'>
               <ReviewRating
                 rate={field.value}
-                changeRate={field.onChange}
+                onRateChange={field.onChange}
                 error={!!errors.rate}
               />
               <p className='text-sm font-medium text-neutral-grey ml-2.5 leading-[21px]'>
