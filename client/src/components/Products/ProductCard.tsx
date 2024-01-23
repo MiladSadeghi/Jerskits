@@ -17,6 +17,7 @@ type Props = {
   removeFavorite?: () => void
   addFavorite?: () => void
   isMini: boolean
+  width?: number
 }
 
 const ProductCard = ({
@@ -29,7 +30,8 @@ const ProductCard = ({
   isCurrentLiked,
   removeFavorite,
   addFavorite,
-  isMini
+  isMini,
+  width
 }: Props) => {
   const isOffPrice = product.offPrice !== 0
   const price = quantity
@@ -43,6 +45,7 @@ const ProductCard = ({
   return (
     <div
       data-testid={testId}
+      style={{ ...(width && { maxWidth: `${width}px`, flex: '0 0 auto' }) }}
       className={cn(
         'group w-full h-full flex flex-col justify-between gap-5 relative',
         {
@@ -53,7 +56,7 @@ const ProductCard = ({
     >
       <img
         className={cn(
-          'w-full object-contain bg-neutral-light-grey px-5 pt-12 ',
+          'w-full h-full object-contain bg-neutral-light-grey px-5 pt-12 ',
           {
             'px-5 pt-12 max-h-[350px] lg:max-h-[460px]': !isMini,
             'px-2.5 pt-2.5 w-[120px] h-[134px]': isMini

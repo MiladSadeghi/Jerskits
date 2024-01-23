@@ -4,7 +4,6 @@ import { m } from 'framer-motion'
 import { useLazyGetKidBrandCollectionQuery } from '../../../../services'
 import KidCollectionController from './KidCollectionSlideController'
 import KidCollectionSlider from './KidCollectionSlider'
-import { cn } from '../../../../utils/utils'
 
 type Props = {
   products: IProduct[] | undefined
@@ -75,15 +74,15 @@ const KidCollection = ({ products, isError, isLoading }: Props) => {
   }
 
   return (
-    <div className='mx-auto'>
-      <div className='container relative flex mx-auto mb-24'>
+    <div>
+      <div className='container relative flex mx-auto'>
         <m.div
-          className={cn(
-            'absolute top-0 w-3/12 lg:w-2/12 h-full bg-primary-black z-[5] mix-blend-color-burn duration-500 bg-opacity-70 ease-linear'
-          )}
+          className={
+            'absolute top-0 w-20 sm:w-[155px] md:w-[187px] lg:w-[251px] xl:w-[320px] h-full bg-primary-black z-[5] mix-blend-color-burn duration-500 bg-opacity-70 ease-linear'
+          }
           style={{ left: `${leftBrandIndicator}%` }}
         />
-        {icons.map((icon: TBrandsIcon, index: number) => (
+        {icons.map((icon, index: number) => (
           <div
             key={icon.name}
             className='flex justify-center w-full h-full py-24 bg-white mix-blend-screen'
@@ -97,7 +96,7 @@ const KidCollection = ({ products, isError, isLoading }: Props) => {
           </div>
         ))}
       </div>
-      <div className='flex flex-col w-full mx-auto xl:flex-row gap-x-24'>
+      <div className='flex py-24 flex-col w-full xl:flex-row gap-x-24'>
         <div className='ml-4 sm:ml-4 md:ml-10 lg:ml-14 xl:ml-16 2xl:ml-20 3xl:ml-28'>
           <KidCollectionController controlSlide={controlSlide} />
         </div>

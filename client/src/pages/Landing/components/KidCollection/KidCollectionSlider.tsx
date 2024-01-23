@@ -6,7 +6,7 @@ import {
 } from '../../../../components'
 
 type Props = {
-  products: IProduct[] | undefined
+  products?: IProduct[]
   isLoading: boolean
   isError: boolean
 }
@@ -17,7 +17,7 @@ const KidCollectionSlider = forwardRef<HTMLDivElement, Props>(
 
     if (isLoading || !products || isError) {
       return (
-        <div className='flex mb-24 overflow-hidden gap-x-7'>
+        <div className='flex overflow-hidden gap-x-7'>
           {productCardSkeletonArray.map((_, idx: number) => (
             <ProductCardSkeleton key={idx} />
           ))}
@@ -27,9 +27,9 @@ const KidCollectionSlider = forwardRef<HTMLDivElement, Props>(
     return (
       <div
         ref={ref}
-        className='flex px-4 mb-24 overflow-hidden gap-x-7 scroll-smooth'
+        className='flex-nowrap flex px-4 overflow-hidden gap-x-7 scroll-smooth'
       >
-        <ProductCardContainer products={products} />
+        <ProductCardContainer products={products} cardWidth={370} />
       </div>
     )
   }

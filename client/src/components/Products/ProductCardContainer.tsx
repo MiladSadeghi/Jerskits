@@ -1,6 +1,5 @@
 import ProductCard from './ProductCard'
 import { useAppSelector } from '../../App/hooks'
-import { RootState } from '../../App/store'
 import {
   useAddProductToFavoritesMutation,
   useRemoveProductFromFavoritesMutation
@@ -9,15 +8,16 @@ import { IProduct } from '../../shared/types/Product.types'
 
 type Props = {
   products?: IProduct[]
+  cardWidth?: number
 }
 
-const ProductCardContainer = ({ products }: Props) => {
+const ProductCardContainer = ({ products, cardWidth }: Props) => {
   const userFavoriteProductsId = useAppSelector(
-    (state: RootState) => state.user.favorites
+    (state) => state.user.favorites
   ).map((product) => product._id)
 
   const isUserAuthenticated = useAppSelector(
-    (state: RootState) => state.auth.isAuthenticated
+    (state) => state.auth.isAuthenticated
   )
   const [addProductToFavorites, { isLoading: isAdding }] =
     useAddProductToFavoritesMutation()
@@ -36,6 +36,7 @@ const ProductCardContainer = ({ products }: Props) => {
       isMini={false}
       addFavorite={() => addProductToFavorites(product._id)}
       removeFavorite={() => removeProductFromFavorites(product._id)}
+      width={cardWidth}
     />
   ))
 }

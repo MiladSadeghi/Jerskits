@@ -3,7 +3,7 @@ import FeatureContent from '../../../shared/FeatureContent'
 const Feature = () => {
   const featureContent = FeatureContent({ color: 'black' })
   return (
-    <div className='container flex flex-col items-center mx-auto my-24 lg:justify-between lg:flex-row gap-y-24'>
+    <div className='container flex flex-col items-center mx-auto py-24 lg:justify-between lg:flex-row gap-y-24'>
       {featureContent.map((content: IFeature, index: number) => (
         <div
           key={index}
